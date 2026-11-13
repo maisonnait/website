@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maison N’Ait</title>
+<meta name="description" content="Maison N’Ait, parfumeur au Maroc. L’histoire de la maison, ses collections et sa boutique en ligne, en darija, arabe, français et anglais.">
+<meta name="theme-color" content="#0A0E2A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Noto+Naskh+Arabic:wght@400;600&family=Reem+Kufi:wght@400;600&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ================= tokens ================= */
+:root{
+  color-scheme: dark;
+  /* nila indigo night, silver line, amber light, ivory text */
+  --nila-950:#0A0E2A; --nila-900:#0F1440; --nila-800:#161D5C; --nila-600:#2A36A8;
+  --ivory:#F4EEDF; --silver:#CDD3E0; --amber:#E99A2B; --amber-hi:#FFC766; --amber-lo:#A85C12;
+  --ink-soft:rgba(244,238,223,.76);
+  --line:rgba(205,211,224,.22);
+  --display:"Josefin Sans","Reem Kufi","Segoe UI",system-ui,sans-serif;
+  --ui:"Josefin Sans","Tajawal","Segoe UI",system-ui,sans-serif;
+  --body:"Spectral","Noto Naskh Arabic",Georgia,"Times New Roman",serif;
+  /* layout: chapters start-aligned on one gutter; chamfered corners echo the flacon; one tall video hero; colour-field notes */
+  --gutter:clamp(20px,5vw,72px);
+  --bar-h:60px;
+  --cham:14px;
+  --ease:cubic-bezier(.2,.7,.15,1);
+  --dir:1;
+  --t-xs:.8125rem; --t-sm:.9375rem;
+  --t-md:clamp(1.0625rem,1rem + .3vw,1.2rem);
+  --t-lg:clamp(1.3rem,1.1rem + .9vw,1.75rem);
+  --t-xl:clamp(2.1rem,1.3rem + 3.4vw,4.2rem);
+  --h-w:300; --h-lh:1.08; --h-k:1; --tr:.04em; --lh:1.65;
+}
+:root[dir="rtl"]{
+  --dir:-1;
+  --display:"Reem Kufi","Josefin Sans","Segoe UI",system-ui,sans-serif;
+  --ui:"Tajawal","Josefin Sans","Segoe UI",system-ui,sans-serif;
+  --body:"Noto Naskh Arabic","Spectral",Georgia,serif;
+  --h-w:400; --h-lh:1.45; --h-k:.82; --tr:0em; --lh:1.95;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--nila-950)}
+body{margin:0;background:var(--nila-950);color:var(--ivory);font-family:var(--body);font-size:var(--t-md);line-height:var(--lh);overflow-x:hidden;overflow-x:clip;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+:root[dir="rtl"] body{font-size:calc(var(--t-md) * 1.06)}
+:root[dir="rtl"]{--t-xs:.9375rem;--t-sm:1.03rem}
+img,svg,video,canvas{max-width:100%}
+h1,h2,h3,p,figure,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+em{font-style:italic;color:var(--amber-hi)}
+:root[dir="rtl"] em{font-style:normal}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--amber-hi);outline-offset:3px}
+::selection{background:var(--amber);color:var(--nila-950)}
+[id]{scroll-margin-top:calc(var(--bar-h) + 8px)}
+[hidden]{display:none !important}
+
+.wrap{width:min(100% - 2 * var(--gutter),1240px);margin-inline:auto}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+.skip{position:fixed;top:8px;inset-inline-start:8px;z-index:99;background:var(--amber);color:var(--nila-950);padding:.7em 1em;font:600 var(--t-sm)/1 var(--ui);transform:translateY(-200%)}
+.skip:focus{transform:none}
+
+/* chamfered shapes: the flacon's cut corners, reused for every frame and button */
+.cham{clip-path:polygon(var(--cham) 0,calc(100% - var(--cham)) 0,100% var(--cham),100% calc(100% - var(--cham)),calc(100% - var(--cham)) 100%,var(--cham) 100%,0 calc(100% - var(--cham)),0 var(--cham))}
+.ring{position:relative}
+.ring::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:var(--ring,var(--line));--b:1px;--k:.42px;
+  clip-path:polygon(evenodd,
+    var(--cham) 0,calc(100% - var(--cham)) 0,100% var(--cham),100% calc(100% - var(--cham)),calc(100% - var(--cham)) 100%,var(--cham) 100%,0 calc(100% - var(--cham)),0 var(--cham),var(--cham) 0,
+    calc(var(--cham) + var(--k)) var(--b),var(--b) calc(var(--cham) + var(--k)),var(--b) calc(100% - var(--cham) - var(--k)),calc(var(--cham) + var(--k)) calc(100% - var(--b)),calc(100% - var(--cham) - var(--k)) calc(100% - var(--b)),calc(100% - var(--b)) calc(100% - var(--cham) - var(--k)),calc(100% - var(--b)) calc(var(--cham) + var(--k)),calc(100% - var(--cham) - var(--k)) var(--b),calc(var(--cham) + var(--k)) var(--b))}
+
+/* ================= buttons and links ================= */
+.btn{--cham:10px;display:inline-flex;align-items:center;justify-content:center;gap:.6em;min-height:48px;padding:.28em 1.6em 0;border:0;cursor:pointer;
+  font:600 var(--t-sm)/1.1 var(--ui);letter-spacing:var(--tr);text-decoration:none;text-align:center;color:var(--nila-950);background:var(--amber);position:relative;overflow:hidden;
+  clip-path:polygon(var(--cham) 0,calc(100% - var(--cham)) 0,100% var(--cham),100% calc(100% - var(--cham)),calc(100% - var(--cham)) 100%,var(--cham) 100%,0 calc(100% - var(--cham)),0 var(--cham));
+  transition:background .35s,transform .25s var(--ease)}
+:root[dir="rtl"] .btn{padding-top:.1em;font-weight:700;font-size:1rem}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);transition:transform .9s var(--ease)}
+.btn:hover{background:var(--amber-hi)}
+.btn:hover::after{transform:translateX(120%)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:0;box-shadow:inset 0 0 0 2px var(--nila-950),inset 0 0 0 4px var(--ivory)}
+.btn--sm{min-height:40px;padding-inline:1.1em;font-size:var(--t-xs)}
+.btn--dark{background:var(--nila-950);color:var(--ivory)}
+.btn--dark:hover{background:var(--nila-800)}
+.btn--line{background:rgba(205,211,224,.08);color:var(--ivory)}
+.btn--line:hover{background:rgba(205,211,224,.18)}
+.tlink{appearance:none;border:0;cursor:pointer;color:inherit;text-decoration:none;font:400 var(--t-sm)/1.2 var(--ui);letter-spacing:var(--tr);padding:.5em 0 .35em;
+  background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat;transition:background-size .45s var(--ease),color .3s}
+.tlink:hover{background-size:0 1px;background-position:100% 100%;color:var(--amber-hi)}
+
+/* ================= header ================= */
+.bar{position:fixed;inset-block-start:0;inset-inline:0;z-index:50;height:var(--bar-h);display:flex;align-items:center;gap:clamp(10px,2.2vw,30px);padding-inline:var(--gutter);border-bottom:1px solid transparent;transition:background .4s,border-color .4s}
+.bar.is-solid{background:rgba(10,14,42,.8);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border-color:var(--line)}
+.bar__brand{display:flex;align-items:center;gap:.8rem;text-decoration:none;margin-inline-end:auto;min-height:44px}
+.bar__glyph{height:19px;width:auto;fill:var(--amber-hi);flex:none}
+.bar__name{font:400 .9rem/1 "Josefin Sans",sans-serif;letter-spacing:.3em;text-transform:uppercase;padding-top:.22em;white-space:nowrap}
+.bar__nav{display:none;gap:1.7rem}
+.bar__nav a{font:400 var(--t-sm)/1 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft);text-decoration:none;padding-block:.7em;transition:color .3s}
+.bar__nav a:hover,.bar__nav a.is-on{color:var(--amber-hi)}
+.bar__shop{display:none}
+.bar__progress{position:absolute;inset-inline:0;bottom:-1px;height:1px;background:var(--amber);transform-origin:left;transform:scaleX(var(--sp,0))}
+:root[dir="rtl"] .bar__progress{transform-origin:right}
+.lang{display:flex;align-items:center}
+.lang button{appearance:none;background:none;border:0;cursor:pointer;position:relative;min-height:44px;padding:.2em .55em 0;color:var(--ink-soft);font:400 .875rem/1 "Josefin Sans",sans-serif;letter-spacing:.06em;transition:color .3s}
+.lang button:lang(ar),.lang button:lang(ary){font:500 1rem/1 "Tajawal","Noto Naskh Arabic",sans-serif;letter-spacing:0;padding-top:0}
+.lang button:hover{color:var(--ivory)}
+.lang button[aria-pressed="true"]{color:var(--amber-hi)}
+.lang button::after{content:"";position:absolute;left:50%;bottom:5px;width:5px;height:5px;background:var(--amber);transform:translateX(-50%) rotate(45deg) scale(0);transition:transform .4s var(--ease)}
+.lang button[aria-pressed="true"]::after{transform:translateX(-50%) rotate(45deg) scale(1)}
+@media (max-width:520px){.bar__name{display:none}}
+@media (min-width:760px){.bar__shop{display:inline-flex}}
+@media (min-width:1080px){.bar__nav{display:flex}}
+
+/* side rail: the four letters of the name, one per chapter */
+.rail{position:fixed;inset-inline-start:20px;top:50%;z-index:40;display:none;flex-direction:column;gap:14px;transform:translateY(-50%);opacity:0;transition:opacity .5s}
+.rail.is-on{opacity:1}
+.rail a{width:30px;height:30px;display:grid;place-items:center;color:rgba(205,211,224,.42);transition:color .35s,transform .35s var(--ease)}
+.rail a svg{height:17px;width:auto;fill:currentColor}
+.rail a:hover{color:var(--ivory)}
+.rail a.is-on{color:var(--amber-hi);transform:scale(1.3)}
+@media (min-width:1360px){.rail{display:flex}}
+
+/* ================= hero ================= */
+.hero{position:relative;isolation:isolate;overflow:hidden;display:grid;align-items:end;min-height:640px;min-height:clamp(580px,94svh,940px);background:url(media/hero.jpg) center/cover no-repeat,radial-gradient(58% 52% at 56% 60%,rgba(233,154,43,.38),rgba(168,92,18,.14) 46%,rgba(10,14,42,0) 72%),var(--nila-950);touch-action:manipulation}
+.hero__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-3}
+.hero__shade{position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(to top,var(--nila-950) 0%,rgba(10,14,42,.78) 24%,rgba(10,14,42,0) 62%),linear-gradient(to bottom,rgba(10,14,42,.6),rgba(10,14,42,0) 24%)}
+.hero__mist{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.hero__in{display:grid;gap:clamp(24px,4vw,56px);align-items:end;padding-block:calc(var(--bar-h) + 48px) clamp(30px,6vh,68px)}
+@media (min-width:980px){.hero__in{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
+.wm{display:grid;gap:clamp(12px,2vw,26px);direction:ltr;justify-items:start}
+:root[dir="rtl"] .wm{justify-items:end}
+.wm svg{display:block;height:auto;overflow:visible}
+.wm__maison{width:min(46%,340px);fill:var(--amber-hi)}
+.wm__nait{width:min(100%,860px)}
+.wm__l{fill:var(--ivory);stroke:var(--silver);stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0;stroke-opacity:0}
+.hero__copy{display:grid;gap:18px;max-width:30rem}
+.hero__lead{font:var(--h-w) var(--t-lg)/1.3 var(--display);text-wrap:balance}
+.hero__sub{color:var(--ink-soft);max-width:36ch}
+.hero__cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin-top:6px}
+.hero__hint{position:absolute;inset-inline-end:var(--gutter);top:calc(var(--bar-h) + 22px);display:flex;align-items:center;gap:.7em;font:400 var(--t-xs)/1 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft);transition:opacity .8s;pointer-events:none}
+.hero__hint::before{content:"";width:10px;height:10px;border:1px solid var(--amber-hi);transform:rotate(45deg);animation:hint 2.4s var(--ease) infinite}
+.hero__hint.is-gone{opacity:0}
+@keyframes hint{0%{box-shadow:0 0 0 0 rgba(255,199,102,.7)}70%,100%{box-shadow:0 0 0 12px rgba(255,199,102,0)}}
+@keyframes wm-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes wm-fill{from{fill-opacity:0;stroke-opacity:1}to{fill-opacity:1;stroke-opacity:0}}
+@keyframes diffuse{from{opacity:0;filter:blur(12px);transform:translate3d(calc(var(--dir) * 26px),0,0)}to{opacity:1;filter:blur(0);transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  .wm__l{animation:wm-draw 1.5s var(--ease) both,wm-fill 1s ease both;animation-delay:calc(.2s + var(--i) * .13s),calc(1.05s + var(--i) * .13s)}
+  .wm__maison{animation:diffuse 1.1s var(--ease) .1s both}
+  .hero__lead{animation:diffuse 1s var(--ease) 1.45s both}
+  .hero__sub{animation:diffuse 1s var(--ease) 1.6s both}
+  .hero__cta{animation:diffuse 1s var(--ease) 1.75s both}
+  .hero__hint{animation:diffuse 1s var(--ease) 2.4s both}
+}
+
+/* quadrilingual ribbon */
+.ribbon{direction:ltr;overflow:hidden;border-block:1px solid var(--line);background:var(--nila-900)}
+.ribbon__track{display:flex;width:max-content}
+.ribbon__set{display:flex;align-items:center;gap:clamp(22px,3vw,44px);padding:15px clamp(11px,1.5vw,22px) 12px;white-space:nowrap;font:300 clamp(1rem,.9rem + .5vw,1.35rem)/1 "Josefin Sans",sans-serif;letter-spacing:.14em;color:var(--ink-soft)}
+.ribbon__set span:lang(ar),.ribbon__set span:lang(ary){font-family:"Reem Kufi","Noto Naskh Arabic",sans-serif;letter-spacing:0;font-weight:400}
+.ribbon__set svg{height:.95em;width:auto;fill:var(--amber-hi);flex:none}
+.ribbon__set i{width:6px;height:6px;background:var(--amber);transform:rotate(45deg);flex:none}
+@keyframes ribbon{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:no-preference){.ribbon__track{animation:ribbon 46s linear infinite}}
+
+/* ================= chapters ================= */
+.ch{position:relative;padding-block:clamp(80px,12vw,168px);overflow-x:clip}
+.ch__head{max-width:46rem}
+.ch__glyph{display:block;height:30px;margin-bottom:20px}
+.ch__glyph svg{display:block;height:100%;width:auto;fill:var(--amber)}
+.ch__mark{position:absolute;inset-inline-end:-2vw;top:8%;height:clamp(200px,36vw,560px);width:auto;fill:var(--silver);opacity:.05;pointer-events:none;transform:translate3d(0,calc((var(--p,.5) - .5) * -140px),0)}
+h2{font:var(--h-w) calc(var(--t-xl) * var(--h-k))/var(--h-lh) var(--display);letter-spacing:calc(var(--tr) * -.3);text-wrap:balance}
+.lede{font-size:var(--t-lg);line-height:1.42;font-weight:300;color:var(--ink-soft);max-width:38ch;margin-top:1.1em}
+:root[dir="rtl"] .lede{line-height:1.8;font-weight:400}
+
+/* scroll reveals: content is visible at rest; it is only hidden once the reader starts scrolling */
+.rv{transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:calc(var(--d,0) * 90ms)}
+.rv.is-pending{opacity:0;transform:translate3d(calc(var(--dir) * 14px),10px,0)}
+main,.foot{overflow-x:clip}
+h2.rv.is-pending,.rv--blur.is-pending{filter:blur(12px)}
+
+/* ---- chapter 1: the name ---- */
+.name__grid{display:grid;gap:clamp(40px,7vw,104px);grid-template-columns:minmax(0,1fr)}
+.name__viz{display:grid;gap:26px}
+.name__row{display:flex;align-items:flex-start;gap:clamp(22px,5vw,64px);direction:ltr}
+:root[dir="rtl"] .name__row{justify-content:flex-end}
+.grp{display:grid;gap:14px;justify-items:start}
+.grp__g{display:flex;align-items:flex-end;gap:clamp(12px,2.4vw,30px);height:clamp(104px,19vw,216px)}
+.grp__g svg{height:100%;width:auto;fill:var(--silver);
+  --k:clamp(0,calc((var(--e,1) - .18 - var(--i) * .13) / .4),1);
+  opacity:var(--k);transform:translate3d(0,calc((1 - var(--k)) * 54px),0) rotate(calc((1 - var(--k)) * var(--r,10deg)));filter:blur(calc((1 - var(--k)) * 9px))}
+.grp figcaption{width:100%;border-top:1px solid var(--line);padding-top:10px;font:400 var(--t-sm)/1.3 var(--ui);letter-spacing:var(--tr);color:var(--amber-hi);white-space:nowrap}
+:root[dir="rtl"] .grp figcaption{direction:rtl;text-align:start}
+.name__legend{font:400 var(--t-xs)/1.3 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft)}
+.name__txt p{max-width:34em;margin-top:1.15em}
+.name__txt p:first-of-type{margin-top:1.6em}
+@media (min-width:920px){
+  .name__grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+  .name__viz{position:sticky;top:calc(var(--bar-h) + 14vh)}
+}
+
+/* ---- chapter 2: five notes, stacked colour fields ---- */
+.notes{padding-top:clamp(80px,12vw,168px)}
+.notes__stack{margin-top:clamp(36px,6vw,80px)}
+.note{position:sticky;top:calc(var(--bar-h) + var(--i) * 12px);min-height:min(78svh,640px);display:grid;align-items:center;background:var(--bg);color:var(--fg,var(--ivory));border-top:1px solid rgba(255,255,255,.16);overflow:hidden}
+.note--rose{--bg:#7E2B3F}
+.note--blossom{--bg:#E9E6CF;--fg:#161D5C}
+.note--cedar{--bg:#173A30}
+.note--amber{--bg:#5A2E0A}
+.note--oud{--bg:#1A1210}
+.note__in{display:grid;gap:clamp(14px,4vw,72px);align-items:center;padding-block:clamp(26px,5vw,64px);transform-origin:50% 0;transform:scale(calc(1 - var(--cover,0) * .05));opacity:calc(1 - var(--cover,0) * .55)}
+.note__art{display:block;width:min(64vw,250px);aspect-ratio:1;justify-self:center}
+.note h3{font:var(--h-w) calc(clamp(2.3rem,1.5rem + 3.8vw,4.8rem) * var(--h-k))/var(--h-lh) var(--display)}
+.note__place{font:400 var(--t-sm)/1.35 var(--ui);letter-spacing:var(--tr);margin-top:.9em;opacity:.85}
+.note__text{max-width:33ch;margin-top:1em}
+.notes__outro{padding-block:clamp(40px,7vw,96px);font-size:var(--t-lg);line-height:1.42;font-weight:300;color:var(--ink-soft);max-width:none}
+.notes__outro span{display:block;max-width:34ch}
+@media (min-width:820px){
+  .note__in{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+  .note__art{width:min(100%,420px)}
+}
+
+/* ---- film ---- */
+.film{background:linear-gradient(var(--nila-950),var(--nila-900))}
+.film__frame{--cham:clamp(14px,2.6vw,34px);margin-top:clamp(28px,5vw,60px);max-width:max(320px,calc((100vh - 250px) * 1.7778))}
+.film__stage{position:relative}
+.film__clip{position:relative;aspect-ratio:16/9;background:var(--nila-950) url(media/film.jpg) center/cover no-repeat}
+.film__clip video{display:block;width:100%;height:100%;object-fit:cover}
+.film__cap{position:absolute;inset-inline:7%;bottom:6.5%;z-index:3;text-align:center;font:var(--h-w) clamp(1rem,.75rem + 1.2vw,1.65rem)/1.35 var(--ui);text-shadow:0 1px 20px rgba(10,14,42,.95),0 0 3px rgba(10,14,42,.8);transition:opacity .45s,filter .45s;pointer-events:none}
+.film__cap.is-out{opacity:0;filter:blur(8px)}
+.film__ctrl{display:flex;align-items:center;gap:18px;margin-top:18px;direction:ltr}
+.film__btn{--cham:9px;width:52px;height:52px;flex:none;display:grid;place-items:center;border:0;cursor:pointer;background:rgba(205,211,224,.1);color:var(--ivory);transition:background .3s}
+.film__btn:hover{background:var(--amber);color:var(--nila-950)}
+.film__btn:focus-visible,.sheet__close:focus-visible{outline:0;box-shadow:inset 0 0 0 2px var(--amber-hi)}
+.film__btn svg{width:16px;height:16px;fill:currentColor}
+.film__btn .i-pause,.film.is-playing .film__btn .i-play{display:none}
+.film.is-playing .film__btn .i-pause{display:block}
+.film__track{position:relative;flex:1;height:24px}
+.film__track::before,.film__track i{content:"";position:absolute;inset-inline:0;top:50%;height:1px;background:var(--line)}
+.film__track i{background:var(--amber);transform-origin:left;transform:scaleX(var(--v,0))}
+.film__tick{position:absolute;top:50%;left:var(--at);width:24px;height:24px;margin:-12px 0 0 -12px;border:0;background:none;cursor:pointer;padding:0}
+.film__tick::before{content:"";position:absolute;inset:8px;background:var(--silver);transform:rotate(45deg);transition:background .3s,transform .3s}
+.film__tick.is-on::before{background:var(--amber-hi);transform:rotate(45deg) scale(1.35)}
+@media (max-width:640px){.film__cap{position:static;margin-top:16px;min-height:2.8em;text-shadow:none}}
+
+/* ---- chapter 3: reading a perfume ---- */
+.read__grid{display:grid;gap:clamp(40px,7vw,96px);grid-template-columns:minmax(0,1fr);align-items:center}
+.atom{display:grid;justify-items:center;gap:22px}
+.atom__stage{position:relative;width:min(78%,320px);aspect-ratio:10/14}
+.atom__mist{position:absolute;inset:-34% -50% 20% -50%;width:200%;height:114%;pointer-events:none}
+.atom__flacon{position:absolute;inset:14% 0 0;width:100%;height:86%;color:var(--silver);overflow:visible}
+.flacon__liq{transition:transform 1.2s var(--ease)}
+@keyframes wave{to{transform:translateX(-80px)}}
+@media (prefers-reduced-motion:no-preference){.flacon__wave{animation:wave 3.4s linear infinite;animation-play-state:paused}.is-live .flacon__wave,.card:hover .flacon__wave{animation-play-state:running}}
+.sizes{display:flex;align-items:flex-end;gap:26px;margin-top:6px}
+.sizes li{display:grid;justify-items:center;gap:8px;font:400 var(--t-xs)/1 var(--ui);letter-spacing:.04em;color:var(--ink-soft);direction:ltr}
+.sizes svg{width:auto;color:var(--silver);display:block}
+.sizes li:nth-child(1) svg{height:38px}.sizes li:nth-child(2) svg{height:50px}.sizes li:nth-child(3) svg{height:62px}
+.read__sizes{font:400 var(--t-sm)/1.4 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft);text-align:center;max-width:30ch}
+.stages{margin-top:clamp(26px,4vw,48px)}
+.stage{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr);gap:4px clamp(14px,3vw,34px);align-items:baseline;padding-block:20px 18px;border-top:1px solid var(--line);transition:opacity .6s}
+.stage__name{font:var(--h-w) calc(clamp(1.6rem,1.2rem + 1.6vw,2.4rem) * var(--h-k))/1.1 var(--display)}
+.stage__time{font:400 var(--t-sm)/1.3 var(--ui);letter-spacing:var(--tr);color:var(--amber-hi)}
+.stage__text{grid-column:2;max-width:38ch;color:var(--ink-soft)}
+.stage__bar{grid-column:1 / -1;height:3px;margin-top:12px;background:rgba(205,211,224,.13);position:relative}
+.stage__bar i{position:absolute;inset-block:0;inset-inline-start:0;width:var(--len);background:linear-gradient(calc(var(--dir) * 90deg),var(--amber-lo),var(--amber-hi));transform-origin:left}
+:root[dir="rtl"] .stage__bar i{transform-origin:right}
+.stage--top{--len:10%}.stage--heart{--len:44%}.stage--base{--len:100%}
+.read.is-playing .stage{opacity:.32}
+.read.is-playing .stage.is-on{opacity:1}
+.read.is-playing .stage__bar i{transform:scaleX(0)}
+.read.is-playing .stage.is-on .stage__bar i{transform:none;transition:transform var(--dur,2s) linear}
+.read__tip{margin-top:26px;padding-inline-start:16px;border-inline-start:2px solid var(--amber);max-width:40ch;color:var(--ink-soft)}
+@media (max-width:520px){.stage{grid-template-columns:minmax(0,1fr)}.stage__text{grid-column:1}}
+@media (min-width:920px){.read__grid{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)}}
+
+/* ---- chapter 4: collections ---- */
+.col{background:var(--nila-900)}
+.col__note{max-width:64ch;margin-top:26px;padding-inline-start:16px;border-inline-start:2px solid var(--amber);font-size:var(--t-sm);line-height:1.6;color:var(--ink-soft)}
+:root[dir="rtl"] .col__note{font-size:1rem;line-height:1.85}
+.tabs{display:flex;gap:clamp(20px,3.4vw,48px);margin-top:clamp(34px,5vw,64px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{appearance:none;background:none;border:0;cursor:pointer;flex:none;display:grid;gap:8px;justify-items:start;padding:6px 0 16px;position:relative;color:var(--ink-soft);transition:color .35s}
+.tab__name{font:var(--h-w) calc(clamp(1.55rem,1.1rem + 2vw,2.7rem) * var(--h-k))/1.1 var(--display)}
+.tab__n{font:400 var(--t-xs)/1 var(--ui);letter-spacing:var(--tr)}
+.tab::after{content:"";position:absolute;inset-inline:0;bottom:0;height:2px;background:var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease)}
+:root[dir="rtl"] .tab::after{transform-origin:right}
+.tab:hover{color:var(--ivory)}
+.tab[aria-selected="true"]{color:var(--ivory)}
+.tab[aria-selected="true"] .tab__n{color:var(--amber-hi)}
+.tab[aria-selected="true"]::after{transform:none}
+.tab:focus-visible{outline-offset:-2px}
+.col__desc{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 28px;margin-top:22px}
+.col__desc p{color:var(--ink-soft);max-width:44ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:clamp(12px,1.8vw,22px);margin-top:28px}
+@media (max-width:620px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{--cham:16px;--ring:rgba(205,211,224,.2);display:grid;grid-template-rows:auto 1fr;background:linear-gradient(180deg,rgba(42,54,168,.26),rgba(22,29,92,.4));transition:background .4s}
+.card:hover{--ring:rgba(255,199,102,.6)}
+.card__art{position:relative;aspect-ratio:1/1.02;display:grid;place-items:center;overflow:hidden}
+.card__art::before{content:"";position:absolute;inset:14% 10% 6%;background:radial-gradient(closest-side,var(--halo,rgba(233,154,43,.34)),transparent);transition:transform .7s var(--ease),opacity .7s}
+.card:hover .card__art::before{transform:scale(1.18)}
+.card__art svg{position:relative;height:84%;width:auto;color:var(--silver);transition:transform .7s var(--ease)}
+.card:hover .card__art svg{transform:translateY(-4px) rotate(calc(var(--dir) * -2deg))}
+.card__body{display:grid;gap:9px;align-content:start;padding:2px clamp(12px,1.6vw,20px) clamp(14px,1.8vw,20px)}
+.card__name{font:400 clamp(.95rem,.86rem + .45vw,1.2rem)/1.2 "Josefin Sans",sans-serif;letter-spacing:.15em;direction:ltr;text-align:start;overflow-wrap:anywhere}
+:root[dir="rtl"] .card__name{text-align:end}
+.card__meta{display:flex;flex-wrap:wrap;gap:2px 14px;font:400 var(--t-xs)/1.5 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft)}
+.card__row{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px}
+.card__price{font:300 1.55rem/1.1 var(--ui);color:var(--amber-hi);font-variant-numeric:tabular-nums;white-space:nowrap}
+.card__see{background-color:transparent;font-size:var(--t-xs)}
+.card__order{width:100%;margin-top:4px}
+@keyframes card-in{from{opacity:0;transform:translate3d(0,22px,0);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@media (prefers-reduced-motion:no-preference){.grid.is-fresh .card,.grid.is-fresh .soon{animation:card-in .75s var(--ease) both;animation-delay:calc(var(--i,0) * 50ms)}}
+.soon{grid-column:1 / -1;display:grid;justify-items:center;gap:18px;text-align:center;padding:clamp(40px,7vw,88px) 20px;--cham:22px}
+.soon svg{height:150px;width:auto;color:var(--silver);opacity:.75}
+.soon p{max-width:30ch;color:var(--ink-soft)}
+.fallback{margin-top:24px;display:grid;gap:10px}
+
+/* scent sheet */
+.sheet{position:fixed;inset:0;z-index:80;visibility:hidden;transition:visibility 0s .6s}
+.sheet.is-open{visibility:visible;transition-delay:0s}
+.sheet__veil{position:absolute;inset:0;background:rgba(4,6,22,.7);opacity:0;transition:opacity .45s;border:0;width:100%;cursor:pointer}
+.sheet.is-open .sheet__veil{opacity:1}
+.sheet__panel{position:absolute;inset-block:0;inset-inline-end:0;width:min(100%,500px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--nila-900);border-inline-start:1px solid var(--line);transform:translate3d(calc(var(--dir) * 104%),0,0);transition:transform .6s var(--ease)}
+.sheet.is-open .sheet__panel{transform:none}
+.sheet__head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:start;padding:26px 24px 18px;border-bottom:1px solid var(--line)}
+.sheet__title{font:400 1.5rem/1.2 "Josefin Sans",sans-serif;letter-spacing:.15em;direction:ltr;text-align:start}
+:root[dir="rtl"] .sheet__title{text-align:end}
+.sheet__meta{grid-column:1;font:400 var(--t-sm)/1.4 var(--ui);letter-spacing:var(--tr);color:var(--amber-hi)}
+.sheet__close{--cham:8px;grid-row:1 / span 2;grid-column:2;width:44px;height:44px;border:0;cursor:pointer;background:rgba(205,211,224,.1);display:grid;place-items:center}
+.sheet__close:hover{background:var(--amber);color:var(--nila-950)}
+.sheet__close svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.6;fill:none}
+.sheet__body{overflow-y:auto;overscroll-behavior:contain;padding:20px 24px 26px;display:grid;gap:18px;align-content:start}
+.sheet__sub{font:400 var(--t-sm)/1.4 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft)}
+.scents{display:flex;flex-wrap:wrap;gap:8px}
+.scent{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;padding:.62em .85em .5em;border:1px solid var(--line);font:400 var(--t-sm)/1.25 "Josefin Sans",sans-serif;letter-spacing:.03em}
+.scent__ar{font:400 .95rem/1.5 "Tajawal","Noto Naskh Arabic",sans-serif;letter-spacing:0;color:var(--ink-soft)}
+.scent__tag{font-size:.6875rem;letter-spacing:.08em;color:var(--nila-950);background:var(--amber-hi);padding:.25em .5em .12em}
+:root[dir="rtl"] .scent__tag{font-family:"Tajawal",sans-serif;font-weight:700;letter-spacing:0;padding:.2em .5em .1em}
+.sheet__note{font-size:var(--t-sm);line-height:1.6;color:var(--ink-soft)}
+.sheet__foot{padding:16px 24px 22px;border-top:1px solid var(--line)}
+.sheet__foot .btn{width:100%}
+@keyframes scent-in{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){.sheet.is-open .scent{animation:scent-in .5s var(--ease) both;animation-delay:calc(.18s + var(--i) * 22ms)}}
+@media (max-width:640px){
+  .sheet__panel{inset-block:auto 0;inset-inline:0;width:100%;max-height:86vh;max-height:86svh;border-inline-start:0;border-top:1px solid var(--line);transform:translate3d(0,104%,0)}
+}
+
+/* ---- now online ---- */
+.steps{position:relative;display:grid;grid-template-columns:minmax(0,1fr);margin-top:clamp(40px,6vw,76px);counter-reset:s}
+.steps::before,.steps::after{content:"";position:absolute;inset-block:0;inset-inline-start:4px;width:1px;background:var(--line)}
+.steps::after{background:var(--amber);transform-origin:top;transform:scaleY(var(--e,1))}
+.step{position:relative;display:grid;align-content:start;gap:6px;padding-block:0 30px;padding-inline:34px 0}
+.step::before{content:"";position:absolute;top:10px;inset-inline-start:0;width:9px;height:9px;background:var(--amber);transform:rotate(45deg)}
+.step__n{font:300 2.5rem/1 var(--ui);color:var(--amber-hi);font-variant-numeric:tabular-nums}
+.step__t{font:var(--h-w) calc(var(--t-lg) * 1.05)/1.25 var(--display)}
+.step__d{color:var(--ink-soft);max-width:30ch}
+.online__returns{margin-top:clamp(18px,3vw,40px);max-width:56ch;color:var(--ink-soft)}
+@media (min-width:880px){
+  .steps{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .steps::before,.steps::after{inset-block:4px auto;inset-inline:0;width:auto;height:1px}
+  .steps::after{transform-origin:left;transform:scaleX(var(--e,1))}
+  :root[dir="rtl"] .steps::after{transform-origin:right}
+  .step{padding:34px 26px 0 0;padding-inline:0 26px}
+  .step::before{top:0}
+}
+.cta{--cham:clamp(18px,3vw,42px);position:relative;isolation:isolate;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:22px 40px;margin-top:clamp(56px,9vw,120px);padding:clamp(40px,7vw,100px) clamp(24px,5vw,76px);background:var(--amber-lo) url(media/amber.jpg) center/cover no-repeat;color:var(--nila-950)}
+.cta video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.cta::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(calc(var(--dir) * 90deg),rgba(255,199,102,.5),rgba(255,199,102,0) 70%)}
+.cta h2{font-weight:400;max-width:14ch}
+:root[dir="rtl"] .cta h2{font-weight:600}
+
+/* ================= footer ================= */
+.foot{background:var(--nila-950);padding:clamp(56px,9vw,120px) 0 30px;border-top:1px solid var(--line)}
+.foot__mark{aspect-ratio:2793/725;width:100%;background:var(--amber) url(media/amber.jpg) 50% 50%/150% auto;-webkit-mask:var(--mark) center/contain no-repeat;mask:var(--mark) center/contain no-repeat}
+@keyframes pan{to{background-position:0% 100%}}
+@media (prefers-reduced-motion:no-preference){.foot__mark{animation:pan 24s ease-in-out infinite alternate}}
+.foot__grid{display:grid;gap:36px 28px;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:clamp(40px,6vw,76px)}
+.foot__tag{grid-column:1 / -1;font:var(--h-w) var(--t-lg)/1.35 var(--display);max-width:16ch}
+.foot__col{display:grid;gap:4px;align-content:start;justify-items:start}
+.foot__col h3{font:400 var(--t-xs)/1 var(--ui);letter-spacing:var(--tr);color:var(--amber-hi);margin-bottom:10px}
+.foot__col a,.foot__col button{appearance:none;background:none;border:0;cursor:pointer;padding:.42em 0;font:400 var(--t-sm)/1.3 var(--ui);letter-spacing:var(--tr);color:var(--ink-soft);text-decoration:none;text-align:start;transition:color .3s}
+.foot__col a:hover,.foot__col button:hover,.foot__col button[aria-pressed="true"]{color:var(--ivory)}
+.foot__col button:lang(ar),.foot__col button:lang(ary){font-family:"Tajawal","Noto Naskh Arabic",sans-serif;letter-spacing:0;font-size:1rem}
+.foot__legal{margin-top:clamp(36px,5vw,64px);padding-top:20px;border-top:1px solid var(--line);font:400 var(--t-xs)/1.6 var(--ui);letter-spacing:var(--tr);color:rgba(244,238,223,.6)}
+@media (min-width:860px){.foot__grid{grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr))}.foot__tag{grid-column:auto}}
+
+/* language change: the page dips into the night while the words are swapped */
+.veil{position:fixed;inset:0;z-index:45;display:grid;place-items:center;background:var(--nila-950);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .6s var(--ease),visibility 0s .6s}
+.veil svg{height:46px;width:auto;fill:var(--amber-hi)}
+.is-swapping .veil{opacity:1;visibility:visible;transition:opacity .22s ease,visibility 0s}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .grp__g svg{--k:1}
+  .ch__mark{transform:none}
+}
+
+.foot__mark{--mark:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%222793%22 height=%22725%22 viewBox=%220 0 2793 725%22%3E%3Cpath d=%22M707 742 160 126 161 725H113V0H116L663 621L662 15H709V742ZM954 156 931 136Q952 116 962.5 84Q973 52 966 17L1009 10Q1015 37 1009 64.5Q1003 92 989 116Q975 140 954 156ZM1166 725 1466 -16H1470L1770 725H1715L1622 490H1309L1215 725ZM1604 444 1467 95 1327 444ZM1994 15H2043V725H1994ZM2272 15H2737V62H2528V725H2479V62H2272Z%22/%3E%3C/svg%3E")}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Aller au contenu</a>
+
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="g-n" viewBox="0 0 89 735"><path d="M0 725V11H89V725Z"/></symbol>
+    <symbol id="g-a" viewBox="0 0 384 735"><path d="M192 735Q108 735 54 685Q0 635 0 544Q0 453 54 402.5Q108 352 192 352Q276 352 330 402.5Q384 453 384 544Q384 635 330 685Q276 735 192 735ZM192 657Q242 657 268.5 626.5Q295 596 295 544Q295 492 268.5 461Q242 430 192 430Q140 430 114.5 461Q89 492 89 544Q89 596 116 626.5Q143 657 192 657Z"/></symbol>
+    <symbol id="g-y" viewBox="0 0 411 735"><path d="M64 735 0 680 207 473Q226 454 241.5 439Q257 424 279 409V403Q255 388 236.5 373Q218 358 201 344L4 175V113L391 0L411 76L235 125Q200 135 172.5 142Q145 149 110 154V161Q141 178 165 198Q189 218 211 238L370 374V427Z"/></symbol>
+    <symbol id="g-t" viewBox="0 0 499 735"><path d="M205 725V387H0V308H205V11H294V308H499V387H294V725Z"/></symbol>
+    <symbol id="g-nayt" viewBox="0 0 1883 735"><path transform="translate(0 0)" d="M0 725V11H89V725Z"/><path transform="translate(349 0)" d="M192 735Q108 735 54 685Q0 635 0 544Q0 453 54 402.5Q108 352 192 352Q276 352 330 402.5Q384 453 384 544Q384 635 330 685Q276 735 192 735ZM192 657Q242 657 268.5 626.5Q295 596 295 544Q295 492 268.5 461Q242 430 192 430Q140 430 114.5 461Q89 492 89 544Q89 596 116 626.5Q143 657 192 657Z"/><path transform="translate(853 0)" d="M64 735 0 680 207 473Q226 454 241.5 439Q257 424 279 409V403Q255 388 236.5 373Q218 358 201 344L4 175V113L391 0L411 76L235 125Q200 135 172.5 142Q145 149 110 154V161Q141 178 165 198Q189 218 211 238L370 374V427Z"/><path transform="translate(1384 0)" d="M205 725V387H0V308H205V11H294V308H499V387H294V725Z"/></symbol>
+    <symbol id="flacon" viewBox="0 0 200 320"><g fill="none" stroke="currentColor" stroke-linejoin="round"><polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96"/><rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38"/><rect x="82" y="2" width="36" height="12"/></g></symbol>
+    <linearGradient id="liq-amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC766"/><stop offset=".4" stop-color="#E99A2B"/><stop offset="1" stop-color="#A85C12"/></linearGradient>
+    <linearGradient id="liq-rose" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FAD0D3"/><stop offset=".45" stop-color="#E58A96"/><stop offset="1" stop-color="#A8475A"/></linearGradient>
+    <linearGradient id="liq-indigo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C3CEF7"/><stop offset=".45" stop-color="#7286E4"/><stop offset="1" stop-color="#2A36A8"/></linearGradient>
+    <linearGradient id="liq-silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4EEDF"/><stop offset="1" stop-color="#9AA3B8"/></linearGradient>
+    <clipPath id="clip-body"><polygon points="58,76 142,76 164,98.5 164,281.5 142,304 58,304 36,281.5 36,98.5"/></clipPath>
+  </defs>
+</svg>
+
+<header class="bar" id="bar">
+  <a class="bar__brand" href="#top" aria-label="Maison N’Ait">
+    <svg class="bar__glyph" viewBox="0 0 1883 735" aria-hidden="true"><use href="#g-nayt"/></svg>
+    <span class="bar__name" dir="ltr" lang="fr">Maison N’Ait</span>
+  </a>
+  <nav class="bar__nav" aria-label="Sections">
+    <a href="#nom" data-i18n="nav.story">L’histoire</a>
+    <a href="#notes" data-i18n="nav.notes">Les notes</a>
+    <a href="#film" data-i18n="nav.film">Le film</a>
+    <a href="#lire" data-i18n="nav.read">Lire un parfum</a>
+    <a href="#collections" data-i18n="nav.collections">Les collections</a>
+  </nav>
+  <div class="lang" role="group" aria-label="Langue" data-i18n-aria="lang.label">
+    <button type="button" data-lang="ary" lang="ary" aria-pressed="false">الدارجة</button>
+    <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
+    <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="Français">FR</button>
+    <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+  </div>
+  <a class="btn btn--sm bar__shop" href="https://maisonait.youcan.store/" target="_blank" rel="noopener" data-i18n="nav.shop">Boutique</a>
+  <i class="bar__progress" aria-hidden="true"></i>
+</header>
+
+<nav class="rail" id="rail" aria-hidden="true">
+  <a href="#nom" tabindex="-1" data-rail="nom"><svg viewBox="0 0 89 735"><use href="#g-n"/></svg></a>
+  <a href="#notes" tabindex="-1" data-rail="notes"><svg viewBox="0 0 384 735"><use href="#g-a"/></svg></a>
+  <a href="#lire" tabindex="-1" data-rail="lire"><svg viewBox="0 0 411 735"><use href="#g-y"/></svg></a>
+  <a href="#collections" tabindex="-1" data-rail="collections"><svg viewBox="0 0 499 735"><use href="#g-t"/></svg></a>
+</nav>
+
+<div class="veil" aria-hidden="true"><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg></div>
+
+<main id="main">
+
+<section class="hero" id="top">
+  <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="media/hero.jpg" aria-hidden="true" tabindex="-1"><source src="media/hero.mp4" type="video/mp4"></video>
+  <div class="hero__shade"></div>
+  <canvas class="hero__mist" id="heroMist" aria-hidden="true"></canvas>
+  <div class="wrap hero__in">
+    <h1 class="wm">
+      <span class="vh">Maison N’Ait</span>
+      <svg class="wm__maison" viewBox="0 0 6309 745" aria-hidden="true"><path d="M104 745V-1H105L461 504L821 -1H823V745H727V276L460 654H458L198 292V745ZM1379 745 1695 -8H1701L2016 745H1905L1830 555H1552L1474 745ZM1797 471 1694 207 1586 471ZM2572 22H2669V745H2572ZM3671 151Q3634 132 3590 118Q3546 104 3504 104Q3446 104 3411.5 131Q3377 158 3377 203Q3377 237 3399 260.5Q3421 284 3457 301Q3493 318 3532 333Q3566 346 3599 362Q3632 378 3658.5 402Q3685 426 3700.5 461Q3716 496 3716 548Q3716 605 3687.5 652Q3659 699 3606 726Q3553 753 3480 753Q3432 753 3388.5 742Q3345 731 3308 713.5Q3271 696 3242 677L3285 601Q3309 618 3340 633.5Q3371 649 3405 658.5Q3439 668 3471 668Q3505 668 3538.5 655.5Q3572 643 3594 617Q3616 591 3616 548Q3616 511 3596.5 486.5Q3577 462 3545 444.5Q3513 427 3477 413Q3443 400 3408 384.5Q3373 369 3343 346.5Q3313 324 3295 291Q3277 258 3277 211Q3277 154 3304.5 111.5Q3332 69 3380 44.5Q3428 20 3490 18Q3560 18 3613.5 35Q3667 52 3708 77ZM4254 384Q4254 309 4282.5 242.5Q4311 176 4362 124.5Q4413 73 4479.5 43.5Q4546 14 4623 14Q4699 14 4765.5 43.5Q4832 73 4883.5 124.5Q4935 176 4964 242.5Q4993 309 4993 384Q4993 461 4964 528Q4935 595 4883.5 645.5Q4832 696 4765.5 724.5Q4699 753 4623 753Q4546 753 4479.5 725Q4413 697 4362 647Q4311 597 4282.5 530Q4254 463 4254 384ZM4354 385Q4354 442 4375 491.5Q4396 541 4433 579Q4470 617 4519 638.5Q4568 660 4625 660Q4681 660 4730 638.5Q4779 617 4815 579Q4851 541 4872 491.5Q4893 442 4893 384Q4893 327 4872 276.5Q4851 226 4814 188Q4777 150 4728 128.5Q4679 107 4623 107Q4566 107 4517 129Q4468 151 4431 189Q4394 227 4374 277.5Q4354 328 4354 385ZM6202 768 5671 229 5673 745H5576V0H5581L6111 545L6109 22H6205V768Z"/></svg>
+      <svg class="wm__nait" viewBox="0 0 2793 725" aria-hidden="true"><path class="wm__l" pathLength="1" style="--i:0" d="M707 742 160 126 161 725H113V0H116L663 621L662 15H709V742Z"/><path class="wm__l" pathLength="1" style="--i:1" d="M954 156 931 136Q952 116 962.5 84Q973 52 966 17L1009 10Q1015 37 1009 64.5Q1003 92 989 116Q975 140 954 156Z"/><path class="wm__l" pathLength="1" style="--i:2" d="M1166 725 1466 -16H1470L1770 725H1715L1622 490H1309L1215 725ZM1604 444 1467 95 1327 444Z"/><path class="wm__l" pathLength="1" style="--i:3" d="M1994 15H2043V725H1994Z"/><path class="wm__l" pathLength="1" style="--i:4" d="M2272 15H2737V62H2528V725H2479V62H2272Z"/></svg>
+    </h1>
+    <div class="hero__copy">
+      <p class="hero__lead" data-i18n="hero.lead">Une maison de parfum marocaine. Désormais en ligne.</p>
+      <p class="hero__sub" data-i18n="hero.sub">Senteurs d’Orient et d’Occident, livrées gratuitement en 1 à 3 jours ouvrés. Vous payez à la réception.</p>
+      <div class="hero__cta">
+        <a class="btn" href="#collections" data-i18n="hero.cta">Voir les collections</a>
+        <a class="tlink" href="#nom" data-i18n="hero.cta2">Lire l’histoire</a>
+      </div>
+    </div>
+  </div>
+  <p class="hero__hint" id="heroHint" data-i18n="hero.hint">Touchez l’image pour vaporiser</p>
+</section>
+
+<div class="ribbon" aria-hidden="true"><div class="ribbon__track">
+  <div class="ribbon__set"><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="fr">Parfumeur au Maroc</span><i></i><span lang="ar">عطور من المغرب</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="en">Perfumer in Morocco</span><i></i><span lang="ary">ريحة بلادنا</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="fr">Parfumeur au Maroc</span><i></i><span lang="ar">عطور من المغرب</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="en">Perfumer in Morocco</span><i></i><span lang="ary">ريحة بلادنا</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="fr">Parfumeur au Maroc</span><i></i><span lang="ar">عطور من المغرب</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="en">Perfumer in Morocco</span><i></i><span lang="ary">ريحة بلادنا</span></div>
+  <div class="ribbon__set"><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="fr">Parfumeur au Maroc</span><i></i><span lang="ar">عطور من المغرب</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="en">Perfumer in Morocco</span><i></i><span lang="ary">ريحة بلادنا</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="fr">Parfumeur au Maroc</span><i></i><span lang="ar">عطور من المغرب</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="en">Perfumer in Morocco</span><i></i><span lang="ary">ريحة بلادنا</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="fr">Parfumeur au Maroc</span><i></i><span lang="ar">عطور من المغرب</span><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg><span lang="en">Perfumer in Morocco</span><i></i><span lang="ary">ريحة بلادنا</span></div>
+</div></div>
+
+<!-- chapter ⵏ : the name -->
+<section class="ch name" id="nom" data-scene>
+  <svg class="ch__mark" viewBox="0 0 1883 735" aria-hidden="true"><use href="#g-nayt"/></svg>
+  <div class="wrap name__grid">
+    <div class="name__viz">
+      <div class="name__row" dir="ltr">
+        <figure class="grp">
+          <div class="grp__g" aria-hidden="true"><svg viewBox="0 0 89 735" style="--i:0;--r:-8deg"><use href="#g-n"/></svg></div>
+          <figcaption data-i18n="ch1.n">n, « de »</figcaption>
+        </figure>
+        <figure class="grp">
+          <div class="grp__g" aria-hidden="true">
+            <svg viewBox="0 0 384 735" style="--i:1;--r:12deg"><use href="#g-a"/></svg>
+            <svg viewBox="0 0 411 735" style="--i:2;--r:-10deg"><use href="#g-y"/></svg>
+            <svg viewBox="0 0 499 735" style="--i:3;--r:14deg"><use href="#g-t"/></svg>
+          </div>
+          <figcaption data-i18n="ch1.ayt">ayt, « ceux de »</figcaption>
+        </figure>
+      </div>
+      <p class="name__legend rv" data-i18n="ch1.legend">Le nom, en lettres tifinaghes</p>
+    </div>
+    <div class="name__txt">
+      <h2 class="rv" data-i18n="ch1.title">Aït veut dire « ceux de »</h2>
+      <p class="rv" style="--d:1" data-i18n-html="ch1.p1">En tamazight, la langue amazighe, <em>aït</em> désigne les gens d’une même terre, d’une même maison. On dit Aït Bouguemez, Aït Benhaddou, et l’on sait aussitôt d’où quelqu’un vient.</p>
+      <p class="rv" style="--d:2" data-i18n-html="ch1.p2">Placez devant le <em>n</em>, qui veut dire « de », et vous obtenez N’Aït : « de ceux de… ». La phrase reste ouverte. Chacun la termine par les siens.</p>
+      <p class="rv" style="--d:3" data-i18n="ch1.p3">Maison N’Ait porte ce nom comme on porte un parfum : pour être reconnu en entrant dans la pièce.</p>
+    </div>
+  </div>
+</section>
+
+<!-- chapter ⴰ : five notes -->
+<section class="notes" id="notes">
+  <div class="wrap"><div class="ch__head">
+    <span class="ch__glyph" aria-hidden="true"><svg viewBox="0 0 384 735"><use href="#g-a"/></svg></span>
+    <h2 class="rv" data-i18n="ch2.title">Cinq odeurs que le Maroc connaît par cœur</h2>
+    <p class="lede rv" style="--d:1" data-i18n="ch2.intro">Avant les flacons, il y avait les maisons, les souks et les saisons.</p>
+  </div></div>
+  <div class="notes__stack" id="notesStack">
+    <article class="note note--rose" style="--i:0">
+      <div class="wrap note__in">
+        <canvas class="note__art" data-sketch="rose" aria-hidden="true"></canvas>
+        <div class="note__txt">
+          <h3 data-i18n="rose.name">La rose</h3>
+          <p class="note__place" data-i18n="rose.place">Kelâat M’Gouna, vallée du Dadès</p>
+          <p class="note__text" data-i18n="rose.text">Au printemps, on cueille la rose de Damas à l’aube, avant que la chaleur n’emporte son parfum. Pendant quelques semaines, toute la vallée embaume.</p>
+        </div>
+      </div>
+    </article>
+    <article class="note note--blossom" style="--i:1">
+      <div class="wrap note__in">
+        <canvas class="note__art" data-sketch="blossom" aria-hidden="true"></canvas>
+        <div class="note__txt">
+          <h3 data-i18n="blossom.name">La fleur d’oranger</h3>
+          <p class="note__place" data-i18n="blossom.place">Les patios, au printemps</p>
+          <p class="note__text" data-i18n="blossom.text">On distille à la maison les fleurs du bigaradier. On asperge de cette eau les mains de l’invité, et l’on en parfume les pâtisseries.</p>
+        </div>
+      </div>
+    </article>
+    <article class="note note--cedar" style="--i:2">
+      <div class="wrap note__in">
+        <canvas class="note__art" data-sketch="cedar" aria-hidden="true"></canvas>
+        <div class="note__txt">
+          <h3 data-i18n="cedar.name">Le cèdre</h3>
+          <p class="note__place" data-i18n="cedar.place">Moyen Atlas, entre Azrou et Ifrane</p>
+          <p class="note__text" data-i18n="cedar.text">Un bois sec, chaud, presque sucré. Il fait les plafonds sculptés, les coffres à linge et l’odeur des maisons anciennes.</p>
+        </div>
+      </div>
+    </article>
+    <article class="note note--amber" style="--i:3">
+      <div class="wrap note__in">
+        <canvas class="note__art" data-sketch="amber" aria-hidden="true"></canvas>
+        <div class="note__txt">
+          <h3 data-i18n="amber.name">L’ambre et le musc</h3>
+          <p class="note__place" data-i18n="amber.place">Chez l’attar, dans la médina</p>
+          <p class="note__text" data-i18n="amber.text">L’ambre se vend en petits cubes cireux, le musc en blocs blancs. On en glisse un dans l’armoire, et le linge s’en souvient des mois.</p>
+        </div>
+      </div>
+    </article>
+    <article class="note note--oud" style="--i:4">
+      <div class="wrap note__in">
+        <canvas class="note__art" data-sketch="oud" aria-hidden="true"></canvas>
+        <div class="note__txt">
+          <h3 data-i18n="oud.name">L’oud et le bkhour</h3>
+          <p class="note__place" data-i18n="oud.place">Le vendredi et les jours de fête</p>
+          <p class="note__text" data-i18n="oud.text">On pose le bkhour sur la braise. La fumée passe dans les vêtements, puis dans toute la maison. C’est l’odeur des grandes occasions.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+  <p class="wrap notes__outro rv"><span data-i18n="ch2.outro">Notre collection Arabisant prolonge cette famille : oud, ambre, musc, encens.</span></p>
+</section>
+
+<!-- the film -->
+<section class="ch film" id="film">
+  <div class="wrap">
+    <div class="ch__head">
+      <h2 class="rv" data-i18n="film.title">Le film</h2>
+      <p class="lede rv" style="--d:1" data-i18n="film.sub">Vingt-six secondes, sans un mot.</p>
+    </div>
+    <div class="film__frame">
+      <div class="film__stage">
+        <div class="film__clip cham ring">
+          <video id="filmVideo" muted loop playsinline preload="none" poster="media/film.jpg" tabindex="-1"><source src="media/film.mp4" type="video/mp4"></video>
+        </div>
+        <p class="film__cap" id="filmCap" data-i18n="film.c4">Ambre, musc, oud : ce qui reste quand tout s’efface.</p>
+      </div>
+      <div class="film__ctrl">
+        <button class="film__btn cham" id="filmBtn" type="button" aria-label="Lire le film" data-i18n-aria="film.play">
+          <svg class="i-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg>
+          <svg class="i-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h3.6v12H3zM9.4 2H13v12H9.4z"/></svg>
+        </button>
+        <div class="film__track" id="filmTrack"><i></i>
+          <button class="film__tick" type="button" style="--at:0%" data-t="0" aria-label="1"></button>
+          <button class="film__tick" type="button" style="--at:19.23%" data-t="5" aria-label="2"></button>
+          <button class="film__tick" type="button" style="--at:40.38%" data-t="10.5" aria-label="3"></button>
+          <button class="film__tick" type="button" style="--at:61.54%" data-t="16" aria-label="4"></button>
+          <button class="film__tick" type="button" style="--at:82.69%" data-t="21.5" aria-label="5"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- chapter ⵢ : reading a perfume -->
+<section class="ch read" id="lire" data-scene>
+  <svg class="ch__mark" viewBox="0 0 411 735" aria-hidden="true"><use href="#g-y"/></svg>
+  <div class="wrap read__grid">
+    <div class="atom">
+      <div class="atom__stage is-live" id="atomStage">
+        <canvas class="atom__mist" id="atomMist" aria-hidden="true"></canvas>
+        <svg class="atom__flacon" viewBox="0 0 200 320" aria-hidden="true">
+          <ellipse cx="100" cy="313" rx="76" ry="6" fill="rgba(4,6,22,.5)"/>
+          <g clip-path="url(#clip-body)"><g class="flacon__liq" id="atomLiq" transform="translate(0 122)"><path class="flacon__wave" d="M-160 0q20-6 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0V240H-160Z" fill="url(#liq-amber)"/></g></g>
+          <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+            <polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="rgba(205,211,224,.05)"/>
+            <rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38" fill="rgba(205,211,224,.08)"/><rect x="82" y="2" width="36" height="12" fill="rgba(205,211,224,.08)"/>
+            <path d="M100 140 134 190 100 240 66 190Z" stroke-opacity=".8"/><circle cx="100" cy="190" r="8" stroke-opacity=".8"/>
+            <path d="M43 104V272" stroke="#fff" stroke-opacity=".28"/>
+          </g>
+        </svg>
+      </div>
+      <button class="btn" id="sprayBtn" type="button" data-i18n="ch3.spray">Vaporiser</button>
+      <ul class="sizes" aria-hidden="true">
+        <li><svg viewBox="0 0 200 320" stroke-width="9"><use href="#flacon"/></svg>50 ml</li>
+        <li><svg viewBox="0 0 200 320" stroke-width="7.5"><use href="#flacon"/></svg>75 ml</li>
+        <li><svg viewBox="0 0 200 320" stroke-width="6"><use href="#flacon"/></svg>100 ml</li>
+      </ul>
+      <p class="read__sizes" data-i18n="ch3.sizes">Trois formats selon les références : 50, 75 et 100 ml.</p>
+    </div>
+    <div class="read__txt">
+      <span class="ch__glyph" aria-hidden="true"><svg viewBox="0 0 411 735"><use href="#g-y"/></svg></span>
+      <h2 class="rv" data-i18n="ch3.title">Un parfum se lit en trois temps</h2>
+      <p class="lede rv" style="--d:1" data-i18n="ch3.intro">Vaporisez, puis attendez. Ce que vous sentez à la première seconde n’est pas ce qui restera ce soir.</p>
+      <ol class="stages" id="stages">
+        <li class="stage stage--top">
+          <h3 class="stage__name" data-i18n="top.name">Tête</h3>
+          <p class="stage__time" data-i18n="top.time">Les premières minutes</p>
+          <p class="stage__text" data-i18n="top.text">Vive et légère. C’est elle qui vous fait dire oui ou non, et elle part la première.</p>
+          <div class="stage__bar" aria-hidden="true"><i></i></div>
+        </li>
+        <li class="stage stage--heart">
+          <h3 class="stage__name" data-i18n="heart.name">Cœur</h3>
+          <p class="stage__time" data-i18n="heart.time">Quelques heures</p>
+          <p class="stage__text" data-i18n="heart.text">Le caractère du parfum. Il s’installe quand la tête s’efface.</p>
+          <div class="stage__bar" aria-hidden="true"><i></i></div>
+        </li>
+        <li class="stage stage--base">
+          <h3 class="stage__name" data-i18n="base.name">Fond</h3>
+          <p class="stage__time" data-i18n="base.time">Jusqu’au soir</p>
+          <p class="stage__text" data-i18n="base.text">Bois, ambre, musc, oud : ce qui reste sur la peau et sur le vêtement.</p>
+          <div class="stage__bar" aria-hidden="true"><i></i></div>
+        </li>
+      </ol>
+      <p class="read__tip rv" data-i18n="ch3.tip">Essayez un parfum sur la peau, pas sur le papier, et laissez-lui une heure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- chapter ⵜ : collections -->
+<section class="ch col" id="collections" data-scene>
+  <svg class="ch__mark" viewBox="0 0 499 735" aria-hidden="true"><use href="#g-t"/></svg>
+  <div class="wrap">
+    <div class="ch__head">
+      <span class="ch__glyph" aria-hidden="true"><svg viewBox="0 0 499 735"><use href="#g-t"/></svg></span>
+      <h2 class="rv" data-i18n="ch4.title">Les collections</h2>
+      <p class="lede rv" style="--d:1" data-i18n="ch4.intro">Vingt-cinq familles et plus de cent soixante senteurs, en trois collections. Une quatrième se prépare.</p>
+    </div>
+    <p class="col__note rv" style="--d:2" data-i18n="ch4.note">Nos créations « Style » sont des interprétations de la maison, inspirées de parfums célèbres. Les marques citées appartiennent à leurs propriétaires ; Maison N’Ait n’est liée à aucune d’elles.</p>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Collections"></div>
+    <div class="col__desc">
+      <p id="colDesc"></p>
+      <a class="tlink" id="colAll" href="https://maisonait.youcan.store/collections" target="_blank" rel="noopener" data-i18n="tab.all">Voir toute la collection en boutique</a>
+    </div>
+    <div class="grid" id="grid" role="tabpanel" aria-live="polite"></div>
+    <noscript>
+      <div class="fallback">
+        <a class="tlink" href="https://maisonait.youcan.store/collections/arabisan-parfums">Arabisant</a>
+        <a class="tlink" href="https://maisonait.youcan.store/collections/parfum-femme">Femmes</a>
+        <a class="tlink" href="https://maisonait.youcan.store/collections/parfum-homme">Hommes</a>
+        <a class="tlink" href="https://maisonait.youcan.store/collections/unisexe">Unisexe</a>
+      </div>
+    </noscript>
+  </div>
+</section>
+
+<!-- now online -->
+<section class="ch online" id="en-ligne">
+  <div class="wrap">
+    <div class="ch__head">
+      <h2 class="rv" data-i18n="ch5.title">Désormais en ligne</h2>
+      <p class="lede rv" style="--d:1" data-i18n="ch5.intro">La maison livre maintenant à domicile. Quatre gestes suffisent.</p>
+    </div>
+    <ol class="steps" data-scene>
+      <li class="step"><span class="step__n" aria-hidden="true">1</span><h3 class="step__t" data-i18n="s1.t">Choisissez</h3><p class="step__d" data-i18n="s1.d">Une senteur, un format.</p></li>
+      <li class="step"><span class="step__n" aria-hidden="true">2</span><h3 class="step__t" data-i18n="s2.t">Commandez</h3><p class="step__d" data-i18n="s2.d">Remplissez le formulaire en boutique. Nous vous rappelons pour confirmer.</p></li>
+      <li class="step"><span class="step__n" aria-hidden="true">3</span><h3 class="step__t" data-i18n="s3.t">Recevez</h3><p class="step__d" data-i18n="s3.d">Livraison gratuite, en général sous 1 à 3 jours ouvrés.</p></li>
+      <li class="step"><span class="step__n" aria-hidden="true">4</span><h3 class="step__t" data-i18n="s4.t">Payez à la réception</h3><p class="step__d" data-i18n="s4.d">Vous réglez au livreur, quand le colis arrive.</p></li>
+    </ol>
+    <p class="online__returns rv" data-i18n="ch5.returns">Retour sous 3 jours, échange sous 7 jours après l’achat. Conditions détaillées en boutique.</p>
+    <div class="cta cham" id="cta">
+      <video id="ctaVideo" muted loop playsinline preload="none" poster="media/amber.jpg" aria-hidden="true" tabindex="-1"><source src="media/amber.mp4" type="video/mp4"></video>
+      <h2 data-i18n="cta.title">La boutique est ouverte.</h2>
+      <a class="btn btn--dark" href="https://maisonait.youcan.store/" target="_blank" rel="noopener" data-i18n="cta.btn">Ouvrir la boutique</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__mark" aria-hidden="true"></div>
+    <div class="foot__grid">
+      <p class="foot__tag" data-i18n="foot.tag">Maison N’Ait, parfumeur au Maroc.</p>
+      <nav class="foot__col" aria-labelledby="fc1">
+        <h3 id="fc1" data-i18n="foot.col1">Collections</h3>
+        <a href="https://maisonait.youcan.store/collections/arabisan-parfums" target="_blank" rel="noopener" data-i18n="tab.arabisant">Arabisant</a>
+        <a href="https://maisonait.youcan.store/collections/parfum-femme" target="_blank" rel="noopener" data-i18n="tab.femmes">Femmes</a>
+        <a href="https://maisonait.youcan.store/collections/parfum-homme" target="_blank" rel="noopener" data-i18n="tab.hommes">Hommes</a>
+        <a href="https://maisonait.youcan.store/collections/unisexe" target="_blank" rel="noopener" data-i18n="tab.unisexe">Unisexe</a>
+      </nav>
+      <nav class="foot__col" aria-labelledby="fc2">
+        <h3 id="fc2" data-i18n="foot.col2">Boutique</h3>
+        <a href="https://maisonait.youcan.store/pages/shipping-delivery" target="_blank" rel="noopener" data-i18n="foot.shipping">Livraison</a>
+        <a href="https://maisonait.youcan.store/pages/return-policy" target="_blank" rel="noopener" data-i18n="foot.returns">Retours et échanges</a>
+        <a href="https://maisonait.youcan.store/pages/how-to-pay" target="_blank" rel="noopener" data-i18n="foot.pay">Paiement</a>
+        <a href="https://maisonait.youcan.store/pages/faq" target="_blank" rel="noopener" data-i18n="foot.faq">Questions fréquentes</a>
+        <a href="https://maisonait.youcan.store/pages/contact-us" target="_blank" rel="noopener" data-i18n="foot.contact">Contact</a>
+      </nav>
+      <div class="foot__col" role="group" aria-labelledby="fc3">
+        <h3 id="fc3" data-i18n="foot.col3">Langue</h3>
+        <button type="button" data-lang="ary" lang="ary" aria-pressed="false">الدارجة</button>
+        <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
+        <button type="button" data-lang="fr" lang="fr" aria-pressed="true">Français</button>
+        <button type="button" data-lang="en" lang="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+    <p class="foot__legal" data-i18n="foot.legal">© 2026 Maison N’Ait. Les marques citées appartiennent à leurs propriétaires respectifs.</p>
+  </div>
+</footer>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+  <button class="sheet__veil" type="button" tabindex="-1" data-close aria-label="Fermer" data-i18n-aria="drawer.close"></button>
+  <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <header class="sheet__head">
+      <h3 class="sheet__title" id="sheetTitle" dir="ltr"></h3>
+      <p class="sheet__meta" id="sheetMeta"></p>
+      <button class="sheet__close cham" id="sheetClose" type="button" data-close aria-label="Fermer" data-i18n-aria="drawer.close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13"/></svg></button>
+    </header>
+    <div class="sheet__body">
+      <p class="sheet__sub" data-i18n="drawer.sub">Senteurs « Style » proposées en boutique</p>
+      <ul class="scents" id="sheetList"></ul>
+      <p class="sheet__note" data-i18n="drawer.note">Liste relevée sur la boutique. Vous choisissez la senteur et le format sur la page de commande.</p>
+    </div>
+    <footer class="sheet__foot"><a class="btn" id="sheetCta" href="https://maisonait.youcan.store/" target="_blank" rel="noopener" data-i18n="drawer.cta">Choisir sur la boutique</a></footer>
+  </div>
+</div>
+
+<script>
+const I18N = {"fr":{"skip":"Aller au contenu","lang.label":"Langue","nav.story":"L’histoire","nav.notes":"Les notes","nav.film":"Le film","nav.read":"Lire un parfum","nav.collections":"Les collections","nav.shop":"Boutique","hero.lead":"Une maison de parfum marocaine. Désormais en ligne.","hero.sub":"Senteurs d’Orient et d’Occident, livrées gratuitement en 1 à 3 jours ouvrés. Vous payez à la réception.","hero.cta":"Voir les collections","hero.cta2":"Lire l’histoire","hero.hint":"Touchez l’image pour vaporiser","ch1.title":"Aït veut dire « ceux de »","ch1.p1":"En tamazight, la langue amazighe, <em>aït</em> désigne les gens d’une même terre, d’une même maison. On dit Aït Bouguemez, Aït Benhaddou, et l’on sait aussitôt d’où quelqu’un vient.","ch1.p2":"Placez devant le <em>n</em>, qui veut dire « de », et vous obtenez N’Aït : « de ceux de… ». La phrase reste ouverte. Chacun la termine par les siens.","ch1.p3":"Maison N’Ait porte ce nom comme on porte un parfum : pour être reconnu en entrant dans la pièce.","ch1.legend":"Le nom, en lettres tifinaghes","ch1.n":"n, « de »","ch1.ayt":"ayt, « ceux de »","ch2.title":"Cinq odeurs que le Maroc connaît par cœur","ch2.intro":"Avant les flacons, il y avait les maisons, les souks et les saisons.","rose.name":"La rose","rose.place":"Kelâat M’Gouna, vallée du Dadès","rose.text":"Au printemps, on cueille la rose de Damas à l’aube, avant que la chaleur n’emporte son parfum. Pendant quelques semaines, toute la vallée embaume.","blossom.name":"La fleur d’oranger","blossom.place":"Les patios, au printemps","blossom.text":"On distille à la maison les fleurs du bigaradier. On asperge de cette eau les mains de l’invité, et l’on en parfume les pâtisseries.","cedar.name":"Le cèdre","cedar.place":"Moyen Atlas, entre Azrou et Ifrane","cedar.text":"Un bois sec, chaud, presque sucré. Il fait les plafonds sculptés, les coffres à linge et l’odeur des maisons anciennes.","amber.name":"L’ambre et le musc","amber.place":"Chez l’attar, dans la médina","amber.text":"L’ambre se vend en petits cubes cireux, le musc en blocs blancs. On en glisse un dans l’armoire, et le linge s’en souvient des mois.","oud.name":"L’oud et le bkhour","oud.place":"Le vendredi et les jours de fête","oud.text":"On pose le bkhour sur la braise. La fumée passe dans les vêtements, puis dans toute la maison. C’est l’odeur des grandes occasions.","ch2.outro":"Notre collection Arabisant prolonge cette famille : oud, ambre, musc, encens.","film.title":"Le film","film.sub":"Vingt-six secondes, sans un mot.","film.c1":"Aït : en tamazight, « ceux de ».","film.c2":"D’une terre où l’on reconnaît les siens à leur parfum.","film.c3":"Rose du Dadès, fleur d’oranger, cèdre de l’Atlas.","film.c4":"Ambre, musc, oud : ce qui reste quand tout s’efface.","film.c5":"Maison N’Ait. Désormais en ligne.","film.play":"Lire le film","film.pause":"Mettre le film en pause","ch3.title":"Un parfum se lit en trois temps","ch3.intro":"Vaporisez, puis attendez. Ce que vous sentez à la première seconde n’est pas ce qui restera ce soir.","top.name":"Tête","top.time":"Les premières minutes","top.text":"Vive et légère. C’est elle qui vous fait dire oui ou non, et elle part la première.","heart.name":"Cœur","heart.time":"Quelques heures","heart.text":"Le caractère du parfum. Il s’installe quand la tête s’efface.","base.name":"Fond","base.time":"Jusqu’au soir","base.text":"Bois, ambre, musc, oud : ce qui reste sur la peau et sur le vêtement.","ch3.spray":"Vaporiser","ch3.tip":"Essayez un parfum sur la peau, pas sur le papier, et laissez-lui une heure.","ch3.sizes":"Trois formats selon les références : 50, 75 et 100 ml.","ch4.title":"Les collections","ch4.intro":"Vingt-cinq familles et plus de cent soixante senteurs, en trois collections. Une quatrième se prépare.","ch4.note":"Nos créations « Style » sont des interprétations de la maison, inspirées de parfums célèbres. Les marques citées appartiennent à leurs propriétaires ; Maison N’Ait n’est liée à aucune d’elles.","tab.arabisant":"Arabisant","tab.femmes":"Femmes","tab.hommes":"Hommes","tab.unisexe":"Unisexe","desc.arabisant":"Oud, ambre, musc, encens : l’esprit des grandes maisons du Golfe.","desc.femmes":"Onze familles de senteurs pour elle.","desc.hommes":"Neuf familles de senteurs pour lui.","desc.unisexe":"La collection Unisexe se prépare. Elle arrivera bientôt en boutique.","tab.all":"Voir toute la collection en boutique","card.see":"Voir les senteurs","card.order":"Commander","card.single":"Un parfum","card.soon":"Bientôt","fmt.scents1":"1 senteur","fmt.scents":"{n} senteurs","fmt.families":"{n} familles","fmt.sizes":"50, 75 ou 100 ml","fmt.price":"{n} DH","tag.EXTRA":"Extra","tag.SUPER":"Super","drawer.sub":"Senteurs « Style » proposées en boutique","drawer.note":"Liste relevée sur la boutique. Vous choisissez la senteur et le format sur la page de commande.","drawer.cta":"Choisir sur la boutique","drawer.close":"Fermer","ch5.title":"Désormais en ligne","ch5.intro":"La maison livre maintenant à domicile. Quatre gestes suffisent.","s1.t":"Choisissez","s1.d":"Une senteur, un format.","s2.t":"Commandez","s2.d":"Remplissez le formulaire en boutique. Nous vous rappelons pour confirmer.","s3.t":"Recevez","s3.d":"Livraison gratuite, en général sous 1 à 3 jours ouvrés.","s4.t":"Payez à la réception","s4.d":"Vous réglez au livreur, quand le colis arrive.","ch5.returns":"Retour sous 3 jours, échange sous 7 jours après l’achat. Conditions détaillées en boutique.","cta.title":"La boutique est ouverte.","cta.btn":"Ouvrir la boutique","foot.tag":"Maison N’Ait, parfumeur au Maroc.","foot.col1":"Collections","foot.col2":"Boutique","foot.col3":"Langue","foot.shipping":"Livraison","foot.returns":"Retours et échanges","foot.pay":"Paiement","foot.faq":"Questions fréquentes","foot.contact":"Contact","foot.legal":"© 2026 Maison N’Ait. Les marques citées appartiennent à leurs propriétaires respectifs."},"en":{"skip":"Skip to content","lang.label":"Language","nav.story":"The story","nav.notes":"The notes","nav.film":"The film","nav.read":"Reading a perfume","nav.collections":"The collections","nav.shop":"Shop","hero.lead":"A Moroccan perfume house. Now online.","hero.sub":"Scents of East and West, delivered free in 1 to 3 working days. You pay when it arrives.","hero.cta":"See the collections","hero.cta2":"Read the story","hero.hint":"Tap the picture to spray","ch1.title":"Aït means “those of”","ch1.p1":"In Tamazight, the Amazigh language, <em>aït</em> names the people of one land, one household. Say Aït Bouguemez or Aït Benhaddou and everyone knows where a person comes from.","ch1.p2":"Put the <em>n</em> in front, meaning “of”, and you get N’Aït: “of those of…”. The phrase stays open. Each of us finishes it with our own people.","ch1.p3":"Maison N’Ait wears the name the way you wear a perfume: to be recognised when you walk into the room.","ch1.legend":"The name in Tifinagh letters","ch1.n":"n, “of”","ch1.ayt":"ayt, “those of”","ch2.title":"Five smells Morocco knows by heart","ch2.intro":"Before the bottles there were the houses, the souks and the seasons.","rose.name":"Rose","rose.place":"Kelâat M’Gouna, Dadès valley","rose.text":"In spring the Damask rose is picked at dawn, before the heat carries its scent away. For a few weeks the whole valley smells of it.","blossom.name":"Orange blossom","blossom.place":"Courtyards, in spring","blossom.text":"Bitter-orange flowers are distilled at home. The water is sprinkled on a guest’s hands and scents the pastries.","cedar.name":"Cedar","cedar.place":"Middle Atlas, between Azrou and Ifrane","cedar.text":"A dry, warm, almost sweet wood. It makes carved ceilings, linen chests and the smell of old houses.","amber.name":"Amber and musk","amber.place":"At the attar’s stall in the medina","amber.text":"Amber is sold in small waxy cubes, musk in white blocks. Slip one into the wardrobe and the linen remembers it for months.","oud.name":"Oud and bkhour","oud.place":"Fridays and feast days","oud.text":"Bkhour goes on the embers. The smoke passes into the clothes, then through the whole house. It is the smell of great occasions.","ch2.outro":"Our Arabisant collection carries this family on: oud, amber, musk, incense.","film.title":"The film","film.sub":"Twenty-six seconds, not a word.","film.c1":"Aït: in Tamazight, “those of”.","film.c2":"From a land where you know your own by their scent.","film.c3":"Dadès rose, orange blossom, Atlas cedar.","film.c4":"Amber, musk, oud: what stays when the rest has gone.","film.c5":"Maison N’Ait. Now online.","film.play":"Play the film","film.pause":"Pause the film","ch3.title":"A perfume is read in three stages","ch3.intro":"Spray, then wait. What you smell in the first second is not what will be left tonight.","top.name":"Top","top.time":"The first minutes","top.text":"Bright and light. It makes you say yes or no, and it leaves first.","heart.name":"Heart","heart.time":"A few hours","heart.text":"The character of the perfume. It settles in as the top fades.","base.name":"Base","base.time":"Until evening","base.text":"Woods, amber, musk, oud: what stays on skin and on cloth.","ch3.spray":"Spray","ch3.tip":"Try a perfume on skin, not on paper, and give it an hour.","ch3.sizes":"Three sizes depending on the product: 50, 75 and 100 ml.","ch4.title":"The collections","ch4.intro":"Twenty-five families and more than a hundred and sixty scents, in three collections. A fourth is being prepared.","ch4.note":"Our “Style” creations are the house’s own interpretations, inspired by famous perfumes. The brand names quoted belong to their owners; Maison N’Ait is not affiliated with any of them.","tab.arabisant":"Arabisant","tab.femmes":"Women","tab.hommes":"Men","tab.unisexe":"Unisex","desc.arabisant":"Oud, amber, musk, incense: the spirit of the great Gulf houses.","desc.femmes":"Eleven scent families for her.","desc.hommes":"Nine scent families for him.","desc.unisexe":"The Unisex collection is being prepared. It will be in the shop soon.","tab.all":"See the whole collection in the shop","card.see":"See the scents","card.order":"Order","card.single":"One perfume","card.soon":"Soon","fmt.scents1":"1 scent","fmt.scents":"{n} scents","fmt.families":"{n} families","fmt.sizes":"50, 75 or 100 ml","fmt.price":"{n} DH","tag.EXTRA":"Extra","tag.SUPER":"Super","drawer.sub":"“Style” scents offered in the shop","drawer.note":"List taken from the shop. You choose the scent and the size on the order page.","drawer.cta":"Choose in the shop","drawer.close":"Close","ch5.title":"Now online","ch5.intro":"The house now delivers to your door. It takes four steps.","s1.t":"Choose","s1.d":"One scent, one size.","s2.t":"Order","s2.d":"Fill in the form in the shop. We call you back to confirm.","s3.t":"Receive","s3.d":"Free delivery, usually within 1 to 3 working days.","s4.t":"Pay on delivery","s4.d":"You pay the courier when the parcel arrives.","ch5.returns":"Returns within 3 days, exchanges within 7 days of purchase. Full conditions in the shop.","cta.title":"The shop is open.","cta.btn":"Open the shop","foot.tag":"Maison N’Ait, perfumer in Morocco.","foot.col1":"Collections","foot.col2":"Shop","foot.col3":"Language","foot.shipping":"Delivery","foot.returns":"Returns and exchanges","foot.pay":"Payment","foot.faq":"Frequent questions","foot.contact":"Contact","foot.legal":"© 2026 Maison N’Ait. Brand names quoted belong to their respective owners."},"ar":{"skip":"انتقل إلى المحتوى","lang.label":"اللغة","nav.story":"الحكاية","nav.notes":"الروائح","nav.film":"الفيلم","nav.read":"قراءة العطر","nav.collections":"المجموعات","nav.shop":"المتجر","hero.lead":"دار عطور مغربية. الآن على الإنترنت.","hero.sub":"عطور من الشرق والغرب، بتوصيل مجاني خلال يوم إلى ثلاثة أيام عمل. والدفع عند الاستلام.","hero.cta":"اكتشف المجموعات","hero.cta2":"اقرأ الحكاية","hero.hint":"المس الصورة لترشّ العطر","ch1.title":"«آيت» تعني «أهل»","ch1.p1":"في الأمازيغية، <em>آيت</em> هم أهل الأرض الواحدة والبيت الواحد. نقول آيت بوكماز وآيت بن حدّو، فيُعرف في الحال من أين يأتي المرء.","ch1.p2":"وإذا سبقتها <em>النون</em>، ومعناها «مِن»، صارت «ن آيت»: «مِن أهل…». تبقى العبارة مفتوحة، ويُتمّها كلٌّ بأهله.","ch1.p3":"دار نايت تحمل هذا الاسم كما يوضع العطر: ليُعرف صاحبه ساعة يدخل المكان.","ch1.legend":"الاسم بحروف تيفيناغ","ch1.n":"ن، «مِن»","ch1.ayt":"آيت، «أهل»","ch2.title":"خمس روائح يحفظها المغرب عن ظهر قلب","ch2.intro":"قبل القوارير كانت البيوت والأسواق والفصول.","rose.name":"الورد","rose.place":"قلعة مكونة، وادي دادس","rose.text":"في الربيع يُقطف الورد الدمشقي عند الفجر، قبل أن تذهب الحرارة بعطره. ولأسابيع يفوح به الوادي كلّه.","blossom.name":"زهر البرتقال","blossom.place":"أفنية البيوت في الربيع","blossom.text":"يُقطَّر زهر النارنج في البيوت. يُرشّ ماء الزهر على يدَي الضيف، وتُعطَّر به الحلويات.","cedar.name":"الأرز","cedar.place":"الأطلس المتوسط، بين أزرو وإفران","cedar.text":"خشب جافّ دافئ يكاد يكون حلواً. منه السقوف المنقوشة وصناديق الثياب ورائحة البيوت العتيقة.","amber.name":"العنبر والمسك","amber.place":"عند العطّار في المدينة العتيقة","amber.text":"يُباع العنبر مكعّباتٍ صغيرة شمعية، والمسك قطعاً بيضاء. تضع واحدة في الخزانة فتحفظ الثياب عطرها شهوراً.","oud.name":"العود والبخور","oud.place":"يوم الجمعة وأيام الأعياد","oud.text":"يوضع البخور على الجمر، فيسري الدخان في الثياب ثم في البيت كلّه. إنها رائحة المناسبات الكبيرة.","ch2.outro":"ومجموعتنا «عربي» امتداد لهذه العائلة: عود وعنبر ومسك وبخور.","film.title":"الفيلم","film.sub":"ستّ وعشرون ثانية، بلا كلمة واحدة.","film.c1":"آيت: بالأمازيغية «أهل».","film.c2":"من أرضٍ يُعرف فيها الأهل بعطرهم.","film.c3":"ورد دادس، زهر البرتقال، أرز الأطلس.","film.c4":"عنبر ومسك وعود: ما يبقى حين يزول كلّ شيء.","film.c5":"دار نايت. الآن على الإنترنت.","film.play":"شغّل الفيلم","film.pause":"أوقف الفيلم مؤقتاً","ch3.title":"العطر يُقرأ على ثلاث مراحل","ch3.intro":"رُشّ ثم انتظر. ما تشمّه في الثانية الأولى ليس ما سيبقى هذا المساء.","top.name":"المقدّمة","top.time":"الدقائق الأولى","top.text":"خفيفة ومنعشة. هي التي تجعلك تقول نعم أو لا، وهي أوّل ما يرحل.","heart.name":"القلب","heart.time":"بضع ساعات","heart.text":"شخصية العطر. يستقرّ حين تخفت المقدّمة.","base.name":"القاعدة","base.time":"حتى المساء","base.text":"أخشاب وعنبر ومسك وعود: ما يبقى على الجلد وعلى الثوب.","ch3.spray":"رُشّ","ch3.tip":"جرّب العطر على الجلد لا على الورق، وامنحه ساعة.","ch3.sizes":"ثلاثة أحجام حسب المنتج: 50 و75 و100 مل.","ch4.title":"المجموعات","ch4.intro":"خمس وعشرون عائلة وأكثر من مئة وستين رائحة، في ثلاث مجموعات. والرابعة قيد التحضير.","ch4.note":"عطور «Style» من تركيب الدار، مستوحاة من عطور مشهورة. العلامات المذكورة ملك لأصحابها، ولا علاقة لدار نايت بأيّ منها.","tab.arabisant":"عربي","tab.femmes":"نسائي","tab.hommes":"رجالي","tab.unisexe":"للجنسين","desc.arabisant":"عود وعنبر ومسك وبخور: روح دور العطور الخليجية الكبرى.","desc.femmes":"إحدى عشرة عائلة عطرية لها.","desc.hommes":"تسع عائلات عطرية له.","desc.unisexe":"مجموعة «للجنسين» قيد التحضير، وستتوفر قريباً في المتجر.","tab.all":"شاهد المجموعة كاملة في المتجر","card.see":"اكتشف الروائح","card.order":"اطلب","card.single":"عطر واحد","card.soon":"قريباً","fmt.scents1":"رائحة واحدة","fmt.scents":"الروائح: {n}","fmt.families":"العائلات: {n}","fmt.sizes":"50 أو 75 أو 100 مل","fmt.price":"{n} درهم","tag.EXTRA":"إكسترا","tag.SUPER":"سوبر","drawer.sub":"روائح «Style» المعروضة في المتجر","drawer.note":"القائمة مأخوذة من المتجر. تختار الرائحة والحجم في صفحة الطلب.","drawer.cta":"اختر من المتجر","drawer.close":"إغلاق","ch5.title":"الآن على الإنترنت","ch5.intro":"الدار توصل الآن إلى باب بيتك. أربع خطوات تكفي.","s1.t":"اختر","s1.d":"رائحة وحجماً.","s2.t":"اطلب","s2.d":"املأ الاستمارة في المتجر، ونتصل بك للتأكيد.","s3.t":"استلم","s3.d":"توصيل مجاني، عادةً خلال يوم إلى ثلاثة أيام عمل.","s4.t":"ادفع عند الاستلام","s4.d":"تدفع لعامل التوصيل عند وصول الطرد.","ch5.returns":"الإرجاع خلال ثلاثة أيام والاستبدال خلال سبعة أيام من تاريخ الشراء. الشروط كاملة في المتجر.","cta.title":"المتجر مفتوح.","cta.btn":"افتح المتجر","foot.tag":"دار نايت، عطور من المغرب.","foot.col1":"المجموعات","foot.col2":"المتجر","foot.col3":"اللغة","foot.shipping":"التوصيل","foot.returns":"الإرجاع والاستبدال","foot.pay":"الدفع","foot.faq":"أسئلة شائعة","foot.contact":"اتصل بنا","foot.legal":"© 2026 دار نايت. العلامات المذكورة ملك لأصحابها."},"ary":{"skip":"سير للمحتوى","lang.label":"اللغة","nav.story":"الحكاية","nav.notes":"الريحات","nav.film":"الفيلم","nav.read":"كيفاش يتقرا العطر","nav.collections":"المجموعات","nav.shop":"المتجر","hero.lead":"دار مغربية ديال العطور. دابا ولّات أونلاين.","hero.sub":"ريحات من الشرق والغرب، والتوصيل فابور فـ 1 حتى لـ 3 أيام ديال الخدمة. وكتخلّص ملي توصلك.","hero.cta":"شوف المجموعات","hero.cta2":"قرا الحكاية","hero.hint":"ورّك على التصويرة باش ترشّ","ch1.title":"«آيت» معناها «الناس ديال…»","ch1.p1":"بالأمازيغية، <em>آيت</em> هوما الناس ديال نفس الأرض ونفس الدار. كنقولو آيت بوكماز، آيت بن حدّو، وكتعرف دغيا الواحد منين جاي.","ch1.p2":"وملي كتزيد قبلها <em>النون</em>، اللي معناها «من»، كتولّي «ن آيت»: «من الناس ديال…». الجملة كتبقى محلولة، وكل واحد كيكمّلها بناسو.","ch1.p3":"دار نايت هازّة هاد السمية بحال ما كتدير العطر: باش يعرفوك غير تدخل.","ch1.legend":"السمية بحروف تيفيناغ","ch1.n":"ن، «من»","ch1.ayt":"آيت، «الناس ديال»","ch2.title":"خمسة ديال الريحات اللي المغرب حافظهم","ch2.intro":"قبل القراعي، كانو الديور والسواق والفصول.","rose.name":"الورد","rose.place":"قلعة مكونة، واد دادس","rose.text":"فالربيع كيتجنى الورد البلدي مع الفجر، قبل ما السخانة تدّي ريحتو. وشي سيمانات، الواد كامل كيعطي بريحة الورد.","blossom.name":"الزهر","blossom.place":"وسط الديور، فالربيع","blossom.text":"الزهر كيتقطّر فالدار. وما زهر كيترشّ على يدّين الضيف، وكتتعطّر بيه الحلوى.","cedar.name":"الأرز","cedar.place":"الأطلس المتوسط، بين أزرو وإفران","cedar.text":"خشب ناشف ودافي، بحال يلا فيه شوية ديال الحلاوة. منّو السقوفا المنقوشين والصنادق ديال الحوايج وريحة الديور القدام.","amber.name":"العنبر والمسك","amber.place":"عند العطّار فالمدينة القديمة","amber.text":"العنبر كيتباع مكعبات صغار بحال الشمع، والمسك طروف بيضين. كتحط واحد فالماريو، والحوايج كيبقاو شادّين ريحتو شهور.","oud.name":"العود والبخور","oud.place":"نهار الجمعة ونهارات العيد","oud.text":"البخور كيتحط على الجمر. الدخان كيدخل فالحوايج ومن بعد فالدار كاملة. هادي هي ريحة المناسبات الكبار.","ch2.outro":"والمجموعة ديالنا «عربي» كتكمّل هاد العائلة: عود، عنبر، مسك، بخور.","film.title":"الفيلم","film.sub":"ستة وعشرين ثانية، بلا حتى كلمة.","film.c1":"آيت: بالأمازيغية «الناس ديال…».","film.c2":"من بلاد كتعرف فيها ناسك من ريحتهم.","film.c3":"ورد دادس، الزهر، أرز الأطلس.","film.c4":"عنبر، مسك، عود: اللي كيبقى ملي كلشي كيمشي.","film.c5":"دار نايت. دابا أونلاين.","film.play":"خدّم الفيلم","film.pause":"وقّف الفيلم","ch3.title":"العطر كيتقرا على ثلاثة ديال المراحل","ch3.intro":"رشّ وتسنّى. اللي كتشمّ فالثانية الأولى ماشي هو اللي غادي يبقى معاك فالعشية.","top.name":"البداية","top.time":"الدقايق الأولين","top.text":"خفيفة ومنعشة. هي اللي كتخليك تقول آه ولا لا، وهي اللي كتمشي الأولى.","heart.name":"القلب","heart.time":"شي سوايع","heart.text":"الشخصية ديال العطر. كيبان ملي كتخفاف البداية.","base.name":"الساس","base.time":"حتى للعشية","base.text":"خشب، عنبر، مسك، عود: اللي كيبقى فالجلد وفالحوايج.","ch3.spray":"رشّ","ch3.tip":"جرّب العطر على جلدك ماشي على الورقة، وخليه ساعة.","ch3.sizes":"ثلاثة ديال الأحجام على حساب المنتوج: 50، 75 و100 مل.","ch4.title":"المجموعات","ch4.intro":"خمسة وعشرين عائلة وكثر من 160 ريحة، فثلاثة ديال المجموعات. والرابعة كتوجد.","ch4.note":"عطور «Style» من تركيبة الدار، مستوحية من عطور معروفة. الماركات المذكورة ديال ماليها، ودار نايت ما عندها حتى علاقة بيهم.","tab.arabisant":"عربي","tab.femmes":"العيالات","tab.hommes":"الرجال","tab.unisexe":"للجوج","desc.arabisant":"عود، عنبر، مسك، بخور: الروح ديال ديور العطر الكبار ديال الخليج.","desc.femmes":"حداشر عائلة ديال الريحات ليها.","desc.hommes":"تسعة ديال العائلات ديال الريحات ليه.","desc.unisexe":"مجموعة «للجوج» كتوجد، وقريب غادي تكون فالمتجر.","tab.all":"شوف المجموعة كاملة فالمتجر","card.see":"شوف الريحات","card.order":"كوموندي","card.single":"عطر واحد","card.soon":"قريب","fmt.scents1":"ريحة وحدة","fmt.scents":"الريحات: {n}","fmt.families":"العائلات: {n}","fmt.sizes":"50، 75 ولا 100 مل","fmt.price":"{n} درهم","tag.EXTRA":"إكسترا","tag.SUPER":"سوبر","drawer.sub":"ريحات «Style» اللي كاينين فالمتجر","drawer.note":"اللائحة خديناها من المتجر. كتختار الريحة والحجم فصفحة الكوموند.","drawer.cta":"ختار من المتجر","drawer.close":"سدّ","ch5.title":"دابا أونلاين","ch5.intro":"الدار دابا كتوصّل حتى لباب دارك. ربعة ديال الخطوات وصافي.","s1.t":"ختار","s1.d":"ريحة وحجم.","s2.t":"كوموندي","s2.d":"عمّر الفورمولير فالمتجر، وغادي نعيطو ليك باش نأكدو.","s3.t":"توصلك","s3.d":"التوصيل فابور، غالباً فـ 1 حتى لـ 3 أيام ديال الخدمة.","s4.t":"خلّص ملي توصلك","s4.d":"كتخلّص لليفرور ملي توصلك الكوموند.","ch5.returns":"الترجاع فـ 3 أيام والتبدال فـ 7 أيام من نهار الشراء. الشروط كاملة فالمتجر.","cta.title":"المتجر محلول.","cta.btn":"دخل للمتجر","foot.tag":"دار نايت، عطور من المغرب.","foot.col1":"المجموعات","foot.col2":"المتجر","foot.col3":"اللغة","foot.shipping":"التوصيل","foot.returns":"الترجاع والتبدال","foot.pay":"الخلاص","foot.faq":"أسئلة","foot.contact":"تواصل معانا","foot.legal":"© 2026 دار نايت. الماركات المذكورة ديال ماليها."}};
+const CATALOG = {"shop":"https://maisonait.youcan.store","price":199,"collections":[{"id":"arabisant","url":"https://maisonait.youcan.store/collections/arabisan-parfums","count":5},{"id":"femmes","url":"https://maisonait.youcan.store/collections/parfum-femme","count":11},{"id":"hommes","url":"https://maisonait.youcan.store/collections/parfum-homme","count":9},{"id":"unisexe","url":"https://maisonait.youcan.store/collections/unisexe","count":0}],"products":[{"c":"arabisant","slug":"al-qurashi","name":"AL QURASHI","sizes":true,"url":"https://maisonait.youcan.store/products/al-qurashi","scents":[["Black Incense","البخور الأسود"],["Khashah Al Oud","خشاش العود"],["Khashah Al Oud","خشاش العود","EXTRA"],["Farusiyya - White Incense","الفروسية - البخور الأبيض"],["Charme d'Orient","سحر الشرق"],["Golden Tears","الدموع الذهبية"],["Safari Extreme","سفاري الشديد"],["Safari Blue","سفاري الأزرق"],["Safari Blue","سفاري الأزرق","EXTRA"],["Safari Blue","سفاري الأزرق","SUPER"]]},{"c":"arabisant","slug":"al-majed-oud","name":"AL MAJED OUD","sizes":true,"url":"https://maisonait.youcan.store/products/al-majed-oud","scents":[["Wood White","الخشب الأبيض"],["Pure Musk","المسك النقي"]]},{"c":"arabisant","slug":"al-maghribi","name":"AL MAGHRIBI","sizes":true,"url":"https://maisonait.youcan.store/products/al-maghribi","scents":[["Ignite Oud","أشعل العود"],["Bia Shaikh","بيا شيخ"],["Oud Chams","عود شمس"],["Summer Oud","عود الصيف"]]},{"c":"arabisant","slug":"aljazeera","name":"AL JAZEERA","sizes":true,"url":"https://maisonait.youcan.store/products/aljazeera","scents":[["Magic","السحر"],["Magic","السحر","EXTRA"],["Damascus","دمشق"]]},{"c":"arabisant","slug":"ajmal","name":"AJMAL","sizes":true,"url":"https://maisonait.youcan.store/products/ajmal","scents":[["Laylat Al Khamis","ليلة الخميس"],["Laylat Al Khamis","ليلة الخميس","EXTRA"],["Oud Chams Abyad","عود شمس أبيض"],["Oud Chams Abyad","عود شمس أبيض","EXTRA"],["Ambre Pouré","العنبر المصبوب"],["Ambre Santal","العنبر الصندل"],["Ambre Supreme","العنبر الأعلى"],["Azeerah","عزيرة"],["Cuir Musc","جلد المسك"],["Incense Wood","خشب البخور"],["Silk Musk","مسك الحرير"],["Silk Musk","مسك الحرير","EXTRA"],["Tanassuq","تناسق"],["Violet Musc","البنفسج المسك"],["Wisal","وصال"],["Qafiya Gold Edition","قافية الطبعة الذهبية"],["Qasida","قصيدة"],["Mosha 27","موشى 27"],["Musk Silk Supreme","مسك الحرير الأعلى"],["Musk Silk Supreme","مسك الحرير الأعلى","EXTRA"],["Raindrops","قطرات المطر"],["Song Of Oud","أغنية العود"],["Song Of Oud","أغنية العود","EXTRA"],["Ambre Pimente","العنبر المتبل"]]},{"c":"femmes","slug":"chanel-femmes","name":"CHANEL","sizes":true,"url":"https://maisonait.youcan.store/products/chanel-femmes","scents":[["Chance","الفرصة"],["Chanel 5","شانيل 5"],["Chanel 5 L'Eau","شانيل 5 الماء"],["Coco Chanel","كوكو شانيل"],["Coco Mademoiselle","كوكو مادموازيل"],["Coco Mademoiselle Intense","كوكو مادموازيل المكثف"],["Coco Noir","كوكو نوار"],["Gabrielle","غابرييل"]]},{"c":"femmes","slug":"cartier-femmes","name":"CARTIER","sizes":true,"url":"https://maisonait.youcan.store/products/cartier-femmes","scents":[["Allure","السحر"]]},{"c":"femmes","slug":"carolina-herrera-femmes","name":"CAROLINA HERRERA","sizes":true,"url":"https://maisonait.youcan.store/products/carolina-herrera-femmes","scents":[["212 Sexy","212 مثير"],["212 VIP","212 في آي بي"],["Good Girl","الفتاة الجيدة"],["Good Girl Blush","احمرار الفتاة الجيدة"],["Good Girl Supreme","الفتاة الجيدة العليا"],["Good Girl Midnight","منتصف ليل الفتاة الجيدة"],["Very Good Girl Glam","الفتاة الجيدة جداً الساحرة"],["Very Good Girl","الفتاة الجيدة جداً"],["Carat","قيراط"]]},{"c":"femmes","slug":"calvin-klein-femmes","name":"CALVIN KLEIN","sizes":true,"url":"https://maisonait.youcan.store/products/calvin-klein-femmes","scents":[["Euphoria","النشوة"],["Euphoria Essence","جوهر النشوة"],["Woman CK","امرأة سي كي"],["Euphoria Blossom","زهرة النشوة"],["212 Heroes Women","212 البطلات"]]},{"c":"femmes","slug":"cacharel-femmes","name":"CACHAREL","sizes":true,"url":"https://maisonait.youcan.store/products/cacharel-femmes","scents":[["Eden Cacharel","عدن كاشاريل"],["Liberte","الحرية"],["Loulou","لولو"],["Yes I am","نعم أنا"],["Yes I Am Fabulous","نعم أنا رائعة"],["Anais Anais","أنايس أنايس"],["Anais Anais Premier Delice","أنايس أنايس الأول اللذيذ"],["Eternity Eau Fresh","الأبدية الماء المنعش"]]},{"c":"femmes","slug":"burberry-femmes","name":"BURBERRY","sizes":true,"url":"https://maisonait.youcan.store/products/burberry-femmes","scents":[["Week End","نهاية الأسبوع"],["Goddess","الإلهة"],["Amor Amor","الحب الحب"]]},{"c":"femmes","slug":"bulgari-femmes","name":"BULGARI","sizes":true,"url":"https://maisonait.youcan.store/products/bulgari-femmes","scents":[["Her EDP","لها أو دو بارفان"],["My Burberry Black","بربري الأسود"]]},{"c":"femmes","slug":"britney-spears-femme","name":"BRITNEY SPEARS","sizes":true,"url":"https://maisonait.youcan.store/products/britney-spears-femme","scents":[["Fantasy In Bloom","الخيال المزهر"],["Midnight Fantasy","خيال منتصف الليل"],["Private Show","العرض الخاص"],["Sunset Fantasy","خيال الغروب"],["Rose Goldea","الوردة الذهبية"],["Black Coral","المرجان الأسود"]]},{"c":"femmes","slug":"azzaro-femme","name":"AZZARO","sizes":true,"url":"https://maisonait.youcan.store/products/azzaro-femme","scents":[]},{"c":"femmes","slug":"avon-femmes","name":"AVON","sizes":true,"url":"https://maisonait.youcan.store/products/avon-femmes","scents":[["Incandescence Lotus","اللوتس المتوهج"],["Incandescence","التوهج"],["Little Black Dress","الفستان الأسود الصغير"],["Today","اليوم"],["Tomorrow","الغد"],["Tomorrow","الغد","EXTRA"],["Wanted Girl Night","ليلة الفتاة المطلوبة"]]},{"c":"femmes","slug":"armani-femmes","name":"ARMANI","sizes":true,"url":"https://maisonait.youcan.store/products/armani-femmes","scents":[["Because it's You","لأنك أنتِ"],["Code Cashmere","كود كشمير"],["In Love With You","عاشقة بك"],["In Love With You Freeze","عاشقة بك المثلج"],["My Way","طريقي"],["My Way Floral","طريقي الزهري"],["My Way Intense","طريقي المكثف"],["My Way Parfum","طريقي العطر"],["Si Fiori","سي فيوري"],["Si Passione","سي العاطفة"],["Si Passione Eclat","سي العاطفة اللامع"],["Acqua Di Gioia","أكوا دي جويا"],["Celebre","سيليبر"],["Faraway","البعيد"]]},{"c":"hommes","slug":"carolina-herrera","name":"CAROLINA HERRERA","sizes":false,"url":"https://maisonait.youcan.store/products/carolina-herrera","scents":[["212 Carolina Herrera","212 كارولينا هيريرا"],["212 Men Heroes Forever Young","212 رجال الأبطال إلى الأبد الشباب"],["212 Sexy Men","212 رجال مثير"],["212 VIP Black","212 في آي بي الأسود"],["212 VIP Men","212 في آي بي الرجال"],["Bad Boy","الولد الشرير"],["Bad Boy Cobalt Elixir","إكسير الولد الشرير الكوبالت"],["Cartier","كارتييه"]]},{"c":"hommes","slug":"calvin-klein","name":"CALVIN KLEIN","sizes":false,"url":"https://maisonait.youcan.store/products/calvin-klein","scents":[["C.K One Collectors","سي كي وان المجمعين"],["Ck One Everyone","سي كي وان للجميع"],["Defy","التحدي"],["Eternity","الأبدية"],["Eternity Flame","لهب الأبدية"],["Euphoria","النشوة"],["Euphoria Men Intense","نشوة الرجال المكثفة"],["CH For Men","سي إتش للرجال"]]},{"c":"hommes","slug":"burberry","name":"BURBERRY","sizes":false,"url":"https://maisonait.youcan.store/products/burberry","scents":[["Hero","البطل"],["Mr Burberry Element","السيد بربري العنصر"],["C.K One","سي كي وان"]]},{"c":"hommes","slug":"bulgari","name":"BULGARI","sizes":false,"url":"https://maisonait.youcan.store/products/bulgari","scents":[["Bulgari Wood","بلغاري الخشبي"],["Bulgari Man Rain Essence","رجل بلغاري جوهر المطر"],["Le Gemme Empyr","الجواهر إمبير"],["Le Gemme Garanat","الجواهر غارانات"],["Le Gemme Gyan","الجواهر غيان"],["Burberry Men","رجال بربري"]]},{"c":"hommes","slug":"bentley","name":"BENTLEY","sizes":false,"url":"https://maisonait.youcan.store/products/bentley","scents":[["For Men Azure","للرجال الأزرق"],["EDP Essential Brioni","أساسي بريوني أو دو بارفان"],["Bulgari Black","بلغاري الأسود"]]},{"c":"hommes","slug":"azzaro","name":"AZZARO","sizes":false,"url":"https://maisonait.youcan.store/products/azzaro","scents":[["Azzaro Sport","أزارو الرياضي"],["Chrome","الكروم"],["Chrome Aqua For Men","كروم أكوا للرجال"],["Chrome Pure","الكروم النقي"],["The Most Wanted","الأكثر طلباً"],["Wanted","المطلوب"]]},{"c":"hommes","slug":"axe","name":"AXE","sizes":false,"url":"https://maisonait.youcan.store/products/axe","scents":[["Dark Tentaion -Twisted-","الإغراء المظلم الملتوي"],["Azzaro","أزارو"]]},{"c":"hommes","slug":"armani-homme","name":"ARMANI","sizes":false,"url":"https://maisonait.youcan.store/products/armani-homme","scents":[["Aqua Di Gio","أكوا دي جيو"],["Aqua Di Gio L'Absolu","أكوا دي جيو المطلق"],["Aqua Di Gio Profondo","أكوا دي جيو العميق"],["Aqua Di Gio Profondo","أكوا دي جيو العميق","EXTRA"],["Aqua Di Gio Parfum","أكوا دي جيو العطر"],["Code","الكود"],["Code Absolu Gold","الكود المطلق الذهبي"],["Code Absolu","الكود المطلق"],["Code Colonia","كود كولونيا"],["Code Profumo","كود بروفومو"],["Code Sport","كود الرياضة"],["Code Ultimate","الكود النهائي"],["Code Parfum","كود العطر"],["Stronger With You","أقوى معك"],["Stronger With You Absolutely","أقوى معك بالمطلق"],["Stronger With You Freeze","أقوى معك المثلج"],["Stronger With You Intensely","أقوى معك بكثافة"],["Stronger With You Leather","أقوى معك الجلدي"],["Stronger With You Only","أقوى معك فقط"],["Stronger With You Oud","أقوى معك العود"],["Stronger With You Amber","أقوى معك العنبر"],["Stronger With You Tobacco","أقوى معك التبغ"],["L'Atelier","الورشة"]]},{"c":"hommes","slug":"antonio-banderas","name":"ANTONIO BANDERAS","sizes":true,"url":"https://maisonait.youcan.store/products/antonio-banderas","scents":[]}]};
+/*
+ * Maison N'Ait - five generative canvas sketches: rose, blossom, cedar, amber, oud.
+ * NAIT_SKETCHES.<name>(ctx, w, h, t) draws one complete frame on a transparent
+ * background. Each sketch is a pure function of (w, h, t): the random-looking data
+ * is seeded once at load, so nothing flickers and every motion loops seamlessly.
+ */
+(function () {
+  'use strict';
+
+  var TAU = Math.PI * 2, IVORY = '#F4EEDF';
+
+  // mulberry32: small seeded PRNG, used for static data only (never at draw time).
+  function mulberry32(a) {
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      var r = Math.imul(a ^ (a >>> 15), 1 | a);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function lerp(a, b, k) { return a + (b - a) * k; }
+
+  // 'rgba(r,g,b,' prefix of a hex colour, optionally mixed towards a second one.
+  function rgb(hex, hex2, k) {
+    var a = parseInt(hex.slice(1), 16), b = hex2 ? parseInt(hex2.slice(1), 16) : a;
+    return 'rgba(' + [16, 8, 0].map(function (s) {
+      return Math.round(lerp((a >> s) & 255, (b >> s) & 255, k || 0));
+    }).join(',') + ',';
+  }
+
+  // Thin line work: 1 px on a 240 px panel, up to 1.5 px on a 520 px one.
+  function lineW(m) { return Math.max(1, Math.min(1.5, m / 340)); }
+
+  // ---- 1. rose: concentric rings of overlapping teardrop petals ---------------
+  var ROSE_N = 8, ROSE_HW = 0.38, ROSE_RINGS = 5, roseRings = [], roseStray = [];
+  (function () {
+    var rnd = mulberry32(11), i, k, tilt;
+    for (i = 0; i < ROSE_RINGS; i++) {
+      k = i / (ROSE_RINGS - 1);                      // 0 = outer ring, 1 = heart
+      roseRings.push({
+        k: k, tip: lerp(1, 0.29, k), rot: i * Math.PI / ROSE_N,   // half-petal offset
+        dir: i % 2 ? -1 : 1, col: rgb('#F2A7B0', '#D96B7A', k)
+      });
+    }
+    for (i = 0; i < 4; i++) {                        // detached petals, evenly spread
+      tilt = rnd() * TAU;
+      roseStray.push({
+        a: 0.4 + 0.025 * rnd(), b: 0.35 + 0.03 * rnd(), tilt: tilt, ph: i * TAU / 4 - tilt + 0.5 * rnd(),
+        spin: 0.1 + 0.08 * rnd(), len: 0.055 + 0.02 * rnd()
+      });
+    }
+  })();
+
+  // Teardrop petal along +x: narrow base at b, softly pointed tip at T, half-width hw.
+  function petal(ctx, b, T, hw) {
+    var L = T - b, x1 = b + 0.2 * L, x2 = T - (0.1 + 0.75 * (hw / T - 0.36)) * L, y2 = 1.62 * hw;
+    ctx.beginPath();
+    ctx.moveTo(b, 0);
+    ctx.bezierCurveTo(x1, hw, x2, y2, T, 0);
+    ctx.bezierCurveTo(x2, -y2, x1, -hw, b, 0);
+  }
+
+  function rose(ctx, w, h, t) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    var m = Math.min(w, h), lw = lineW(m), breath = Math.sin(t * 0.8), R = m * 0.32 * (1 + 0.02 * breath);
+    var i, j, q, T, b, hw, g, a, r, step, len;
+    ctx.translate(w / 2, h / 2);
+    ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = IVORY;
+    for (i = 0; i < ROSE_RINGS; i++) {               // outer ring first, heart last
+      q = roseRings[i];
+      T = R * q.tip * (1 + 0.03 * breath * (1 - q.k)); // outer rings open a little more
+      b = T * 0.25; hw = T * ROSE_HW * (1 + 0.04 * breath);
+      step = q.dir * TAU / ROSE_N;
+      g = ctx.createRadialGradient(0, 0, T * 0.45, 0, 0, T);   // deep at the base, light at the tip
+      g.addColorStop(0, 'rgba(217,107,122,0.92)'); g.addColorStop(1, q.col + '0.88)');
+      ctx.fillStyle = g;
+      ctx.save();
+      ctx.rotate(q.rot + q.dir * t * 0.02);          // neighbouring rings counter-rotate
+      for (j = 0; j < ROSE_N; j++) { petal(ctx, b, T, hw); ctx.fill(); ctx.stroke(); ctx.rotate(step); }
+      ctx.rotate(-step); petal(ctx, b, T + lw, hw + lw); ctx.clip();   // close the weave: the first
+      ctx.rotate(step); petal(ctx, b, T, hw); ctx.fill(); ctx.stroke(); // petal overlaps the last one
+      ctx.restore();
+    }
+    r = R * 0.13;                                    // heart: an ivory spiral on a deep rose disc
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU);
+    ctx.fillStyle = 'rgba(217,107,122,0.95)'; ctx.fill(); ctx.stroke();
+    ctx.beginPath();
+    for (j = 0; j <= 30; j++) {
+      a = j * 0.42 + t * 0.02;
+      ctx.lineTo(Math.cos(a) * r * j / 30, Math.sin(a) * r * j / 30);
+    }
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(242,167,176,0.72)';
+    for (i = 0; i < roseStray.length; i++) {         // detached petals on slow elliptical orbits
+      q = roseStray[i]; a = q.ph + 0.06 * t; len = q.len * m;
+      ctx.save();
+      ctx.rotate(q.tilt);
+      ctx.translate(Math.cos(a) * q.a * m, Math.sin(a) * q.b * m);
+      ctx.rotate(q.ph * 3 + q.spin * t);
+      petal(ctx, -len / 2, len / 2, len * 0.36); ctx.fill(); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  // ---- 2. blossom: scattered five-petal orange blossom ------------------------
+  var INDIGO = '#161D5C', AMBER = '#E99A2B', LEAF = '#6F8A5B';
+  var BLOSSOMS = [ // x, y, radius (units of min(w, h), origin at the centre), spin in rad/s
+    [-0.10, -0.06, 0.170, 0.030], [0.23, -0.22, 0.118, -0.045], [0.17, 0.19, 0.132, 0.040],
+    [-0.28, 0.22, 0.100, -0.055], [-0.30, -0.30, 0.078, 0.070], [0.04, -0.37, 0.062, -0.080],
+    [0.38, 0.00, 0.060, 0.090], [-0.06, 0.36, 0.066, 0.075], [0.36, 0.37, 0.050, -0.095]
+  ];
+  var LEAVES = [ // base x, y, direction (rad), length
+    [-0.20, -0.02, 3.5, 0.25], [0.15, 0.25, 1.75, 0.20], [0.26, -0.26, -0.87, 0.20]
+  ];
+  var pollen = [];
+  (function () {
+    var rnd = mulberry32(23), i;
+    for (i = 0; i < 14; i++) {
+      pollen.push({ x: (rnd() - 0.5) * 0.84, v: 0.018 + 0.02 * rnd(), ph: rnd(), r: 0.004 + 0.004 * rnd(), sw: rnd() * TAU });
+    }
+  })();
+
+  function blossom(ctx, w, h, t) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    var m = Math.min(w, h), lw = lineW(m), i, j, f, R, L, b, hw, x1, x2, p, k;
+    ctx.translate(w / 2, h / 2);
+    ctx.lineWidth = lw; ctx.lineJoin = 'round';
+    for (i = 0; i < LEAVES.length; i++) {            // leaves sway gently behind the flowers
+      f = LEAVES[i]; L = f[3] * m;
+      ctx.save();
+      ctx.translate(f[0] * m, f[1] * m);
+      ctx.rotate(f[2] + 0.04 * Math.sin(t * 0.5 + i * 2));
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(L * 0.45, L * 0.38, L, 0);
+      ctx.quadraticCurveTo(L * 0.45, -L * 0.38, 0, 0);
+      ctx.fillStyle = LEAF; ctx.fill();
+      ctx.moveTo(0, 0); ctx.lineTo(L * 0.9, 0);      // midrib
+      ctx.strokeStyle = INDIGO; ctx.globalAlpha = 0.55; ctx.stroke();
+      ctx.restore();
+    }
+    for (i = 0; i < BLOSSOMS.length; i++) {
+      f = BLOSSOMS[i]; R = f[2] * m; b = R * 0.1; L = R - b; hw = R * 0.26;
+      x1 = b + 0.25 * L; x2 = R - 0.28 * L;
+      ctx.save();
+      ctx.translate(f[0] * m + 0.006 * m * Math.cos(t * 0.45 + i * 1.7),   // slight bob
+        f[1] * m + 0.01 * m * Math.sin(t * 0.6 + i * 2.3));
+      ctx.rotate(i * 1.3 + f[3] * t);
+      ctx.beginPath();                               // five lens petals as one path
+      for (j = 0; j < 5; j++) {
+        ctx.moveTo(b, 0);
+        ctx.bezierCurveTo(x1, hw * 1.3, x2, hw * 1.25, R, 0);
+        ctx.bezierCurveTo(x2, -hw * 1.25, x1, -hw * 1.3, b, 0);
+        ctx.rotate(TAU / 5);
+      }
+      ctx.fillStyle = '#FFFFFF'; ctx.fill();
+      ctx.strokeStyle = INDIGO; ctx.stroke();
+      ctx.beginPath();                               // faint petal veins
+      for (j = 0; j < 5; j++) { ctx.moveTo(R * 0.42, 0); ctx.lineTo(R * 0.74, 0); ctx.rotate(TAU / 5); }
+      ctx.globalAlpha = 0.22; ctx.stroke();
+      ctx.beginPath();                               // stamens: a dotted ring
+      ctx.arc(0, 0, R * 0.29, 0, TAU);
+      ctx.setLineDash([0.01, R * 0.29 * TAU / 10 - 0.01]);
+      ctx.lineCap = 'round'; ctx.lineWidth = Math.max(1.4, R * 0.06);
+      ctx.strokeStyle = AMBER; ctx.globalAlpha = 1; ctx.stroke();
+      ctx.setLineDash([]); ctx.lineWidth = lw;
+      ctx.beginPath();                               // amber centre
+      ctx.arc(0, 0, R * 0.15, 0, TAU);
+      ctx.fillStyle = AMBER; ctx.fill();
+      ctx.strokeStyle = INDIGO; ctx.stroke();
+      ctx.restore();
+    }
+    ctx.fillStyle = AMBER;
+    for (i = 0; i < pollen.length; i++) {            // pollen rises, faded in and out at the ends
+      p = pollen[i]; k = (t * p.v + p.ph) % 1;
+      ctx.globalAlpha = 0.85 * Math.sin(Math.PI * k);
+      ctx.beginPath();
+      ctx.arc((p.x + 0.012 * Math.sin(t * 0.5 + p.sw)) * m, (0.43 - 0.86 * k) * m, p.r * m, 0, TAU);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ---- 3. cedar: growth rings of a trunk cross-section ------------------------
+  var WOOD = '#E7D9B8', GLOW = '#FFC766';
+  var CEDAR_K = 20, CEDAR_N = 16;                    // control points per ring; growth rings (index N = bark)
+  var cedarF = [], cedarX = [], cedarY = [], cedarA = [], cedarW = [], cedarCracks = [], pithX = 0, pithY = 0;
+  (function () {
+    var rnd = mulberry32(5), ph = [], gaps = [], sum = 0, mx = 0, my = 0, max = 0;
+    var i, k, f, th, r, psi, xs, ys, a, len, c, s, bend, wd;
+    for (i = 0; i < 4; i++) ph.push(rnd() * TAU);
+    for (i = 0; i < CEDAR_N - 1; i++) { gaps.push(0.55 + rnd()); sum += gaps[i]; }
+    for (i = 0, f = 0.055; i <= CEDAR_N; i++) {      // irregular ring spacing, bark at 1
+      cedarF.push(i < CEDAR_N ? f : 1);
+      if (i < CEDAR_N - 1) f += gaps[i] / sum * 0.85;
+    }
+    for (i = 0; i <= CEDAR_N; i++) {
+      f = cedarF[i]; psi = rnd() * TAU; xs = []; ys = [];
+      for (k = 0; k < CEDAR_K; k++) {                // smooth low-frequency wobble, growing outwards
+        th = k / CEDAR_K * TAU;
+        r = f + Math.pow(f, 1.3) * (0.045 * Math.cos(th + ph[0] + 0.8 * f) + 0.026 * Math.cos(2 * th + ph[1] - 1.5 * f) +
+          0.017 * Math.cos(3 * th + ph[2] + 2 * f) + 0.011 * Math.cos(5 * th + ph[3] - 2.5 * f)) +
+          0.007 * Math.min(1, f * 4) * Math.cos(4 * th + psi);
+        xs.push(r * Math.cos(th)); ys.push(r * Math.sin(th));
+      }
+      cedarX.push(xs); cedarY.push(ys);
+      cedarA.push(i === CEDAR_N ? 0.95 : i % 4 === 3 ? 0.8 : 0.28 + 0.4 * rnd());
+      cedarW.push(i === CEDAR_N ? 1.9 : i % 4 === 3 ? 1.4 : 0.7 + 0.5 * rnd());
+    }
+    // Centre the bark on the origin and scale it to unit radius (the pith sits slightly off-centre).
+    for (k = 0; k < CEDAR_K; k++) { mx += cedarX[CEDAR_N][k] / CEDAR_K; my += cedarY[CEDAR_N][k] / CEDAR_K; }
+    for (k = 0; k < CEDAR_K; k++) max = Math.max(max, Math.hypot(cedarX[CEDAR_N][k] - mx, cedarY[CEDAR_N][k] - my));
+    for (i = 0; i <= CEDAR_N; i++) {
+      for (k = 0; k < CEDAR_K; k++) { cedarX[i][k] = (cedarX[i][k] - mx) / max; cedarY[i][k] = (cedarY[i][k] - my) / max; }
+    }
+    pithX = -mx / max; pithY = -my / max;
+    [0.58, 0.2, 0.33, 0.14].forEach(function (len, i) {   // radial cracks: bent wedges opening at the pith
+      a = 0.6 + (i + 0.7 * rnd()) * TAU / 4; c = Math.cos(a); s = Math.sin(a);
+      bend = (rnd() - 0.5) * 0.14 * len; wd = 0.007 + 0.012 * len;
+      cedarCracks.push([pithX - s * wd, pithY + c * wd, pithX + s * wd, pithY - c * wd,
+        pithX + c * len * 0.5 - s * (bend + wd * 0.5), pithY + s * len * 0.5 + c * (bend + wd * 0.5),
+        pithX + c * len * 0.5 - s * (bend - wd * 0.5), pithY + s * len * 0.5 + c * (bend - wd * 0.5),
+        pithX + c * len + s * bend, pithY + s * len - c * bend]);
+    });
+  })();
+
+  // Smooth closed curve through ring i, blended a fraction k towards ring i + 1.
+  function cedarRing(ctx, i, k) {
+    var X0 = cedarX[i], Y0 = cedarY[i], X1 = cedarX[i + 1] || X0, Y1 = cedarY[i + 1] || Y0;
+    var K = CEDAR_K, j, n, x, y, px = 0, py = 0;
+    ctx.beginPath();
+    for (j = -1; j <= K; j++) {
+      n = (j + K) % K; x = lerp(X0[n], X1[n], k); y = lerp(Y0[n], Y1[n], k);
+      if (j === 0) ctx.moveTo((px + x) / 2, (py + y) / 2);
+      else if (j > 0) ctx.quadraticCurveTo(px, py, (px + x) / 2, (py + y) / 2);
+      px = x; py = y;
+    }
+    ctx.closePath();
+  }
+
+  function cedar(ctx, w, h, t) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    var m = Math.min(w, h), R = m * 0.43, u = lineW(m) / R, i, d, glow, c;
+    var p = (t / 12) % 1, fh = lerp(cedarF[0], 1, p), env = Math.min(1, p / 0.12, (1 - p) / 0.12);
+    env = env * env * (3 - 2 * env);                 // highlight fades in at the heart, out at the bark
+    ctx.translate(w / 2, h / 2);
+    ctx.rotate(t * 0.015);                           // very slow rotation
+    ctx.scale(R, R);
+    ctx.lineJoin = 'round';
+    for (i = CEDAR_N; i >= 0; i--) {                 // bark first, then inwards to the pith
+      cedarRing(ctx, i, 0);
+      if (i === CEDAR_N || i === 7) { ctx.fillStyle = WOOD; ctx.globalAlpha = 0.07; ctx.fill(); }
+      ctx.lineWidth = u * cedarW[i]; ctx.globalAlpha = cedarA[i]; ctx.strokeStyle = WOOD; ctx.stroke();
+      d = cedarF[i] - fh;                            // rings near the highlight take an amber afterglow
+      glow = env * (d > 0 ? Math.exp(-d * 30) : Math.exp(d * 6));
+      if (glow > 0.03) { ctx.globalAlpha = glow * 0.8; ctx.strokeStyle = GLOW; ctx.stroke(); }
+    }
+    cedarRing(ctx, CEDAR_N - 1, 0.55);               // bark: a band of fine radial hatching
+    ctx.setLineDash([0.006, 0.026]);
+    ctx.lineWidth = 0.05; ctx.globalAlpha = 0.5; ctx.strokeStyle = WOOD; ctx.stroke();
+    ctx.setLineDash([]);
+    for (i = 0; i < CEDAR_N - 1 && cedarF[i + 1] < fh; i++) { /* find the rings around the highlight */ }
+    cedarRing(ctx, i, (fh - cedarF[i]) / (cedarF[i + 1] - cedarF[i]));
+    ctx.strokeStyle = GLOW;                          // soft amber ring: three stacked strokes
+    ctx.lineWidth = u * 6; ctx.globalAlpha = 0.14 * env; ctx.stroke();
+    ctx.lineWidth = u * 2.8; ctx.globalAlpha = 0.3 * env; ctx.stroke();
+    ctx.lineWidth = u * 1.2; ctx.globalAlpha = 0.95 * env; ctx.stroke();
+    ctx.lineWidth = u * 0.8; ctx.strokeStyle = WOOD;
+    for (i = 0; i < cedarCracks.length; i++) {       // cracks are cut out of the rings, then outlined
+      c = cedarCracks[i];
+      ctx.beginPath();
+      ctx.moveTo(c[0], c[1]); ctx.quadraticCurveTo(c[4], c[5], c[8], c[9]);
+      ctx.quadraticCurveTo(c[6], c[7], c[2], c[3]);
+      ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 1; ctx.fill();
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 0.5; ctx.stroke();
+    }
+    ctx.beginPath();                                 // pith
+    ctx.arc(pithX, pithY, 0.014, 0, TAU);
+    ctx.fillStyle = WOOD; ctx.globalAlpha = 0.95; ctx.fill();
+    ctx.restore();
+  }
+
+  // ---- 4. amber: loosely stacked isometric cubes of resin ---------------------
+  var C30 = Math.cos(Math.PI / 6);
+  // x, y, z, size of each cube in isometric space, listed back to front.
+  var CUBE_DEFS = [[0, 0, 0, 1], [0.26, 0.18, 1, 0.56], [1.12, 0.22, 0, 0.66], [0.02, 1.18, 0, 0.42]];
+  // Vertex ids: 0 top-back, 1 top-right, 2 top-front, 3 top-left, 4 bottom-right, 5 bottom-front, 6 bottom-left, 7 hidden.
+  var TOP = [0, 1, 2, 3], LEFT = [3, 2, 5, 6], RIGHT = [1, 2, 5, 4], HEX = [0, 1, 4, 5, 6, 3];
+  var EDGES = [[0, 1], [1, 2], [2, 3], [3, 0], [2, 5], [1, 4], [3, 6]];
+  var cubes = [], sparkles = [];
+  (function () {
+    var rnd = mulberry32(42), all = [], lo = [1e9, 1e9], hi = [-1e9, -1e9], fit;
+    function iso(x, y, z) {
+      var p = [(x - y) * C30, (x + y) * 0.5 - z];
+      all.push(p);
+      return p;
+    }
+    CUBE_DEFS.forEach(function (c, n) {
+      var x = c[0], y = c[1], z = c[2], s = c[3], q = { s: s, ph: n * TAU / 4 + 0.6, dots: [] }, i;
+      q.v = [iso(x, y, z + s), iso(x + s, y, z + s), iso(x + s, y + s, z + s), iso(x, y + s, z + s),
+        iso(x + s, y, z), iso(x + s, y + s, z), iso(x, y + s, z), iso(x, y, z)];
+      for (i = 0; i < 6; i++) {                      // inclusions trapped in the resin
+        q.dots.push({
+          p: iso(x + s * (0.15 + 0.7 * rnd()), y + s * (0.15 + 0.7 * rnd()), z + s * (0.15 + 0.7 * rnd())),
+          r: s * (0.014 + 0.026 * rnd()), light: i > 3
+        });
+      }
+      cubes.push(q);
+    });
+    all.forEach(function (p) {
+      lo[0] = Math.min(lo[0], p[0]); hi[0] = Math.max(hi[0], p[0]);
+      lo[1] = Math.min(lo[1], p[1]); hi[1] = Math.max(hi[1], p[1]);
+    });
+    fit = Math.max(hi[0] - lo[0], hi[1] - lo[1]);    // fit the pile into a centred unit box
+    all.forEach(function (p) { p[0] = (p[0] - (lo[0] + hi[0]) / 2) / fit; p[1] = (p[1] - (lo[1] + hi[1]) / 2) / fit; });
+    cubes.forEach(function (q) {
+      var i, e, k;
+      q.s /= fit;
+      q.dots.forEach(function (d) { d.r /= fit; });
+      for (i = 0; i < 2; i++) {                      // two sparkle sites on the visible edges
+        e = EDGES[(rnd() * EDGES.length) | 0]; k = 0.1 + 0.8 * rnd();
+        sparkles.push({ x: lerp(q.v[e[0]][0], q.v[e[1]][0], k), y: lerp(q.v[e[0]][1], q.v[e[1]][1], k), T: 6 + 4 * rnd(), ph: rnd() });
+      }
+    });
+  })();
+
+  // Polyline through the vertices v[ids[0]], v[ids[1]], ... (added to the current path).
+  function trace(ctx, v, ids, close) {
+    ctx.moveTo(v[ids[0]][0], v[ids[0]][1]);
+    for (var i = 1; i < ids.length; i++) ctx.lineTo(v[ids[i]][0], v[ids[i]][1]);
+    if (close) ctx.closePath();
+  }
+
+  // Cube face, filled with a linear gradient running between its opposite corners.
+  function face(ctx, v, ids, c0, c1) {
+    var g = ctx.createLinearGradient(v[ids[0]][0], v[ids[0]][1], v[ids[2]][0], v[ids[2]][1]);
+    g.addColorStop(0, c0); g.addColorStop(1, c1);
+    ctx.beginPath(); trace(ctx, v, ids, true);
+    ctx.fillStyle = g; ctx.fill();
+  }
+
+  function amber(ctx, w, h, t) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    var m = Math.min(w, h), S = m * 0.8, u = lineW(m) / S, n, i, q, v, g, d, k, r, x, y, cx, cy;
+    ctx.translate(w / 2, h / 2);
+    ctx.scale(S, S);
+    ctx.lineJoin = 'round';
+    for (n = 0; n < cubes.length; n++) {
+      q = cubes[n]; v = q.v;
+      face(ctx, v, TOP, 'rgba(255,199,102,0.92)', 'rgba(233,154,43,0.82)');
+      face(ctx, v, LEFT, 'rgba(233,154,43,0.86)', 'rgba(168,92,18,0.8)');
+      face(ctx, v, RIGHT, 'rgba(168,92,18,0.9)', 'rgba(168,92,18,0.62)');
+      k = 0.5 + 0.5 * Math.sin(t * 0.75 + q.ph);     // inner glow, out of phase per cube
+      cx = (v[2][0] + v[7][0]) / 2; cy = (v[2][1] + v[7][1]) / 2;
+      g = ctx.createRadialGradient(cx, cy, 0, cx, cy, q.s * 1.1);
+      g.addColorStop(0, 'rgba(255,226,166,' + (0.1 + 0.42 * k) + ')');
+      g.addColorStop(0.4, 'rgba(255,199,102,' + (0.04 + 0.17 * k) + ')');
+      g.addColorStop(1, 'rgba(255,199,102,0)');
+      ctx.beginPath(); trace(ctx, v, HEX, true);     // the glow fills the cube's silhouette
+      ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+      for (i = 0; i < q.dots.length; i++) {          // inclusions
+        d = q.dots[i];
+        ctx.beginPath(); ctx.arc(d.p[0], d.p[1], d.r, 0, TAU);
+        ctx.fillStyle = d.light ? 'rgba(255,226,166,0.55)' : 'rgba(168,92,18,0.8)'; ctx.fill();
+      }
+      ctx.strokeStyle = '#FFE2A6'; ctx.lineWidth = u;
+      ctx.beginPath(); trace(ctx, v, [4, 7, 6]); trace(ctx, v, [7, 0]);
+      ctx.globalAlpha = 0.22; ctx.stroke();          // hidden back edges, seen through the resin
+      ctx.beginPath(); trace(ctx, v, HEX, true); trace(ctx, v, [1, 2, 3]); trace(ctx, v, [2, 5]);
+      ctx.globalAlpha = 0.9; ctx.stroke();           // silhouette and the three front edges
+      ctx.globalAlpha = 1;
+    }
+    ctx.fillStyle = '#FFE2A6';
+    for (i = 0; i < sparkles.length; i++) {          // sparkles bloom and fade on the edges
+      q = sparkles[i]; k = Math.sin(TAU * (t / q.T + q.ph));
+      if (k <= 0) continue;
+      k = k * k * k; r = 0.01 + 0.03 * k; x = q.x; y = q.y;
+      ctx.globalAlpha = k;
+      ctx.beginPath();                               // four-point star with concave sides
+      ctx.moveTo(x, y - r);
+      ctx.quadraticCurveTo(x, y, x + r, y); ctx.quadraticCurveTo(x, y, x, y + r);
+      ctx.quadraticCurveTo(x, y, x - r, y); ctx.quadraticCurveTo(x, y, x, y - r);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ---- 5. oud: an ember on its tray, ribbons of smoke -------------------------
+  var SMOKE = 'rgba(205,211,224,', ribbons = [];
+  (function () {
+    var rnd = mulberry32(77), n = 12, i;
+    for (i = 0; i < n; i++) {
+      ribbons.push({ u: i / (n - 1) * 2 - 1 + (rnd() - 0.5) * 0.12, ph: rnd() * TAU, g: 0.7 + 0.6 * rnd(), a: 0.4 + 0.6 * rnd() });
+    }
+  })();
+
+  function oud(ctx, w, h, t) {
+    ctx.clearRect(0, 0, w, h);
+    ctx.save();
+    var m = Math.min(w, h), lw = lineW(m), N = 22, ty = 0.385 * m, er = 0.014 * m, ey = ty - er, H = 0.83 * m;
+    var pulse = 0.5 + 0.5 * Math.sin(t * 1.1), i, j, q, s, e, x, y, px, py, g;
+    ctx.translate(w / 2, h / 2);
+    g = ctx.createLinearGradient(0, ey, 0, ey - H);  // smoke fades towards the top
+    g.addColorStop(0, SMOKE + '0)'); g.addColorStop(0.07, SMOKE + '0.5)'); g.addColorStop(0.3, SMOKE + '0.7)');
+    g.addColorStop(0.7, SMOKE + '0.36)'); g.addColorStop(1, SMOKE + '0)');
+    ctx.strokeStyle = g; ctx.lineWidth = lw; ctx.lineCap = 'round';
+    for (j = 0; j < ribbons.length; j++) {
+      q = ribbons[j];
+      ctx.beginPath();
+      for (i = 0; i <= N; i++) {                     // flow field: waves travel upwards, widening with height
+        s = i / N; e = Math.pow(s, 1.15) * m;
+        x = e * (0.07 * Math.sin(7.2 * s - 0.45 * t) + 0.035 * Math.sin(13.5 * s - 0.7 * t + 1.7) +
+          0.19 * q.u * Math.cos(4.6 * s - 0.32 * t + 0.8 + 0.6 * q.u) +
+          0.03 * q.g * Math.sin(10.5 * s - 0.55 * t + q.ph) + 0.03 * s * Math.sin(17 * s - 0.8 * t + 2 * q.ph));
+        y = ey - H * s + e * 0.025 * Math.cos(7.2 * s - 0.45 * t + q.u);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.quadraticCurveTo(px, py, (px + x) / 2, (py + y) / 2);
+        px = x; py = y;
+      }
+      ctx.globalAlpha = q.a; ctx.stroke();
+    }
+    ctx.strokeStyle = IVORY;                         // tray: a thin line and a shorter foot
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath(); ctx.moveTo(-0.16 * m, ty); ctx.lineTo(0.16 * m, ty); ctx.stroke();
+    ctx.globalAlpha = 0.45;
+    ctx.beginPath(); ctx.moveTo(-0.07 * m, ty + 0.022 * m); ctx.lineTo(0.07 * m, ty + 0.022 * m); ctx.stroke();
+    g = ctx.createRadialGradient(0, ey, 0, 0, ey, 0.09 * m);   // ember: pulsing halo and core
+    g.addColorStop(0, 'rgba(255,199,102,' + (0.5 + 0.4 * pulse) + ')');
+    g.addColorStop(0.35, 'rgba(233,154,43,' + (0.14 + 0.16 * pulse) + ')');
+    g.addColorStop(1, 'rgba(233,154,43,0)');
+    ctx.globalAlpha = 1; ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, ey, 0.09 * m, 0, TAU); ctx.fill();
+    ctx.fillStyle = '#FFC766';
+    ctx.beginPath(); ctx.arc(0, ey, er, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+
+  window.NAIT_SKETCHES = { rose: rose, blossom: blossom, cedar: cedar, amber: amber, oud: oud };
+})();
+
+(() => {
+'use strict';
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const debounce = (fn, ms) => { let id; return () => { clearTimeout(id); id = setTimeout(fn, ms); }; };
+const root = document.documentElement;
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hasIO = 'IntersectionObserver' in window;
+
+/* ============ language ============ */
+const LANGS = {
+  fr: { dir: 'ltr', hash: 'fr' },
+  en: { dir: 'ltr', hash: 'en' },
+  ar: { dir: 'rtl', hash: 'ar' },
+  ary: { dir: 'rtl', hash: 'darija' }
+};
+const byHash = h => Object.keys(LANGS).find(k => LANGS[k].hash === h);
+let lang = 'fr';
+
+function t(key, n) {
+  const d = I18N[lang] || I18N.fr;
+  let s = d[key];
+  if (s === undefined) s = I18N.fr[key] !== undefined ? I18N.fr[key] : key;
+  return n === undefined ? s : s.replace('{n}', n);
+}
+
+function initialLang() {
+  const h = byHash(location.hash.replace('#', ''));
+  if (h) return h;
+  try { const s = localStorage.getItem('nait-lang'); if (LANGS[s]) return s; } catch (e) { /* storage may be unavailable */ }
+  const n = (navigator.language || 'fr').toLowerCase();
+  if (n.indexOf('ar') === 0) return 'ar';
+  if (n.indexOf('en') === 0) return 'en';
+  return 'fr';
+}
+
+function paintLang() {
+  root.lang = lang;
+  root.dir = LANGS[lang].dir;
+  $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  $$('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  $$('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
+  $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  catalog.render();
+  sheet.refresh();
+  layout();
+}
+
+function setLang(next, instant) {
+  if (!LANGS[next] || next === lang) return;
+  lang = next;
+  try { localStorage.setItem('nait-lang', lang); } catch (e) { /* ignore */ }
+  try { location.hash = LANGS[lang].hash; } catch (e) { /* the address may be read-only */ }
+  if (instant || RM) { paintLang(); return; }
+  root.classList.add('is-swapping');
+  setTimeout(() => {
+    paintLang();
+    setTimeout(() => root.classList.remove('is-swapping'), 120);
+  }, 260);
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-lang]');
+  if (b) setLang(b.dataset.lang);
+});
+window.addEventListener('hashchange', () => {
+  const h = byHash(location.hash.replace('#', ''));
+  if (h) setLang(h);
+});
+
+/* in-page links scroll without touching the address, which carries the language */
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const target = document.getElementById(a.getAttribute('href').slice(1));
+  if (!target) return;
+  e.preventDefault();
+  target.scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+});
+
+/* ============ mist: the spray particles ============ */
+function Mist(canvas) {
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, dpr = 1, raf = 0;
+  const parts = [];
+  const sprite = document.createElement('canvas');
+  sprite.width = sprite.height = 64;
+  const sg = sprite.getContext('2d');
+  const g = sg.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,240,210,.95)');
+  g.addColorStop(0.3, 'rgba(255,199,102,.45)');
+  g.addColorStop(1, 'rgba(233,154,43,0)');
+  sg.fillStyle = g;
+  sg.fillRect(0, 0, 64, 64);
+
+  function resize() {
+    const r = canvas.getBoundingClientRect();
+    if (!r.width) return;
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    w = r.width; h = r.height;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+  }
+  function tick() {
+    raf = 0;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      if (p.wait > 0) { p.wait--; continue; }
+      p.life++;
+      if (p.life > p.max) { parts.splice(i, 1); continue; }
+      p.vx *= 0.955; p.vy = p.vy * 0.955 - 0.014;
+      p.x += p.vx; p.y += p.vy; p.s *= p.g;
+      const k = p.life / p.max;
+      ctx.globalAlpha = (k < 0.1 ? k / 0.1 : 1 - (k - 0.1) / 0.9) * p.a;
+      ctx.drawImage(sprite, p.x - p.s, p.y - p.s, p.s * 2, p.s * 2);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    if (parts.length) raf = requestAnimationFrame(tick);
+  }
+  function burst(x, y, o) {
+    o = o || {};
+    if (!w) resize();
+    const n = o.n || 110, ang = o.angle === undefined ? -Math.PI / 2 : o.angle, spread = o.spread || 0.95, pw = o.power || 1;
+    for (let i = 0; i < n; i++) {
+      const a = ang + (Math.random() - 0.5) * 2 * spread * (0.25 + Math.random() * 0.75);
+      const v = (1.2 + Math.random() * 9) * pw;
+      parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, s: 4 + Math.random() * 11, g: 1.012 + Math.random() * 0.02,
+        a: 0.1 + Math.random() * 0.16, life: 0, max: 60 + Math.random() * 100, wait: Math.floor(Math.random() * 8) });
+    }
+    if (parts.length > 720) parts.splice(0, parts.length - 720);
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  return { resize, burst };
+}
+
+const hero = $('#top');
+const mistHero = Mist($('#heroMist'));
+const mistAtom = Mist($('#atomMist'));
+const hint = $('#heroHint');
+
+hero.addEventListener('click', e => {
+  if (RM || e.target.closest('a,button')) return;
+  const r = hero.getBoundingClientRect();
+  mistHero.burst(e.clientX - r.left, e.clientY - r.top, { n: 130 });
+  hint.classList.add('is-gone');
+});
+/* one spray as the wordmark finishes drawing */
+if (!RM) {
+  setTimeout(() => {
+    const m = $('.wm__nait'), r = hero.getBoundingClientRect(), b = m.getBoundingClientRect();
+    if (r.bottom < 80 || document.hidden) return;
+    const rtl = root.dir === 'rtl';
+    mistHero.burst((rtl ? b.left + b.width * 0.12 : b.right - b.width * 0.12) - r.left, b.top + b.height * 0.25 - r.top,
+      { n: 150, angle: rtl ? -2.1 : -1.05, spread: 0.8, power: 1.15 });
+  }, 2100);
+}
+
+/* ============ the five note sketches ============ */
+const sketches = (() => {
+  const S = window.NAIT_SKETCHES || {};
+  const items = $$('canvas[data-sketch]').map(c => ({ c, ctx: c.getContext('2d'), name: c.dataset.sketch, w: 0, h: 0, on: false }));
+  const t0 = performance.now();
+  let raf = 0, odd = false;
+  function size(it) {
+    const r = it.c.getBoundingClientRect();
+    if (!r.width) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    it.w = Math.round(r.width); it.h = Math.round(r.height);
+    it.c.width = Math.round(it.w * dpr); it.c.height = Math.round(it.h * dpr);
+    it.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function draw(it, tt) {
+    const f = S[it.name];
+    if (!f || !it.w) return;
+    try { f(it.ctx, it.w, it.h, tt); } catch (e) { /* a sketch must never break the page */ }
+  }
+  function loop(now) {
+    raf = 0; odd = !odd;
+    const tt = (now - t0) / 1000;
+    let live = false;
+    for (const it of items) {
+      if (!it.on) continue;
+      live = true;
+      if (odd && it.c.dataset.off !== '1') draw(it, tt);
+    }
+    if (live) raf = requestAnimationFrame(loop);
+  }
+  function resize() {
+    const tt = RM ? 4 : (performance.now() - t0) / 1000;
+    items.forEach(it => { size(it); draw(it, tt); });
+  }
+  if (hasIO && !RM) {
+    const io = new IntersectionObserver(es => {
+      for (const e of es) { const it = items.find(i => i.c === e.target); if (it) it.on = e.isIntersecting; }
+      if (!raf) raf = requestAnimationFrame(loop);
+    }, { rootMargin: '60px' });
+    items.forEach(it => io.observe(it.c));
+  }
+  return { resize };
+})();
+
+/* ============ film ============ */
+const film = (() => {
+  const sec = $('#film'), v = $('#filmVideo'), cap = $('#filmCap'), btn = $('#filmBtn');
+  const track = $('#filmTrack'), fill = $('i', track), ticks = $$('.film__tick', track);
+  const CUES = [[0, 'film.c1'], [5, 'film.c2'], [10.5, 'film.c3'], [16, 'film.c4'], [21.5, 'film.c5']];
+  const DUR = 26;
+  let cue = 3, raf = 0, userPaused = false, swapId = 0;
+
+  function setCue(i) {
+    if (i === cue) return;
+    cue = i;
+    ticks.forEach((tk, k) => tk.classList.toggle('is-on', k === i));
+    clearTimeout(swapId);
+    if (RM) { cap.dataset.i18n = CUES[i][1]; cap.textContent = t(CUES[i][1]); return; }
+    cap.classList.add('is-out');
+    swapId = setTimeout(() => {
+      cap.dataset.i18n = CUES[cue][1];
+      cap.textContent = t(CUES[cue][1]);
+      cap.classList.remove('is-out');
+    }, 300);
+  }
+  function loop() {
+    raf = 0;
+    const tt = v.currentTime || 0;
+    fill.style.setProperty('--v', clamp(tt / DUR).toFixed(4));
+    let i = 0;
+    for (let k = 0; k < CUES.length; k++) if (tt >= CUES[k][0] - 0.08) i = k;
+    setCue(i);
+    if (!v.paused) raf = requestAnimationFrame(loop);
+  }
+  function play() {
+    if (v.preload === 'none') v.preload = 'auto';
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+  function seek(s) {
+    const go = () => { try { v.currentTime = s + 0.03; } catch (e) { /* not seekable yet */ } loop(); };
+    if (v.readyState >= 1) go(); else { v.addEventListener('loadedmetadata', go, { once: true }); }
+  }
+  v.addEventListener('play', () => {
+    sec.classList.add('is-playing');
+    btn.dataset.i18nAria = 'film.pause';
+    btn.setAttribute('aria-label', t('film.pause'));
+    if (!raf) raf = requestAnimationFrame(loop);
+  });
+  v.addEventListener('pause', () => {
+    sec.classList.remove('is-playing');
+    btn.dataset.i18nAria = 'film.play';
+    btn.setAttribute('aria-label', t('film.play'));
+  });
+  btn.addEventListener('click', () => {
+    if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); }
+  });
+  ticks.forEach(tk => tk.addEventListener('click', () => { userPaused = false; play(); seek(parseFloat(tk.dataset.t)); }));
+  ticks[cue].classList.add('is-on');
+  $('source', v).addEventListener('error', () => {
+    sec.hidden = true;
+    $$('a[href="#film"]').forEach(a => { a.hidden = true; });
+  });
+  if (hasIO && !RM) {
+    new IntersectionObserver(es => {
+      for (const e of es) {
+        if (e.isIntersecting && e.intersectionRatio >= 0.55) { if (!userPaused) play(); }
+        else if (!e.isIntersecting && !v.paused) v.pause();
+      }
+    }, { threshold: [0, 0.55] }).observe($('.film__clip', sec));
+  }
+})();
+
+/* background videos only run while they are on screen */
+(() => {
+  const vids = [$('#heroVideo'), $('#ctaVideo')];
+  if (RM) { vids.forEach(v => { v.removeAttribute('autoplay'); v.pause(); }); return; }
+  if (!hasIO) return;
+  const io = new IntersectionObserver(es => {
+    for (const e of es) {
+      const v = e.target.tagName === 'VIDEO' ? e.target : $('video', e.target);
+      if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'auto'; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+      else v.pause();
+    }
+  }, { rootMargin: '120px' });
+  io.observe(hero.querySelector('video'));
+  io.observe($('#cta'));
+})();
+
+/* ============ reading a perfume: the spray timeline ============ */
+(() => {
+  const sec = $('#lire'), stages = $$('.stage', sec), liq = $('#atomLiq'), flac = $('.atom__flacon'), cv = $('#atomMist');
+  let level = 122, timers = [];
+  liq.style.transform = 'translate(0px,' + level + 'px)';
+  $('#sprayBtn').addEventListener('click', () => {
+    level = level > 236 ? 122 : level + 9;                 /* the flacon empties a little, then refills */
+    liq.style.transform = 'translate(0px,' + level + 'px)';
+    if (RM) return;
+    const a = flac.getBoundingClientRect(), c = cv.getBoundingClientRect();
+    const x = a.left + a.width / 2 - c.left, y = a.top + a.height * (2 / 320) - c.top;
+    mistAtom.burst(x, y, { n: 150, spread: 0.75, power: 1.05 });
+    setTimeout(() => mistAtom.burst(x, y, { n: 70, spread: 0.5, power: 0.8 }), 140);
+    timers.forEach(clearTimeout); timers = [];
+    sec.classList.add('is-playing');
+    stages.forEach(s => s.classList.remove('is-on'));
+    void sec.offsetWidth;
+    const on = (i, dur) => { stages[i].style.setProperty('--dur', dur + 'ms'); stages[i].classList.add('is-on'); };
+    const off = i => stages[i].classList.remove('is-on');
+    on(0, 1500);
+    timers.push(setTimeout(() => on(1, 2900), 1200));
+    timers.push(setTimeout(() => off(0), 1900));
+    timers.push(setTimeout(() => on(2, 3600), 3700));
+    timers.push(setTimeout(() => off(1), 4600));
+    timers.push(setTimeout(() => { sec.classList.remove('is-playing'); stages.forEach(s => s.classList.remove('is-on')); }, 8200));
+  });
+})();
+
+/* ============ catalogue ============ */
+const TONES = {
+  arabisant: { liq: 'liq-amber', halo: 'rgba(233,154,43,.36)' },
+  femmes: { liq: 'liq-rose', halo: 'rgba(229,138,150,.34)' },
+  hommes: { liq: 'liq-indigo', halo: 'rgba(114,134,228,.36)' },
+  unisexe: { liq: 'liq-silver', halo: 'rgba(205,211,224,.28)' }
+};
+const WAVE = 'M-160 0q20-6 40 0' + 't40 0'.repeat(14) + 'V240H-160Z';
+const MOTIFS = [
+  () => '<path d="M100 140 134 190 100 240 66 190Z"/><circle cx="100" cy="190" r="8"/>',
+  () => '<path d="M100 132 140 190 100 248 60 190Z"/><path d="M100 152 126 190 100 228 74 190Z"/><path d="M100 172 112 190 100 208 88 190Z"/>',
+  () => [0, 1, 2, 3, 4].map(i => '<path d="M62 ' + (150 + i * 22) + ' 100 ' + (128 + i * 22) + ' 138 ' + (150 + i * 22) + '"/>').join(''),
+  () => '<path d="M72 162h56v56H72z"/><path d="M100 150.4 139.6 190 100 229.6 60.4 190Z"/><circle cx="100" cy="190" r="12"/>',
+  () => [-60, -40, -20, 0, 20, 40, 60].map(a => { const r = a * Math.PI / 180; return '<path d="M100 266 ' + (100 + Math.sin(r) * 150).toFixed(1) + ' ' + (266 - Math.cos(r) * 150).toFixed(1) + '"/>'; }).join('') + '<path d="M60 266h80"/>',
+  () => [24, 44, 64, 84].map(r => '<path d="M' + (100 - r) + ' 258a' + r + ' ' + r + ' 0 0 1 ' + (2 * r) + ' 0"/>').join('') + '<path d="M50 258h100"/>',
+  () => [150, 190, 230].map(y => '<path d="M52 ' + (y + 10) + ' 68 ' + (y - 10) + ' 84 ' + (y + 10) + ' 100 ' + (y - 10) + ' 116 ' + (y + 10) + ' 132 ' + (y - 10) + ' 148 ' + (y + 10) + '"/>').join(''),
+  () => [58, 72, 86, 100, 114, 128, 142].map(x => '<path d="M' + x + ' 118V262"/>').join('') + '<path d="M100 170 114 190 100 210 86 190Z" fill="#F4EEDF" stroke="none"/>'
+];
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = seed; return () => { a = a + 0x6D2B79F5 | 0; let x = Math.imul(a ^ a >>> 15, 1 | a); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; }; }
+
+/* every scent family wears the same house flacon; the engraving and the fill level are drawn from its name */
+function flacon(p) {
+  const r = rng(hash(p.slug)), tone = TONES[p.c];
+  const motif = MOTIFS[Math.floor(r() * MOTIFS.length)]();
+  const lvl = Math.round(112 + r() * 66), phase = Math.round(r() * 80);
+  return '<svg viewBox="0 0 200 320" aria-hidden="true"><ellipse cx="100" cy="313" rx="72" ry="5" fill="rgba(4,6,22,.5)"/>' +
+    '<g clip-path="url(#clip-body)"><g transform="translate(' + phase + ' ' + lvl + ')"><path class="flacon__wave" d="' + WAVE + '" fill="url(#' + tone.liq + ')"/></g></g>' +
+    '<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="rgba(205,211,224,.05)"/>' +
+    '<rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38" fill="rgba(205,211,224,.09)"/><rect x="82" y="2" width="36" height="12" fill="rgba(205,211,224,.09)"/>' +
+    '<g clip-path="url(#clip-body)" stroke="#F4EEDF" stroke-opacity=".82" stroke-width="1.5">' + motif + '</g>' +
+    '<path d="M43 104V272" stroke="#fff" stroke-opacity=".28"/></g></svg>';
+}
+
+const catalog = (() => {
+  const tabsEl = $('#tabs'), grid = $('#grid'), desc = $('#colDesc'), all = $('#colAll');
+  let current = 'arabisant', io = null;
+  const scentLabel = p => { const n = p.scents.length; return n === 0 ? t('card.single') : n === 1 ? t('fmt.scents1') : t('fmt.scents', n); };
+  const price = () => t('fmt.price', CATALOG.price);
+
+  function renderTabs() {
+    tabsEl.innerHTML = CATALOG.collections.map(c => {
+      const on = c.id === current;
+      return '<button class="tab" role="tab" type="button" id="tab-' + c.id + '" data-c="' + c.id + '" aria-controls="grid" aria-selected="' + on + '" tabindex="' + (on ? 0 : -1) + '">' +
+        '<span class="tab__name">' + esc(t('tab.' + c.id)) + '</span><span class="tab__n">' + esc(c.count ? t('fmt.families', c.count) : t('card.soon')) + '</span></button>';
+    }).join('');
+  }
+  function renderGrid(fresh) {
+    const col = CATALOG.collections.find(c => c.id === current);
+    const items = CATALOG.products.filter(p => p.c === current);
+    desc.textContent = t('desc.' + current);
+    all.href = col.url;
+    grid.setAttribute('aria-labelledby', 'tab-' + current);
+    if (!items.length) {
+      grid.innerHTML = '<div class="soon cham ring"><svg viewBox="0 0 200 320" stroke-width="2.4" aria-hidden="true"><use href="#flacon"/></svg><p>' + esc(t('desc.unisexe')) + '</p></div>';
+    } else {
+      grid.innerHTML = items.map((p, i) => {
+        const n = p.scents.length;
+        return '<article class="card cham ring" style="--i:' + i + ';--halo:' + TONES[p.c].halo + '">' +
+          '<div class="card__art">' + flacon(p) + '</div>' +
+          '<div class="card__body"><h3 class="card__name" dir="ltr">' + esc(p.name) + '</h3>' +
+          '<p class="card__meta"><span>' + esc(scentLabel(p)) + '</span>' + (p.sizes ? '<span>' + esc(t('fmt.sizes')) + '</span>' : '') + '</p>' +
+          '<div class="card__row"><span class="card__price">' + esc(price()) + '</span>' +
+          (n ? '<button class="tlink card__see" type="button" data-open="' + esc(p.slug) + '">' + esc(t('card.see')) + '</button>' : '') + '</div>' +
+          '<a class="btn btn--sm card__order" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(t('card.order')) + '<span class="vh"> ' + esc(p.name) + '</span></a>' +
+          '</div></article>';
+      }).join('');
+    }
+    grid.classList.remove('is-fresh');
+    if (fresh) { void grid.offsetWidth; grid.classList.add('is-fresh'); }
+    if (io) io.disconnect();
+    if (hasIO && !RM) {
+      io = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-live', e.isIntersecting)), { rootMargin: '40px' });
+      $$('.card', grid).forEach(c => io.observe(c));
+    }
+  }
+  function select(id, focus) {
+    if (id === current) return;
+    current = id;
+    renderTabs();
+    renderGrid(true);
+    if (focus) { const b = $('#tab-' + id); if (b) b.focus(); }
+  }
+  tabsEl.addEventListener('click', e => { const b = e.target.closest('.tab'); if (b) select(b.dataset.c); });
+  tabsEl.addEventListener('keydown', e => {
+    const ids = CATALOG.collections.map(c => c.id), i = ids.indexOf(current);
+    const fwd = root.dir === 'rtl' ? 'ArrowLeft' : 'ArrowRight', back = root.dir === 'rtl' ? 'ArrowRight' : 'ArrowLeft';
+    let j = -1;
+    if (e.key === fwd) j = (i + 1) % ids.length;
+    else if (e.key === back) j = (i - 1 + ids.length) % ids.length;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = ids.length - 1;
+    if (j < 0) return;
+    e.preventDefault();
+    select(ids[j], true);
+  });
+  grid.addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) sheet.open(b.dataset.open, b); });
+  return { render() { renderTabs(); renderGrid(false); }, scentLabel, price };
+})();
+
+/* ============ the scent sheet ============ */
+const sheet = (() => {
+  const el = $('#sheet'), panel = $('.sheet__panel', el), title = $('#sheetTitle'), meta = $('#sheetMeta'), list = $('#sheetList'), cta = $('#sheetCta'), closeBtn = $('#sheetClose');
+  let slug = null, opener = null;
+  function fill() {
+    const p = CATALOG.products.find(x => x.slug === slug);
+    if (!p) return;
+    const rtl = root.dir === 'rtl';
+    title.textContent = p.name;
+    meta.textContent = catalog.scentLabel(p) + (p.sizes ? ' — ' + t('fmt.sizes') : '');
+    cta.href = p.url;
+    list.innerHTML = p.scents.map((s, i) =>
+      '<li class="scent" style="--i:' + i + '"><span dir="ltr">' + esc(s[0]) + '</span>' +
+      (s[2] ? '<span class="scent__tag">' + esc(t('tag.' + s[2])) + '</span>' : '') +
+      (rtl && s[1] ? '<span class="scent__ar">' + esc(s[1]) + '</span>' : '') + '</li>').join('');
+    $('.sheet__body', el).scrollTop = 0;
+  }
+  function open(s, from) {
+    slug = s; opener = from || null;
+    fill();
+    el.classList.add('is-open');
+    el.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => closeBtn.focus(), 80);
+  }
+  function close() {
+    if (!slug) return;
+    slug = null;
+    el.classList.remove('is-open');
+    el.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (opener && document.contains(opener)) opener.focus();
+  }
+  el.addEventListener('click', e => { if (e.target.closest('[data-close]')) close(); });
+  document.addEventListener('keydown', e => {
+    if (!slug) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (e.key !== 'Tab') return;
+    const f = $$('a[href],button:not([tabindex="-1"])', panel);
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  return { open, close, refresh() { if (slug) fill(); } };
+})();
+
+/* ============ scroll: progress, chapters, stacked notes ============ */
+const bar = $('#bar'), rail = $('#rail');
+const scenes = $$('[data-scene]');
+const notes = $$('.note');
+const noteArt = notes.map(n => $('canvas', n));
+const navLinks = $$('.bar__nav a'), railLinks = $$('[data-rail]');
+const chapters = ['nom', 'notes', 'film', 'lire', 'collections', 'en-ligne'].map(id => document.getElementById(id));
+let vh = window.innerHeight, ticking = false;
+
+function frame() {
+  ticking = false;
+  const y = window.scrollY || root.scrollTop || 0;
+  const max = Math.max(1, root.scrollHeight - vh);
+  bar.classList.toggle('is-solid', y > 24);
+  bar.style.setProperty('--sp', clamp(y / max).toFixed(4));
+  for (const s of scenes) {
+    if (!s._live) continue;
+    const r = s.getBoundingClientRect();
+    if (r.bottom < -vh || r.top > vh * 2) continue;
+    s.style.setProperty('--p', clamp((vh - r.top) / (vh + r.height)).toFixed(4));
+    s.style.setProperty('--e', clamp((vh - r.top) / (vh * 0.75)).toFixed(4));
+  }
+  for (let i = 0; i < notes.length; i++) {
+    const next = notes[i + 1];
+    if (!next) { noteArt[i].dataset.off = ''; break; }
+    const a = notes[i].getBoundingClientRect(), b = next.getBoundingClientRect();
+    notes[i].style.setProperty('--cover', clamp((vh - b.top) / (vh * 0.85)).toFixed(3));
+    noteArt[i].dataset.off = b.top <= a.top + 16 ? '1' : '';
+  }
+  let cur = '';
+  for (const c of chapters) if (c.getBoundingClientRect().top < vh * 0.45) cur = c.id;
+  navLinks.forEach(a => a.classList.toggle('is-on', a.getAttribute('href') === '#' + cur));
+  const key = cur === 'film' ? 'notes' : cur === 'en-ligne' ? 'collections' : cur;
+  railLinks.forEach(a => a.classList.toggle('is-on', a.dataset.rail === key));
+  rail.classList.toggle('is-on', y > vh * 0.7);
+}
+function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+window.addEventListener('scroll', onScroll, { passive: true });
+/* scroll-driven scenes switch on at the first scroll, and only for scenes still below the fold: nothing jumps, and the page is complete at rest */
+window.addEventListener('scroll', () => { if (!RM) scenes.forEach(s => { s._live = s.getBoundingClientRect().top > vh * 0.9; }); }, { passive: true, once: true });
+
+function layout() {
+  vh = window.innerHeight;
+  const bh = bar.offsetHeight;
+  /* a note taller than the screen sticks by its bottom edge, so all of it can be read */
+  notes.forEach((n, i) => { n.style.top = Math.min(bh + i * 12, vh - n.offsetHeight) + 'px'; });
+  sketches.resize();
+  mistHero.resize();
+  mistAtom.resize();
+  frame();
+}
+window.addEventListener('resize', debounce(layout, 160));
+window.addEventListener('load', layout);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+
+/* ============ reveals: armed by the first scroll, so the page is complete at rest ============ */
+(() => {
+  if (!hasIO || RM) return;
+  const els = $$('.rv');
+  let armed = false;
+  const io = new IntersectionObserver(es => {
+    for (const e of es) if (e.isIntersecting) { e.target.classList.remove('is-pending'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+  function arm() {
+    if (armed) return;
+    armed = true;
+    const lim = window.innerHeight * 1.05;
+    for (const el of els) if (el.getBoundingClientRect().top > lim) { el.classList.add('is-pending'); io.observe(el); }
+  }
+  ['scroll', 'wheel', 'touchmove', 'keydown'].forEach(ev => window.addEventListener(ev, arm, { passive: true, once: true }));
+})();
+
+/* ============ start ============ */
+lang = initialLang();
+paintLang();
+})();
+
+</script>
+</body>
+</html>
