@@ -12,13 +12,16 @@ const hasIO = 'IntersectionObserver' in window;
 
 /* ============ language ============ */
 const LANGS = {
-  fr: { dir: 'ltr', hash: 'fr' },
-  en: { dir: 'ltr', hash: 'en' },
-  ar: { dir: 'rtl', hash: 'ar' },
-  ary: { dir: 'rtl', hash: 'darija' }
+  fr: { dir: 'ltr', hash: 'fr', name: 'Français' },
+  en: { dir: 'ltr', hash: 'en', name: 'English' },
+  ar: { dir: 'rtl', hash: 'ar', name: 'العربية' },
+  ary: { dir: 'rtl', hash: 'darija', name: 'الدارجة' },
+  zgh: { dir: 'ltr', hash: 'tamazight', name: 'ⵜⴰⵎⴰⵣⵉⵖⵜ' }
 };
 const byHash = h => Object.keys(LANGS).find(k => LANGS[k].hash === h);
 let lang = 'fr';
+/* the light theme is the default; the dark one is a choice the visitor makes */
+let mode = root.getAttribute('data-mode') === 'dark' ? 'dark' : 'light';
 
 function t(key, n) {
   const d = I18N[lang] || I18N.fr;
@@ -33,9 +36,12 @@ function initialLang() {
   try { const s = localStorage.getItem('nait-lang'); if (LANGS[s]) return s; } catch (e) { /* storage may be unavailable */ }
   const n = (navigator.language || 'fr').toLowerCase();
   if (n.indexOf('ar') === 0) return 'ar';
+  if (n.indexOf('zgh') === 0 || n.indexOf('tzm') === 0 || n.indexOf('ber') === 0) return 'zgh';
   if (n.indexOf('en') === 0) return 'en';
   return 'fr';
 }
+
+const langbox = $('#langbox'), langBtn = $('#langBtn'), langCur = $('#langCur');
 
 function paintLang() {
   root.lang = lang;
@@ -44,27 +50,41 @@ function paintLang() {
   $$('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
   $$('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t(el.dataset.i18nAria)));
   $$('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  langCur.textContent = LANGS[lang].name;
+  langCur.lang = lang;
   catalog.render();
   sheet.refresh();
+  film.setVoice();
   layout();
 }
 
-function setLang(next, instant) {
+/* the page dips out behind a veil while words or colours are swapped */
+function swap(apply) {
+  if (RM) { apply(); return; }
+  root.classList.add('is-swapping');
+  setTimeout(() => { apply(); setTimeout(() => root.classList.remove('is-swapping'), 140); }, 260);
+}
+
+function setLang(next) {
   if (!LANGS[next] || next === lang) return;
   lang = next;
   try { localStorage.setItem('nait-lang', lang); } catch (e) { /* ignore */ }
   try { location.hash = LANGS[lang].hash; } catch (e) { /* the address may be read-only */ }
-  if (instant || RM) { paintLang(); return; }
-  root.classList.add('is-swapping');
-  setTimeout(() => {
-    paintLang();
-    setTimeout(() => root.classList.remove('is-swapping'), 120);
-  }, 260);
+  swap(paintLang);
 }
 
+function openLang(open) {
+  langbox.classList.toggle('is-open', open);
+  langBtn.setAttribute('aria-expanded', String(open));
+}
+langBtn.addEventListener('click', () => openLang(!langbox.classList.contains('is-open')));
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-lang]');
-  if (b) setLang(b.dataset.lang);
+  if (b) { openLang(false); setLang(b.dataset.lang); return; }
+  if (!e.target.closest('#langbox')) openLang(false);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && langbox.classList.contains('is-open')) { openLang(false); langBtn.focus(); }
 });
 window.addEventListener('hashchange', () => {
   const h = byHash(location.hash.replace('#', ''));
@@ -84,18 +104,28 @@ document.addEventListener('click', e => {
 /* ============ mist: the spray particles ============ */
 function Mist(canvas) {
   const ctx = canvas.getContext('2d');
-  let w = 0, h = 0, dpr = 1, raf = 0;
+  let w = 0, h = 0, dpr = 1, raf = 0, light = true;
   const parts = [];
   const sprite = document.createElement('canvas');
   sprite.width = sprite.height = 64;
   const sg = sprite.getContext('2d');
-  const g = sg.createRadialGradient(32, 32, 0, 32, 32, 32);
-  g.addColorStop(0, 'rgba(255,240,210,.95)');
-  g.addColorStop(0.3, 'rgba(255,199,102,.45)');
-  g.addColorStop(1, 'rgba(233,154,43,0)');
-  sg.fillStyle = g;
-  sg.fillRect(0, 0, 64, 64);
 
+  /* gold dust on white paper, warm light on the night */
+  function paintSprite() {
+    sg.clearRect(0, 0, 64, 64);
+    const g = sg.createRadialGradient(32, 32, 0, 32, 32, 32);
+    if (light) {
+      g.addColorStop(0, 'rgba(168,128,24,.95)');
+      g.addColorStop(0.35, 'rgba(201,162,39,.42)');
+      g.addColorStop(1, 'rgba(201,162,39,0)');
+    } else {
+      g.addColorStop(0, 'rgba(255,244,214,.95)');
+      g.addColorStop(0.3, 'rgba(241,220,155,.45)');
+      g.addColorStop(1, 'rgba(212,175,55,0)');
+    }
+    sg.fillStyle = g;
+    sg.fillRect(0, 0, 64, 64);
+  }
   function resize() {
     const r = canvas.getBoundingClientRect();
     if (!r.width) return;
@@ -108,7 +138,7 @@ function Mist(canvas) {
     raf = 0;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
-    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalCompositeOperation = light ? 'source-over' : 'lighter';
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
       if (p.wait > 0) { p.wait--; continue; }
@@ -137,10 +167,12 @@ function Mist(canvas) {
     if (parts.length > 720) parts.splice(0, parts.length - 720);
     if (!raf) raf = requestAnimationFrame(tick);
   }
-  return { resize, burst };
+  paintSprite();
+  return { resize, burst, setLight(v) { light = !!v; paintSprite(); } };
 }
 
 const hero = $('#top');
+const heroVideo = $('#heroVideo');
 const mistHero = Mist($('#heroMist'));
 const mistAtom = Mist($('#atomMist'));
 const hint = $('#heroHint');
@@ -203,16 +235,48 @@ const sketches = (() => {
     }, { rootMargin: '60px' });
     items.forEach(it => io.observe(it.c));
   }
-  return { resize };
+  return { resize, light(v) { if (S.light) S.light(v); } };
 })();
+
+/* ============ theme ============ */
+const modeBtn = $('#modeBtn'), themeColor = $('#themeColor');
+
+function paintMode() {
+  const dark = mode === 'dark';
+  root.setAttribute('data-mode', mode);
+  modeBtn.dataset.i18nAria = dark ? 'theme.toLight' : 'theme.toDark';
+  modeBtn.setAttribute('aria-label', t(modeBtn.dataset.i18nAria));
+  modeBtn.setAttribute('aria-pressed', String(dark));
+  if (themeColor) themeColor.setAttribute('content', dark ? '#080B1F' : '#FFFFFF');
+  /* each theme has its own hero film: gold smoke on white, or on the night */
+  if (!RM) {
+    const src = dark ? 'media/hero-dark.mp4' : 'media/hero.mp4';
+    if (heroVideo.getAttribute('src') !== src) {
+      heroVideo.setAttribute('src', src);
+      heroVideo.load();
+      if (hero.getBoundingClientRect().bottom > 0) { const p = heroVideo.play(); if (p && p.catch) p.catch(() => {}); }
+    }
+  }
+  sketches.light(!dark);
+  mistHero.setLight(!dark);
+  mistAtom.setLight(!dark);
+  sketches.resize();
+}
+modeBtn.addEventListener('click', () => {
+  mode = mode === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('nait-mode', mode); } catch (e) { /* ignore */ }
+  swap(paintMode);
+});
 
 /* ============ film ============ */
 const film = (() => {
-  const sec = $('#film'), v = $('#filmVideo'), cap = $('#filmCap'), btn = $('#filmBtn');
+  const sec = $('#film'), v = $('#filmVideo'), cap = $('#filmCap'), btn = $('#filmBtn'), snd = $('#filmSound');
   const track = $('#filmTrack'), fill = $('i', track), ticks = $$('.film__tick', track);
   const CUES = [[0, 'film.c1'], [5, 'film.c2'], [10.5, 'film.c3'], [16, 'film.c4'], [21.5, 'film.c5']];
   const DUR = 26;
-  let cue = 3, raf = 0, userPaused = false, swapId = 0;
+  /* one cut of the film per voice-over; Darija and Tamazight are read in Arabic */
+  const VOICE = { fr: 'fr', en: 'en', ar: 'ar', ary: 'ar', zgh: 'ar' };
+  let cue = 3, raf = 0, userPaused = false, swapId = 0, sound = false;
 
   function setCue(i) {
     if (i === cue) return;
@@ -236,14 +300,39 @@ const film = (() => {
     setCue(i);
     if (!v.paused) raf = requestAnimationFrame(loop);
   }
+  function paintSound() {
+    v.muted = !sound;
+    v.loop = !sound;                       /* with the voice on, the film plays once and rests on the name */
+    snd.setAttribute('aria-pressed', String(sound));
+    snd.dataset.i18nAria = sound ? 'film.soundOff' : 'film.soundOn';
+    snd.setAttribute('aria-label', t(snd.dataset.i18nAria));
+  }
   function play() {
     if (v.preload === 'none') v.preload = 'auto';
     const p = v.play();
-    if (p && p.catch) p.catch(() => {});
+    if (p && p.catch) p.catch(err => {
+      /* a browser that refuses sound still gets the silent film */
+      if (!sound || !err || err.name !== 'NotAllowedError') return;
+      sound = false;
+      paintSound();
+      const q = v.play();
+      if (q && q.catch) q.catch(() => {});
+    });
   }
   function seek(s) {
     const go = () => { try { v.currentTime = s + 0.03; } catch (e) { /* not seekable yet */ } loop(); };
     if (v.readyState >= 1) go(); else { v.addEventListener('loadedmetadata', go, { once: true }); }
+  }
+  /* the cut that matches the page's language; a change of voice restarts the current shot */
+  function setVoice() {
+    const src = 'media/film-' + (VOICE[lang] || 'fr') + '.mp4';
+    if (v.getAttribute('src') === src) return;
+    const was = !v.paused, at = CUES[cue][0], started = v.currentTime > 0.1 || was;
+    v.setAttribute('src', src);
+    if (!started && v.preload === 'none') return;      /* nothing loaded yet: the new address is enough */
+    v.load();
+    if (at > 0) seek(at);
+    if (was) play();
   }
   v.addEventListener('play', () => {
     sec.classList.add('is-playing');
@@ -256,38 +345,50 @@ const film = (() => {
     btn.dataset.i18nAria = 'film.play';
     btn.setAttribute('aria-label', t('film.play'));
   });
-  btn.addEventListener('click', () => {
-    if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); }
-  });
-  ticks.forEach(tk => tk.addEventListener('click', () => { userPaused = false; play(); seek(parseFloat(tk.dataset.t)); }));
-  ticks[cue].classList.add('is-on');
-  $('source', v).addEventListener('error', () => {
+  v.addEventListener('ended', () => { userPaused = true; });
+  /* a film that cannot load takes its section with it */
+  v.addEventListener('error', () => {
     sec.hidden = true;
     $$('a[href="#film"]').forEach(a => { a.hidden = true; });
   });
-  if (hasIO && !RM) {
+  btn.addEventListener('click', () => {
+    if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); }
+  });
+  snd.addEventListener('click', () => {
+    sound = !sound;
+    sec.classList.add('has-heard');
+    paintSound();
+    if (sound) { userPaused = false; seek(0); play(); }   /* the voice-over is heard from its first word */
+  });
+  ticks.forEach(tk => tk.addEventListener('click', () => { userPaused = false; play(); seek(parseFloat(tk.dataset.t)); }));
+  ticks[cue].classList.add('is-on');
+  if (hasIO) {
     new IntersectionObserver(es => {
       for (const e of es) {
-        if (e.isIntersecting && e.intersectionRatio >= 0.55) { if (!userPaused) play(); }
-        else if (!e.isIntersecting && !v.paused) v.pause();
+        /* the silent film starts by itself; with sound on, it waits for the visitor. Off screen it always stops. */
+        if (e.isIntersecting && e.intersectionRatio >= 0.55) { if (!RM && !userPaused && !sound) play(); }
+        else if (!e.isIntersecting && !v.paused) { v.pause(); if (sound) userPaused = true; }
       }
     }, { threshold: [0, 0.55] }).observe($('.film__clip', sec));
   }
+  return { setVoice };
 })();
 
 /* background videos only run while they are on screen */
 (() => {
-  const vids = [$('#heroVideo'), $('#ctaVideo')];
-  if (RM) { vids.forEach(v => { v.removeAttribute('autoplay'); v.pause(); }); return; }
+  const cta = $('#ctaVideo');
+  if (RM) { cta.pause(); return; }
   if (!hasIO) return;
   const io = new IntersectionObserver(es => {
     for (const e of es) {
       const v = e.target.tagName === 'VIDEO' ? e.target : $('video', e.target);
-      if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'auto'; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
-      else v.pause();
+      if (e.isIntersecting) {
+        if (v.preload === 'none') v.preload = 'auto';
+        if (v.getAttribute('src')) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+      } else v.pause();
     }
   }, { rootMargin: '120px' });
-  io.observe(hero.querySelector('video'));
+  io.observe(heroVideo);
   io.observe($('#cta'));
 })();
 
@@ -320,12 +421,7 @@ const film = (() => {
 })();
 
 /* ============ catalogue ============ */
-const TONES = {
-  arabisant: { liq: 'liq-amber', halo: 'rgba(233,154,43,.36)' },
-  femmes: { liq: 'liq-rose', halo: 'rgba(229,138,150,.34)' },
-  hommes: { liq: 'liq-indigo', halo: 'rgba(114,134,228,.36)' },
-  unisexe: { liq: 'liq-silver', halo: 'rgba(205,211,224,.28)' }
-};
+const LIQUID = { arabisant: 'liq-amber', femmes: 'liq-rose', hommes: 'liq-indigo', unisexe: 'liq-silver' };
 const WAVE = 'M-160 0q20-6 40 0' + 't40 0'.repeat(14) + 'V240H-160Z';
 const MOTIFS = [
   () => '<path d="M100 140 134 190 100 240 66 190Z"/><circle cx="100" cy="190" r="8"/>',
@@ -335,22 +431,22 @@ const MOTIFS = [
   () => [-60, -40, -20, 0, 20, 40, 60].map(a => { const r = a * Math.PI / 180; return '<path d="M100 266 ' + (100 + Math.sin(r) * 150).toFixed(1) + ' ' + (266 - Math.cos(r) * 150).toFixed(1) + '"/>'; }).join('') + '<path d="M60 266h80"/>',
   () => [24, 44, 64, 84].map(r => '<path d="M' + (100 - r) + ' 258a' + r + ' ' + r + ' 0 0 1 ' + (2 * r) + ' 0"/>').join('') + '<path d="M50 258h100"/>',
   () => [150, 190, 230].map(y => '<path d="M52 ' + (y + 10) + ' 68 ' + (y - 10) + ' 84 ' + (y + 10) + ' 100 ' + (y - 10) + ' 116 ' + (y + 10) + ' 132 ' + (y - 10) + ' 148 ' + (y + 10) + '"/>').join(''),
-  () => [58, 72, 86, 100, 114, 128, 142].map(x => '<path d="M' + x + ' 118V262"/>').join('') + '<path d="M100 170 114 190 100 210 86 190Z" fill="#F4EEDF" stroke="none"/>'
+  () => [58, 72, 86, 100, 114, 128, 142].map(x => '<path d="M' + x + ' 118V262"/>').join('') + '<path d="M100 170 114 190 100 210 86 190Z" fill="currentColor" stroke="none"/>'
 ];
 function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 function rng(seed) { let a = seed; return () => { a = a + 0x6D2B79F5 | 0; let x = Math.imul(a ^ a >>> 15, 1 | a); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; }; }
 
-/* every scent family wears the same house flacon; the engraving and the fill level are drawn from its name */
+/* every scent family wears the same house flacon; the engraving and the fill level are drawn from its name.
+   Lines use currentColor, so the drawing follows the theme. */
 function flacon(p) {
-  const r = rng(hash(p.slug)), tone = TONES[p.c];
+  const r = rng(hash(p.slug));
   const motif = MOTIFS[Math.floor(r() * MOTIFS.length)]();
   const lvl = Math.round(112 + r() * 66), phase = Math.round(r() * 80);
-  return '<svg viewBox="0 0 200 320" aria-hidden="true"><ellipse cx="100" cy="313" rx="72" ry="5" fill="rgba(4,6,22,.5)"/>' +
-    '<g clip-path="url(#clip-body)"><g transform="translate(' + phase + ' ' + lvl + ')"><path class="flacon__wave" d="' + WAVE + '" fill="url(#' + tone.liq + ')"/></g></g>' +
-    '<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="rgba(205,211,224,.05)"/>' +
-    '<rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38" fill="rgba(205,211,224,.09)"/><rect x="82" y="2" width="36" height="12" fill="rgba(205,211,224,.09)"/>' +
-    '<g clip-path="url(#clip-body)" stroke="#F4EEDF" stroke-opacity=".82" stroke-width="1.5">' + motif + '</g>' +
-    '<path d="M43 104V272" stroke="#fff" stroke-opacity=".28"/></g></svg>';
+  return '<svg viewBox="0 0 200 320" aria-hidden="true"><ellipse cx="100" cy="313" rx="72" ry="5" fill="#000" opacity=".16"/>' +
+    '<g clip-path="url(#clip-body)"><g transform="translate(' + phase + ' ' + lvl + ')"><path class="flacon__wave" d="' + WAVE + '" fill="url(#' + LIQUID[p.c] + ')"/></g></g>' +
+    '<g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="currentColor" fill-opacity=".03"/>' +
+    '<rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38" fill="currentColor" fill-opacity=".07"/><rect x="82" y="2" width="36" height="12" fill="currentColor" fill-opacity=".07"/>' +
+    '<g clip-path="url(#clip-body)" stroke-opacity=".72" stroke-width="1.5">' + motif + '</g></g></svg>';
 }
 
 const catalog = (() => {
@@ -377,9 +473,11 @@ const catalog = (() => {
     } else {
       grid.innerHTML = items.map((p, i) => {
         const n = p.scents.length;
-        return '<article class="card cham ring" style="--i:' + i + ';--halo:' + TONES[p.c].halo + '">' +
-          '<div class="card__art">' + flacon(p) + '</div>' +
-          '<div class="card__body"><h3 class="card__name" dir="ltr">' + esc(p.name) + '</h3>' +
+        return '<article class="card card--' + p.c + ' cham ring" style="--i:' + i + '">' +
+          '<div class="card__art">' + flacon(p) +
+          (p.img ? '<img class="card__photo" src="' + esc(p.img) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">' : '') + '</div>' +
+          '<div class="card__body">' + (n ? '<p class="card__tag">Style</p>' : '') +
+          '<h3 class="card__name" dir="ltr">' + esc(p.name) + '</h3>' +
           '<p class="card__meta"><span>' + esc(scentLabel(p)) + '</span>' + (p.sizes ? '<span>' + esc(t('fmt.sizes')) + '</span>' : '') + '</p>' +
           '<div class="card__row"><span class="card__price">' + esc(price()) + '</span>' +
           (n ? '<button class="tlink card__see" type="button" data-open="' + esc(p.slug) + '">' + esc(t('card.see')) + '</button>' : '') + '</div>' +
@@ -387,6 +485,16 @@ const catalog = (() => {
           '</div></article>';
       }).join('');
     }
+    /* the shop's photo replaces the drawn flacon only once it has really loaded */
+    $$('.card__photo', grid).forEach(img => {
+      const done = () => {
+        if (img.naturalWidth < 2) { img.remove(); return; }
+        const r = img.naturalWidth / img.naturalHeight;
+        if (r < .8 || r > 1.25) img.classList.add('is-fit');   /* tall or wide pictures are shown whole */
+        img.parentNode.classList.add('has-photo');
+      };
+      if (img.complete) done(); else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', () => img.remove(), { once: true }); }
+    });
     grid.classList.remove('is-fresh');
     if (fresh) { void grid.offsetWidth; grid.classList.add('is-fresh'); }
     if (io) io.disconnect();
@@ -495,7 +603,7 @@ function frame() {
     noteArt[i].dataset.off = b.top <= a.top + 16 ? '1' : '';
   }
   let cur = '';
-  for (const c of chapters) if (c.getBoundingClientRect().top < vh * 0.45) cur = c.id;
+  for (const c of chapters) if (!c.hidden && c.getBoundingClientRect().top < vh * 0.45) cur = c.id;
   navLinks.forEach(a => a.classList.toggle('is-on', a.getAttribute('href') === '#' + cur));
   const key = cur === 'film' ? 'notes' : cur === 'en-ligne' ? 'collections' : cur;
   railLinks.forEach(a => a.classList.toggle('is-on', a.dataset.rail === key));
@@ -539,5 +647,6 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
 
 /* ============ start ============ */
 lang = initialLang();
+paintMode();
 paintLang();
 })();

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="fr" dir="ltr" data-mode="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Maison N’Ait</title>
-<meta name="description" content="Maison N’Ait, parfumeur au Maroc. L’histoire de la maison, ses collections et sa boutique en ligne, en darija, arabe, français et anglais.">
-<meta name="theme-color" content="#0A0E2A">
+<meta name="description" content="Maison N’Ait, parfumeur au Maroc. L’histoire de la maison, ses collections et sa boutique en ligne, en darija, arabe, tamazight, français et anglais.">
+<meta name="theme-color" content="#FFFFFF" id="themeColor">
+<script>try{if(localStorage.getItem('nait-mode')==='dark')document.documentElement.setAttribute('data-mode','dark')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Noto+Naskh+Arabic:wght@400;600&family=Reem+Kufi:wght@400;600&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Sans+Tifinagh&family=Reem+Kufi:wght@400;600&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /*CSS*/
 </style>
@@ -20,17 +21,18 @@
   <defs>
 <!--SYMBOLS-->
     <symbol id="flacon" viewBox="0 0 200 320"><g fill="none" stroke="currentColor" stroke-linejoin="round"><polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96"/><rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38"/><rect x="82" y="2" width="36" height="12"/></g></symbol>
-    <linearGradient id="liq-amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC766"/><stop offset=".4" stop-color="#E99A2B"/><stop offset="1" stop-color="#A85C12"/></linearGradient>
-    <linearGradient id="liq-rose" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FAD0D3"/><stop offset=".45" stop-color="#E58A96"/><stop offset="1" stop-color="#A8475A"/></linearGradient>
-    <linearGradient id="liq-indigo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C3CEF7"/><stop offset=".45" stop-color="#7286E4"/><stop offset="1" stop-color="#2A36A8"/></linearGradient>
-    <linearGradient id="liq-silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4EEDF"/><stop offset="1" stop-color="#9AA3B8"/></linearGradient>
+    <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8E6B12"/><stop offset=".28" stop-color="#C9A227"/><stop offset=".5" stop-color="#F6E7AE"/><stop offset=".72" stop-color="#C9A227"/><stop offset="1" stop-color="#8E6B12"/></linearGradient>
+    <linearGradient id="liq-amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--liq-a0)"/><stop offset=".4" style="stop-color:var(--liq-a1)"/><stop offset="1" style="stop-color:var(--liq-a2)"/></linearGradient>
+    <linearGradient id="liq-rose" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--liq-r0)"/><stop offset=".45" style="stop-color:var(--liq-r1)"/><stop offset="1" style="stop-color:var(--liq-r2)"/></linearGradient>
+    <linearGradient id="liq-indigo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--liq-i0)"/><stop offset=".45" style="stop-color:var(--liq-i1)"/><stop offset="1" style="stop-color:var(--liq-i2)"/></linearGradient>
+    <linearGradient id="liq-silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--liq-s0)"/><stop offset="1" style="stop-color:var(--liq-s1)"/></linearGradient>
     <clipPath id="clip-body"><polygon points="58,76 142,76 164,98.5 164,281.5 142,304 58,304 36,281.5 36,98.5"/></clipPath>
   </defs>
 </svg>
 
 <header class="bar" id="bar">
   <a class="bar__brand" href="#top" aria-label="Maison N’Ait">
-    <svg class="bar__glyph" viewBox="0 0 1883 735" aria-hidden="true"><use href="#g-nayt"/></svg>
+    <svg class="bar__glyph foil" viewBox="0 0 1883 735" aria-hidden="true"><use href="#g-nayt"/></svg>
     <span class="bar__name" dir="ltr" lang="fr">Maison N’Ait</span>
   </a>
   <nav class="bar__nav" aria-label="Sections">
@@ -40,11 +42,24 @@
     <a href="#lire" data-i18n="nav.read">Lire un parfum</a>
     <a href="#collections" data-i18n="nav.collections">Les collections</a>
   </nav>
-  <div class="lang" role="group" aria-label="Langue" data-i18n-aria="lang.label">
-    <button type="button" data-lang="ary" lang="ary" aria-pressed="false">الدارجة</button>
-    <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
-    <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="Français">FR</button>
-    <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+  <div class="tools">
+    <div class="langbox" id="langbox">
+      <button class="langbox__btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="langList" aria-label="Langue" data-i18n-aria="lang.label">
+        <span class="lname" id="langCur" lang="fr">Français</span>
+        <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4"/></svg>
+      </button>
+      <div class="lang" id="langList" role="group" aria-label="Langue" data-i18n-aria="lang.label">
+        <button type="button" data-lang="ary" lang="ary" aria-pressed="false">الدارجة</button>
+        <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
+        <button type="button" data-lang="zgh" lang="zgh" aria-pressed="false">ⵜⴰⵎⴰⵣⵉⵖⵜ</button>
+        <button type="button" data-lang="fr" lang="fr" aria-pressed="true">Français</button>
+        <button type="button" data-lang="en" lang="en" aria-pressed="false">English</button>
+      </div>
+    </div>
+    <button class="mode" id="modeBtn" type="button" aria-label="Passer au thème sombre" data-i18n-aria="theme.toDark">
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+    </button>
   </div>
   <a class="btn btn--sm bar__shop" href="https://maisonait.youcan.store/" target="_blank" rel="noopener" data-i18n="nav.shop">Boutique</a>
   <i class="bar__progress" aria-hidden="true"></i>
@@ -57,12 +72,12 @@
   <a href="#collections" tabindex="-1" data-rail="collections"><svg viewBox="0 0 499 735"><use href="#g-t"/></svg></a>
 </nav>
 
-<div class="veil" aria-hidden="true"><svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg></div>
+<div class="veil" aria-hidden="true"><svg class="foil" viewBox="0 0 1883 735"><use href="#g-nayt"/></svg></div>
 
 <main id="main">
 
 <section class="hero" id="top">
-  <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="media/hero.jpg" aria-hidden="true" tabindex="-1"><source src="media/hero.mp4" type="video/mp4"></video>
+  <video class="hero__video" id="heroVideo" muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
   <div class="hero__shade"></div>
   <canvas class="hero__mist" id="heroMist" aria-hidden="true"></canvas>
   <div class="wrap hero__in">
@@ -83,7 +98,7 @@
   <p class="hero__hint" id="heroHint" data-i18n="hero.hint">Touchez l’image pour vaporiser</p>
 </section>
 
-<div class="ribbon" aria-hidden="true"><div class="ribbon__track">
+<div class="ribbon onyx" aria-hidden="true"><div class="ribbon__track">
 <!--RIBBON-->
 </div></div>
 
@@ -94,14 +109,14 @@
     <div class="name__viz">
       <div class="name__row" dir="ltr">
         <figure class="grp">
-          <div class="grp__g" aria-hidden="true"><svg viewBox="0 0 89 735" style="--i:0;--r:-8deg"><use href="#g-n"/></svg></div>
+          <div class="grp__g" aria-hidden="true"><svg class="foil" viewBox="0 0 89 735" style="--i:0;--r:-8deg"><use href="#g-n"/></svg></div>
           <figcaption data-i18n="ch1.n">n, « de »</figcaption>
         </figure>
         <figure class="grp">
           <div class="grp__g" aria-hidden="true">
-            <svg viewBox="0 0 384 735" style="--i:1;--r:12deg"><use href="#g-a"/></svg>
-            <svg viewBox="0 0 411 735" style="--i:2;--r:-10deg"><use href="#g-y"/></svg>
-            <svg viewBox="0 0 499 735" style="--i:3;--r:14deg"><use href="#g-t"/></svg>
+            <svg class="foil" viewBox="0 0 384 735" style="--i:1;--r:12deg"><use href="#g-a"/></svg>
+            <svg class="foil" viewBox="0 0 411 735" style="--i:2;--r:-10deg"><use href="#g-y"/></svg>
+            <svg class="foil" viewBox="0 0 499 735" style="--i:3;--r:14deg"><use href="#g-t"/></svg>
           </div>
           <figcaption data-i18n="ch1.ayt">ayt, « ceux de »</figcaption>
         </figure>
@@ -120,7 +135,7 @@
 <!-- chapter ⴰ : five notes -->
 <section class="notes" id="notes">
   <div class="wrap"><div class="ch__head">
-    <span class="ch__glyph" aria-hidden="true"><svg viewBox="0 0 384 735"><use href="#g-a"/></svg></span>
+    <span class="ch__glyph" aria-hidden="true"><svg class="foil" viewBox="0 0 384 735"><use href="#g-a"/></svg></span>
     <h2 class="rv" data-i18n="ch2.title">Cinq odeurs que le Maroc connaît par cœur</h2>
     <p class="lede rv" style="--d:1" data-i18n="ch2.intro">Avant les flacons, il y avait les maisons, les souks et les saisons.</p>
   </div></div>
@@ -180,18 +195,18 @@
 </section>
 
 <!-- the film -->
-<section class="ch film" id="film">
+<section class="ch film onyx" id="film">
   <div class="wrap">
     <div class="ch__head">
       <h2 class="rv" data-i18n="film.title">Le film</h2>
-      <p class="lede rv" style="--d:1" data-i18n="film.sub">Vingt-six secondes, sans un mot.</p>
+      <p class="lede rv" style="--d:1" data-i18n="film.sub">Vingt-six secondes. Activez le son.</p>
     </div>
     <div class="film__frame">
       <div class="film__stage">
         <div class="film__clip cham ring">
-          <video id="filmVideo" muted loop playsinline preload="none" poster="media/film.jpg" tabindex="-1"><source src="media/film.mp4" type="video/mp4"></video>
+          <video id="filmVideo" muted loop playsinline preload="none" poster="media/film.jpg" src="media/film-fr.mp4" tabindex="-1"></video>
         </div>
-        <p class="film__cap" id="filmCap" data-i18n="film.c4">Ambre, musc, oud : ce qui reste quand tout s’efface.</p>
+        <p class="film__cap" id="filmCap" data-i18n="film.c4">L’ambre, le musc et l’oud : ce qui reste quand tout s’efface.</p>
       </div>
       <div class="film__ctrl">
         <button class="film__btn cham" id="filmBtn" type="button" aria-label="Lire le film" data-i18n-aria="film.play">
@@ -205,7 +220,12 @@
           <button class="film__tick" type="button" style="--at:61.54%" data-t="16" aria-label="4"></button>
           <button class="film__tick" type="button" style="--at:82.69%" data-t="21.5" aria-label="5"></button>
         </div>
+        <button class="film__btn film__btn--sound cham" id="filmSound" type="button" aria-pressed="false" aria-label="Activer le son" data-i18n-aria="film.soundOn">
+          <svg class="i-off" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 6h3L8.6 2.6v10.8L4.5 10h-3z"/><path class="ln" d="M11 6l3.6 4M14.6 6 11 10"/></svg>
+          <svg class="i-on" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 6h3L8.6 2.6v10.8L4.5 10h-3z"/><path class="ln" d="M10.8 5.7a3.3 3.3 0 0 1 0 4.6M12.7 3.7a6.1 6.1 0 0 1 0 8.6"/></svg>
+        </button>
       </div>
+      <p class="film__note" data-i18n="film.voice">Voix off de synthèse.</p>
     </div>
   </div>
 </section>
@@ -218,13 +238,12 @@
       <div class="atom__stage is-live" id="atomStage">
         <canvas class="atom__mist" id="atomMist" aria-hidden="true"></canvas>
         <svg class="atom__flacon" viewBox="0 0 200 320" aria-hidden="true">
-          <ellipse cx="100" cy="313" rx="76" ry="6" fill="rgba(4,6,22,.5)"/>
+          <ellipse cx="100" cy="313" rx="76" ry="6" fill="#000" opacity=".16"/>
           <g clip-path="url(#clip-body)"><g class="flacon__liq" id="atomLiq" transform="translate(0 122)"><path class="flacon__wave" d="M-160 0q20-6 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0V240H-160Z" fill="url(#liq-amber)"/></g></g>
           <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
-            <polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="rgba(205,211,224,.05)"/>
-            <rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38" fill="rgba(205,211,224,.08)"/><rect x="82" y="2" width="36" height="12" fill="rgba(205,211,224,.08)"/>
-            <path d="M100 140 134 190 100 240 66 190Z" stroke-opacity=".8"/><circle cx="100" cy="190" r="8" stroke-opacity=".8"/>
-            <path d="M43 104V272" stroke="#fff" stroke-opacity=".28"/>
+            <polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="currentColor" fill-opacity=".03"/>
+            <rect x="88" y="52" width="24" height="18"/><rect x="70" y="14" width="60" height="38" fill="currentColor" fill-opacity=".07"/><rect x="82" y="2" width="36" height="12" fill="currentColor" fill-opacity=".07"/>
+            <path d="M100 140 134 190 100 240 66 190Z" stroke-opacity=".7"/><circle cx="100" cy="190" r="8" stroke-opacity=".7"/>
           </g>
         </svg>
       </div>
@@ -237,7 +256,7 @@
       <p class="read__sizes" data-i18n="ch3.sizes">Trois formats selon les références : 50, 75 et 100 ml.</p>
     </div>
     <div class="read__txt">
-      <span class="ch__glyph" aria-hidden="true"><svg viewBox="0 0 411 735"><use href="#g-y"/></svg></span>
+      <span class="ch__glyph" aria-hidden="true"><svg class="foil" viewBox="0 0 411 735"><use href="#g-y"/></svg></span>
       <h2 class="rv" data-i18n="ch3.title">Un parfum se lit en trois temps</h2>
       <p class="lede rv" style="--d:1" data-i18n="ch3.intro">Vaporisez, puis attendez. Ce que vous sentez à la première seconde n’est pas ce qui restera ce soir.</p>
       <ol class="stages" id="stages">
@@ -270,7 +289,7 @@
   <svg class="ch__mark" viewBox="0 0 499 735" aria-hidden="true"><use href="#g-t"/></svg>
   <div class="wrap">
     <div class="ch__head">
-      <span class="ch__glyph" aria-hidden="true"><svg viewBox="0 0 499 735"><use href="#g-t"/></svg></span>
+      <span class="ch__glyph" aria-hidden="true"><svg class="foil" viewBox="0 0 499 735"><use href="#g-t"/></svg></span>
       <h2 class="rv" data-i18n="ch4.title">Les collections</h2>
       <p class="lede rv" style="--d:1" data-i18n="ch4.intro">Vingt-cinq familles et plus de cent soixante senteurs, en trois collections. Une quatrième se prépare.</p>
     </div>
@@ -307,7 +326,7 @@
     </ol>
     <p class="online__returns rv" data-i18n="ch5.returns">Retour sous 3 jours, échange sous 7 jours après l’achat. Conditions détaillées en boutique.</p>
     <div class="cta cham" id="cta">
-      <video id="ctaVideo" muted loop playsinline preload="none" poster="media/amber.jpg" aria-hidden="true" tabindex="-1"><source src="media/amber.mp4" type="video/mp4"></video>
+      <video id="ctaVideo" muted loop playsinline preload="none" poster="media/amber.jpg" src="media/amber.mp4" aria-hidden="true" tabindex="-1"></video>
       <h2 data-i18n="cta.title">La boutique est ouverte.</h2>
       <a class="btn btn--dark" href="https://maisonait.youcan.store/" target="_blank" rel="noopener" data-i18n="cta.btn">Ouvrir la boutique</a>
     </div>
@@ -316,7 +335,7 @@
 
 </main>
 
-<footer class="foot">
+<footer class="foot onyx">
   <div class="wrap">
     <div class="foot__mark" aria-hidden="true"></div>
     <div class="foot__grid">
@@ -340,6 +359,7 @@
         <h3 id="fc3" data-i18n="foot.col3">Langue</h3>
         <button type="button" data-lang="ary" lang="ary" aria-pressed="false">الدارجة</button>
         <button type="button" data-lang="ar" lang="ar" aria-pressed="false">العربية</button>
+        <button type="button" data-lang="zgh" lang="zgh" aria-pressed="false">ⵜⴰⵎⴰⵣⵉⵖⵜ</button>
         <button type="button" data-lang="fr" lang="fr" aria-pressed="true">Français</button>
         <button type="button" data-lang="en" lang="en" aria-pressed="false">English</button>
       </div>

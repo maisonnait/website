@@ -13,6 +13,16 @@ catalog = json.loads(read("catalog.json"))
 glyphs = json.loads(read("glyphs.json"))
 sketches = read("sketches.js") if os.path.exists(f"{SRC}/sketches.js") else "window.NAIT_SKETCHES = {};"
 
+# A photo saved as media/products/<slug>.(webp|jpg|jpeg|png) replaces the picture hot-linked from the shop.
+PHOTOS = os.path.join(os.path.dirname(OUT), "media", "products")
+local = 0
+for p in catalog["products"]:
+    for ext in ("webp", "jpg", "jpeg", "png"):
+        if os.path.exists(os.path.join(PHOTOS, f'{p["slug"]}.{ext}')):
+            p["img"] = f'media/products/{p["slug"]}.{ext}'
+            local += 1
+            break
+
 # ---------- checks ----------
 problems = []
 keys = set(i18n["fr"])
@@ -28,7 +38,7 @@ used |= {m for m in re.findall(r"'((?:film\.c|tag\.|desc\.|tab\.)[A-Za-z0-9]*)'"
 for k in sorted(used):
     if k not in keys and not k.endswith("."):
         problems.append(f"key used but not defined: {k}")
-dyn = [k for k in keys if k.startswith(("tab.", "desc.", "tag.", "film.c"))]
+dyn = [k for k in keys if k.startswith(("tab.", "desc.", "tag.", "film.c", "film.sound", "theme."))]
 unused = sorted(keys - used - set(dyn))
 if unused:
     print("note: keys defined but not referenced:", unused)
@@ -50,7 +60,7 @@ assert abs(x - 1883) < 1, x
 symbols.append(f'    <symbol id="g-nayt" viewBox="0 0 1883 {H:g}">{"".join(parts)}</symbol>')
 
 m = glyphs["maison400"]
-wm_maison = (f'      <svg class="wm__maison" viewBox="0 0 {m["w"]:g} {m["h"]:g}" aria-hidden="true"><path d="'
+wm_maison = (f'      <svg class="wm__maison foil" viewBox="0 0 {m["w"]:g} {m["h"]:g}" aria-hidden="true"><path d="'
              + "".join(l["d"] for l in m["letters"]) + '"/></svg>')
 n = glyphs["nait300"]
 wm_nait = (f'      <svg class="wm__nait" viewBox="0 0 {n["w"]:g} {n["h"]:g}" aria-hidden="true">'
@@ -58,12 +68,12 @@ wm_nait = (f'      <svg class="wm__nait" viewBox="0 0 {n["w"]:g} {n["h"]:g}" ari
            + "</svg>")
 mask_svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{n["w"]:g}" height="{n["h"]:g}" viewBox="0 0 {n["w"]:g} {n["h"]:g}"><path d="'
             + "".join(l["d"] for l in n["letters"]) + '"/></svg>')
-css += '\n.foot__mark{--mark:url("data:image/svg+xml,' + quote(mask_svg, safe="/:=,.- ") + '")}\n'
+css += '\n.foot__mark{--mark-shape:url("data:image/svg+xml,' + quote(mask_svg, safe="/:=,.- ") + '")}\n'
 
-glyph = '<svg viewBox="0 0 1883 735"><use href="#g-nayt"/></svg>'
-phrases = [('fr', 'Parfumeur au Maroc'), ('ar', 'عطور من المغرب'), ('en', 'Perfumer in Morocco'), ('ary', 'ريحة بلادنا')]
-one = "".join(f'{glyph if i % 2 == 0 else "<i></i>"}<span lang="{l}">{txt}</span>' for i, (l, txt) in enumerate(phrases))
-ribbon = "\n".join(f'  <div class="ribbon__set">{one * 3}</div>' for _ in range(2))
+glyph = '<svg class="foil" viewBox="0 0 1883 735"><use href="#g-nayt"/></svg>'
+phrases = [('fr', 'Parfumeur au Maroc'), ('ar', 'عطور من المغرب'), ('zgh', 'ⵜⵓⵊⵊⵓⵜ ⵏ ⵍⵎⵖⵔⵉⴱ'), ('en', 'Perfumer in Morocco'), ('ary', 'ريحة بلادنا')]
+one = "".join(f'{glyph if i == 0 else "<i></i>"}<span lang="{l}">{txt}</span>' for i, (l, txt) in enumerate(phrases))
+ribbon = "\n".join(f'  <div class="ribbon__set">{one * 2}</div>' for _ in range(2))
 
 data = ("const I18N = " + json.dumps(i18n, ensure_ascii=False, separators=(",", ":")) + ";\n"
         "const CATALOG = " + json.dumps(catalog, ensure_ascii=False, separators=(",", ":")) + ";")
@@ -81,7 +91,8 @@ if "</script" in (data + sketches + js).lower():
 
 os.makedirs(os.path.dirname(OUT), exist_ok=True)
 open(OUT, "w", encoding="utf-8").write(page)
-print(f"built {OUT}: {len(page.encode('utf-8')) / 1024:.1f} KiB; sketches {'inlined' if 'NAIT_SKETCHES' in sketches and len(sketches) > 60 else 'STUB'}")
+print(f"built {OUT}: {len(page.encode('utf-8')) / 1024:.1f} KiB; sketches {'inlined' if 'NAIT_SKETCHES' in sketches and len(sketches) > 60 else 'STUB'}; "
+      f"product photos: {local} local, {sum(1 for p in catalog['products'] if p.get('img', '').startswith('http'))} from the shop")
 if problems:
     print("PROBLEMS:")
     for p in problems:

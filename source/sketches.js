@@ -9,6 +9,15 @@
 
   var TAU = Math.PI * 2, IVORY = '#F4EEDF';
 
+  // Two palettes. The dark theme keeps the original colours; the light theme maps them to gold and black.
+  var LIGHT = false;
+  var PAL_HEX = { '#D96B7A': '#C9A227', '#F4EEDE': '#8E6B12', '#161D5C': '#0B0B0C', '#E99A2B': '#C9A227', '#6F8A5B': '#C2A23A',
+              '#E7D9B8': '#E9CE7E', '#FFC766': '#F1DC9B', '#FFE2A6': '#9A7412' };
+  var PAL_RGB = { '217,107,122': '201,162,39', '242,167,176': '233,206,126', '255,199,102': '241,220,155', '233,154,43': '201,162,39',
+              '168,92,18': '142,107,18', '255,226,166': '255,244,214', '205,211,224': '247,242,230' };
+  function tone(v) { return LIGHT ? (PAL_HEX[v] || v) : v; }
+  function toneA(v) { return 'rgba(' + (LIGHT ? (PAL_RGB[v] || v) : v) + ','; }
+
   // mulberry32: small seeded PRNG, used for static data only (never at draw time).
   function mulberry32(a) {
     return function () {
@@ -40,7 +49,7 @@
       k = i / (ROSE_RINGS - 1);                      // 0 = outer ring, 1 = heart
       roseRings.push({
         k: k, tip: lerp(1, 0.29, k), rot: i * Math.PI / ROSE_N,   // half-petal offset
-        dir: i % 2 ? -1 : 1, col: rgb('#F2A7B0', '#D96B7A', k)
+        dir: i % 2 ? -1 : 1, col: rgb('#F2A7B0', '#D96B7A', k), colL: rgb('#F1DC9B', '#C9A227', k)
       });
     }
     for (i = 0; i < 4; i++) {                        // detached petals, evenly spread
@@ -67,14 +76,14 @@
     var m = Math.min(w, h), lw = lineW(m), breath = Math.sin(t * 0.8), R = m * 0.32 * (1 + 0.02 * breath);
     var i, j, q, T, b, hw, g, a, r, step, len;
     ctx.translate(w / 2, h / 2);
-    ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = IVORY;
+    ctx.lineWidth = lw; ctx.lineJoin = 'round'; ctx.strokeStyle = tone('#F4EEDE');
     for (i = 0; i < ROSE_RINGS; i++) {               // outer ring first, heart last
       q = roseRings[i];
       T = R * q.tip * (1 + 0.03 * breath * (1 - q.k)); // outer rings open a little more
       b = T * 0.25; hw = T * ROSE_HW * (1 + 0.04 * breath);
       step = q.dir * TAU / ROSE_N;
       g = ctx.createRadialGradient(0, 0, T * 0.45, 0, 0, T);   // deep at the base, light at the tip
-      g.addColorStop(0, 'rgba(217,107,122,0.92)'); g.addColorStop(1, q.col + '0.88)');
+      g.addColorStop(0, toneA('217,107,122') + '0.92)'); g.addColorStop(1, (LIGHT ? q.colL : q.col) + '0.88)');
       ctx.fillStyle = g;
       ctx.save();
       ctx.rotate(q.rot + q.dir * t * 0.02);          // neighbouring rings counter-rotate
@@ -85,14 +94,14 @@
     }
     r = R * 0.13;                                    // heart: an ivory spiral on a deep rose disc
     ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU);
-    ctx.fillStyle = 'rgba(217,107,122,0.95)'; ctx.fill(); ctx.stroke();
+    ctx.fillStyle = toneA('217,107,122') + '0.95)'; ctx.fill(); ctx.stroke();
     ctx.beginPath();
     for (j = 0; j <= 30; j++) {
       a = j * 0.42 + t * 0.02;
       ctx.lineTo(Math.cos(a) * r * j / 30, Math.sin(a) * r * j / 30);
     }
     ctx.stroke();
-    ctx.fillStyle = 'rgba(242,167,176,0.72)';
+    ctx.fillStyle = toneA('242,167,176') + '0.72)';
     for (i = 0; i < roseStray.length; i++) {         // detached petals on slow elliptical orbits
       q = roseStray[i]; a = q.ph + 0.06 * t; len = q.len * m;
       ctx.save();
@@ -138,9 +147,9 @@
       ctx.moveTo(0, 0);
       ctx.quadraticCurveTo(L * 0.45, L * 0.38, L, 0);
       ctx.quadraticCurveTo(L * 0.45, -L * 0.38, 0, 0);
-      ctx.fillStyle = LEAF; ctx.fill();
+      ctx.fillStyle = tone(LEAF); ctx.fill();
       ctx.moveTo(0, 0); ctx.lineTo(L * 0.9, 0);      // midrib
-      ctx.strokeStyle = INDIGO; ctx.globalAlpha = 0.55; ctx.stroke();
+      ctx.strokeStyle = tone(INDIGO); ctx.globalAlpha = 0.55; ctx.stroke();
       ctx.restore();
     }
     for (i = 0; i < BLOSSOMS.length; i++) {
@@ -158,7 +167,7 @@
         ctx.rotate(TAU / 5);
       }
       ctx.fillStyle = '#FFFFFF'; ctx.fill();
-      ctx.strokeStyle = INDIGO; ctx.stroke();
+      ctx.strokeStyle = tone(INDIGO); ctx.stroke();
       ctx.beginPath();                               // faint petal veins
       for (j = 0; j < 5; j++) { ctx.moveTo(R * 0.42, 0); ctx.lineTo(R * 0.74, 0); ctx.rotate(TAU / 5); }
       ctx.globalAlpha = 0.22; ctx.stroke();
@@ -166,15 +175,15 @@
       ctx.arc(0, 0, R * 0.29, 0, TAU);
       ctx.setLineDash([0.01, R * 0.29 * TAU / 10 - 0.01]);
       ctx.lineCap = 'round'; ctx.lineWidth = Math.max(1.4, R * 0.06);
-      ctx.strokeStyle = AMBER; ctx.globalAlpha = 1; ctx.stroke();
+      ctx.strokeStyle = tone(AMBER); ctx.globalAlpha = 1; ctx.stroke();
       ctx.setLineDash([]); ctx.lineWidth = lw;
       ctx.beginPath();                               // amber centre
       ctx.arc(0, 0, R * 0.15, 0, TAU);
-      ctx.fillStyle = AMBER; ctx.fill();
-      ctx.strokeStyle = INDIGO; ctx.stroke();
+      ctx.fillStyle = tone(AMBER); ctx.fill();
+      ctx.strokeStyle = tone(INDIGO); ctx.stroke();
       ctx.restore();
     }
-    ctx.fillStyle = AMBER;
+    ctx.fillStyle = tone(AMBER);
     for (i = 0; i < pollen.length; i++) {            // pollen rises, faded in and out at the ends
       p = pollen[i]; k = (t * p.v + p.ph) % 1;
       ctx.globalAlpha = 0.85 * Math.sin(Math.PI * k);
@@ -254,23 +263,23 @@
     ctx.lineJoin = 'round';
     for (i = CEDAR_N; i >= 0; i--) {                 // bark first, then inwards to the pith
       cedarRing(ctx, i, 0);
-      if (i === CEDAR_N || i === 7) { ctx.fillStyle = WOOD; ctx.globalAlpha = 0.07; ctx.fill(); }
-      ctx.lineWidth = u * cedarW[i]; ctx.globalAlpha = cedarA[i]; ctx.strokeStyle = WOOD; ctx.stroke();
+      if (i === CEDAR_N || i === 7) { ctx.fillStyle = tone(WOOD); ctx.globalAlpha = 0.07; ctx.fill(); }
+      ctx.lineWidth = u * cedarW[i]; ctx.globalAlpha = cedarA[i]; ctx.strokeStyle = tone(WOOD); ctx.stroke();
       d = cedarF[i] - fh;                            // rings near the highlight take an amber afterglow
       glow = env * (d > 0 ? Math.exp(-d * 30) : Math.exp(d * 6));
-      if (glow > 0.03) { ctx.globalAlpha = glow * 0.8; ctx.strokeStyle = GLOW; ctx.stroke(); }
+      if (glow > 0.03) { ctx.globalAlpha = glow * 0.8; ctx.strokeStyle = tone(GLOW); ctx.stroke(); }
     }
     cedarRing(ctx, CEDAR_N - 1, 0.55);               // bark: a band of fine radial hatching
     ctx.setLineDash([0.006, 0.026]);
-    ctx.lineWidth = 0.05; ctx.globalAlpha = 0.5; ctx.strokeStyle = WOOD; ctx.stroke();
+    ctx.lineWidth = 0.05; ctx.globalAlpha = 0.5; ctx.strokeStyle = tone(WOOD); ctx.stroke();
     ctx.setLineDash([]);
     for (i = 0; i < CEDAR_N - 1 && cedarF[i + 1] < fh; i++) { /* find the rings around the highlight */ }
     cedarRing(ctx, i, (fh - cedarF[i]) / (cedarF[i + 1] - cedarF[i]));
-    ctx.strokeStyle = GLOW;                          // soft amber ring: three stacked strokes
+    ctx.strokeStyle = tone(GLOW);                          // soft amber ring: three stacked strokes
     ctx.lineWidth = u * 6; ctx.globalAlpha = 0.14 * env; ctx.stroke();
     ctx.lineWidth = u * 2.8; ctx.globalAlpha = 0.3 * env; ctx.stroke();
     ctx.lineWidth = u * 1.2; ctx.globalAlpha = 0.95 * env; ctx.stroke();
-    ctx.lineWidth = u * 0.8; ctx.strokeStyle = WOOD;
+    ctx.lineWidth = u * 0.8; ctx.strokeStyle = tone(WOOD);
     for (i = 0; i < cedarCracks.length; i++) {       // cracks are cut out of the rings, then outlined
       c = cedarCracks[i];
       ctx.beginPath();
@@ -281,7 +290,7 @@
     }
     ctx.beginPath();                                 // pith
     ctx.arc(pithX, pithY, 0.014, 0, TAU);
-    ctx.fillStyle = WOOD; ctx.globalAlpha = 0.95; ctx.fill();
+    ctx.fillStyle = tone(WOOD); ctx.globalAlpha = 0.95; ctx.fill();
     ctx.restore();
   }
 
@@ -353,31 +362,31 @@
     ctx.lineJoin = 'round';
     for (n = 0; n < cubes.length; n++) {
       q = cubes[n]; v = q.v;
-      face(ctx, v, TOP, 'rgba(255,199,102,0.92)', 'rgba(233,154,43,0.82)');
-      face(ctx, v, LEFT, 'rgba(233,154,43,0.86)', 'rgba(168,92,18,0.8)');
-      face(ctx, v, RIGHT, 'rgba(168,92,18,0.9)', 'rgba(168,92,18,0.62)');
+      face(ctx, v, TOP, toneA('255,199,102') + '0.92)', toneA('233,154,43') + '0.82)');
+      face(ctx, v, LEFT, toneA('233,154,43') + '0.86)', toneA('168,92,18') + '0.8)');
+      face(ctx, v, RIGHT, toneA('168,92,18') + '0.9)', toneA('168,92,18') + '0.62)');
       k = 0.5 + 0.5 * Math.sin(t * 0.75 + q.ph);     // inner glow, out of phase per cube
       cx = (v[2][0] + v[7][0]) / 2; cy = (v[2][1] + v[7][1]) / 2;
       g = ctx.createRadialGradient(cx, cy, 0, cx, cy, q.s * 1.1);
-      g.addColorStop(0, 'rgba(255,226,166,' + (0.1 + 0.42 * k) + ')');
-      g.addColorStop(0.4, 'rgba(255,199,102,' + (0.04 + 0.17 * k) + ')');
-      g.addColorStop(1, 'rgba(255,199,102,0)');
+      g.addColorStop(0, toneA('255,226,166') + '' + (0.1 + 0.42 * k) + ')');
+      g.addColorStop(0.4, toneA('255,199,102') + '' + (0.04 + 0.17 * k) + ')');
+      g.addColorStop(1, toneA('255,199,102') + '0)');
       ctx.beginPath(); trace(ctx, v, HEX, true);     // the glow fills the cube's silhouette
       ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = g; ctx.fill();
       ctx.globalCompositeOperation = 'source-over';
       for (i = 0; i < q.dots.length; i++) {          // inclusions
         d = q.dots[i];
         ctx.beginPath(); ctx.arc(d.p[0], d.p[1], d.r, 0, TAU);
-        ctx.fillStyle = d.light ? 'rgba(255,226,166,0.55)' : 'rgba(168,92,18,0.8)'; ctx.fill();
+        ctx.fillStyle = d.light ? toneA('255,226,166') + '0.55)' : toneA('168,92,18') + '0.8)'; ctx.fill();
       }
-      ctx.strokeStyle = '#FFE2A6'; ctx.lineWidth = u;
+      ctx.strokeStyle = tone('#FFE2A6'); ctx.lineWidth = u;
       ctx.beginPath(); trace(ctx, v, [4, 7, 6]); trace(ctx, v, [7, 0]);
       ctx.globalAlpha = 0.22; ctx.stroke();          // hidden back edges, seen through the resin
       ctx.beginPath(); trace(ctx, v, HEX, true); trace(ctx, v, [1, 2, 3]); trace(ctx, v, [2, 5]);
       ctx.globalAlpha = 0.9; ctx.stroke();           // silhouette and the three front edges
       ctx.globalAlpha = 1;
     }
-    ctx.fillStyle = '#FFE2A6';
+    ctx.fillStyle = tone('#FFE2A6');
     for (i = 0; i < sparkles.length; i++) {          // sparkles bloom and fade on the edges
       q = sparkles[i]; k = Math.sin(TAU * (t / q.T + q.ph));
       if (k <= 0) continue;
@@ -393,7 +402,7 @@
   }
 
   // ---- 5. oud: an ember on its tray, ribbons of smoke -------------------------
-  var SMOKE = 'rgba(205,211,224,', ribbons = [];
+  var SMOKE = '205,211,224', ribbons = [];
   (function () {
     var rnd = mulberry32(77), n = 12, i;
     for (i = 0; i < n; i++) {
@@ -408,8 +417,8 @@
     var pulse = 0.5 + 0.5 * Math.sin(t * 1.1), i, j, q, s, e, x, y, px, py, g;
     ctx.translate(w / 2, h / 2);
     g = ctx.createLinearGradient(0, ey, 0, ey - H);  // smoke fades towards the top
-    g.addColorStop(0, SMOKE + '0)'); g.addColorStop(0.07, SMOKE + '0.5)'); g.addColorStop(0.3, SMOKE + '0.7)');
-    g.addColorStop(0.7, SMOKE + '0.36)'); g.addColorStop(1, SMOKE + '0)');
+    g.addColorStop(0, toneA(SMOKE) + '0)'); g.addColorStop(0.07, toneA(SMOKE) + '0.5)'); g.addColorStop(0.3, toneA(SMOKE) + '0.7)');
+    g.addColorStop(0.7, toneA(SMOKE) + '0.36)'); g.addColorStop(1, toneA(SMOKE) + '0)');
     ctx.strokeStyle = g; ctx.lineWidth = lw; ctx.lineCap = 'round';
     for (j = 0; j < ribbons.length; j++) {
       q = ribbons[j];
@@ -432,15 +441,15 @@
     ctx.globalAlpha = 0.45;
     ctx.beginPath(); ctx.moveTo(-0.07 * m, ty + 0.022 * m); ctx.lineTo(0.07 * m, ty + 0.022 * m); ctx.stroke();
     g = ctx.createRadialGradient(0, ey, 0, 0, ey, 0.09 * m);   // ember: pulsing halo and core
-    g.addColorStop(0, 'rgba(255,199,102,' + (0.5 + 0.4 * pulse) + ')');
-    g.addColorStop(0.35, 'rgba(233,154,43,' + (0.14 + 0.16 * pulse) + ')');
-    g.addColorStop(1, 'rgba(233,154,43,0)');
+    g.addColorStop(0, toneA('255,199,102') + '' + (0.5 + 0.4 * pulse) + ')');
+    g.addColorStop(0.35, toneA('233,154,43') + '' + (0.14 + 0.16 * pulse) + ')');
+    g.addColorStop(1, toneA('233,154,43') + '0)');
     ctx.globalAlpha = 1; ctx.fillStyle = g;
     ctx.beginPath(); ctx.arc(0, ey, 0.09 * m, 0, TAU); ctx.fill();
-    ctx.fillStyle = '#FFC766';
+    ctx.fillStyle = tone('#FFC766');
     ctx.beginPath(); ctx.arc(0, ey, er, 0, TAU); ctx.fill();
     ctx.restore();
   }
 
-  window.NAIT_SKETCHES = { rose: rose, blossom: blossom, cedar: cedar, amber: amber, oud: oud };
+  window.NAIT_SKETCHES = { rose: rose, blossom: blossom, cedar: cedar, amber: amber, oud: oud, light: function (v) { LIGHT = !!v; } };
 })();
