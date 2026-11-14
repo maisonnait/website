@@ -14,8 +14,15 @@ function isUnder(pathname: string, base: string): boolean {
   return pathname === base || pathname.startsWith(`${base}/`)
 }
 
+/** On Vercel the stock manager needs a Postgres database. Without one, every page is replaced by a note (app/configuration). */
+const NO_DATABASE = Boolean(process.env.VERCEL) && !process.env.DATABASE_URL?.trim()
+
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
+  if (pathname === '/configuration') {
+    return NO_DATABASE ? NextResponse.next() : NextResponse.redirect(new URL('/', request.url))
+  }
+  if (NO_DATABASE) return NextResponse.rewrite(new URL('/configuration', request.url))
   const claims = await verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value)
 
   if (!claims) {

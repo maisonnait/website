@@ -6,8 +6,13 @@ import { LOCALE_COOKIE, isLocale, localeFromAcceptLanguage } from '@/i18n/config
  * is redirected to the visitor's language: the one chosen earlier (cookie), else the
  * browser's (Accept-Language), else French.
  */
+/** On Vercel the shop needs a Postgres database. Without one, every page is replaced by a setup note (app/setup). */
+const NO_DATABASE = Boolean(process.env.VERCEL) && !process.env.DATABASE_URL?.trim();
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if (pathname === '/setup') return NO_DATABASE ? NextResponse.next() : NextResponse.redirect(new URL('/', request.url), 307);
+  if (NO_DATABASE) return NextResponse.rewrite(new URL('/setup', request.url));
   const first = pathname.split('/')[1] ?? '';
   if (isLocale(first)) return NextResponse.next();
 

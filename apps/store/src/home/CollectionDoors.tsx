@@ -2,20 +2,18 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import { FlaconPlate } from '@/components/FlaconPlate';
 import { usePrefersReducedMotion } from '@/lib/theme';
 
 export type Door = { slug: string; name: string; count: string; href: string };
 
-/** Collections that have their own rendered flacon in /media/flacon. */
-const RENDERED = new Set(['arabisant', 'femmes', 'hommes', 'unisexe']);
 const TURN_MS = 3200; // one perfume stays this long before the next
 const HOLD_MS = 9000; // after the visitor pointed at a collection, the flacon waits this long
 
 /**
- * The collections as four doors next to one flacon. The four pictures are the same flacon
- * rendered with each collection's perfume, so passing from one door to the next only changes
- * the colour of the perfume. It changes by itself while the block is on screen; pointing at a
- * door (or reaching it with the keyboard) chooses it.
+ * The collections as four doors next to their flacons. Each collection has its own bottle (same
+ * logo, different design); the picture dissolves from one to the next. It changes by itself while
+ * the block is on screen; pointing at a door (or reaching it with the keyboard) chooses it.
  */
 export function CollectionDoors({ doors }: { doors: Door[] }) {
   const [active, setActive] = useState(0);
@@ -50,16 +48,7 @@ export function CollectionDoors({ doors }: { doors: Door[] }) {
     <div className="showcase" ref={root}>
       <div className="showcase__flacon" aria-hidden="true">
         {doors.map((door, index) => (
-          <img
-            key={door.slug}
-            className={`showcase__img ${index === active ? 'is-on' : ''}`}
-            src={`/media/flacon/bottle-${RENDERED.has(door.slug) ? door.slug : 'arabisant'}.webp`}
-            alt=""
-            width={1200}
-            height={1500}
-            loading="lazy"
-            decoding="async"
-          />
+          <FlaconPlate key={door.slug} collection={door.slug} className={`showcase__img ${index === active ? 'is-on' : ''}`} />
         ))}
       </div>
       <ul className="doors">

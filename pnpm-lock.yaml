@@ -10,6 +10,9 @@ importers:
 
   apps/admin:
     dependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.5.16
+        version: 0.5.16
       '@fontsource/josefin-sans':
         specifier: ^5.3.0
         version: 5.3.0
@@ -31,6 +34,9 @@ importers:
       next:
         specifier: 16.4.6
         version: 16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      postgres:
+        specifier: ^4.1.1
+        version: 4.1.1
       react:
         specifier: ^19.3.1
         version: 19.3.1

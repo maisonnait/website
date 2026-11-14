@@ -621,3 +621,12 @@ h3 {
 main:focus {
   outline: 0;
 }
+
+/* pictures made for one theme only: the other one stays out of the page */
+.on-dark,
+:root[data-mode='dark'] .on-light {
+  display: none;
+}
+:root[data-mode='dark'] .on-dark {
+  display: block;
+}

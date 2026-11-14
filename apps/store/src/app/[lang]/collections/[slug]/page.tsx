@@ -9,9 +9,7 @@ import { StyleNote } from '@/components/StyleNote';
 import { collectionDescription, collectionName, getSettings, listCollections, listProducts } from '@/lib/data';
 import { pageContext } from '@/lib/page';
 import { localePath, pageMetadata } from '@/lib/site';
-
-/** Collections that have their own rendered flacon in /media/flacon. */
-const FLACONS = new Set(['arabisant', 'femmes', 'hommes', 'unisexe']);
+import { FlaconPlate } from '@/components/FlaconPlate';
 
 // Stock and prices are live: rendered on request.
 export const dynamic = 'force-dynamic';
@@ -60,14 +58,9 @@ export default async function CollectionPage({ params }: PageProps<'/[lang]/coll
           </>
         ) : (
           <div className="soon">
-            <img
-              className="soon__flacon"
-              src={`/media/flacon/bottle-${FLACONS.has(collection.slug) ? collection.slug : 'arabisant'}.webp`}
-              alt=""
-              width={1200}
-              height={1500}
-              decoding="async"
-            />
+            <span className="soon__plate">
+              <FlaconPlate collection={collection.slug} className="soon__flacon" />
+            </span>
             <Link className="btn" href={localePath(lang, '/collections')}>
               {t('nav.allCollections')}
             </Link>

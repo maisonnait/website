@@ -55,6 +55,7 @@ ap.add_argument('--turn-seq', default=None, help='render several turns in one ru
 ap.add_argument('--turn', type=float, default=0.0, help='turn the flacon about its vertical axis, in degrees (frames of the turning hero). Multiples of 2.8125 (one lathe segment) keep the glass mesh identical, so only the print and the stopper change between frames')
 ap.add_argument('--logo', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'logo-mark.svg'), help='house mark (SVG or PNG with alpha) printed in gold on the belly; "none" for the 3D drop emblem')
 ap.add_argument('--logo-height', type=float, default=4.0, help='height of the printed mark in cm (belly is about 7.5 cm)')
+ap.add_argument('--design', choices=['arabisant', 'femmes', 'hommes', 'unisexe'], default='arabisant', help='flacon design: arabisant = crowned amphora (default), femmes = slender hourglass with a rose-gold sphere, hommes = bevelled block with a gunmetal cap, unisexe = straight cylinder with a low champagne drum. Independent of --liquid')
 args = ap.parse_args()
 
 import numpy as np
@@ -469,6 +470,230 @@ def build_flacon(tag, scale, loc, mats, fill):
 
 
 
+# ----------------------------------------------------------------------------- the other designs (--design)
+# All are drawn at the same scale as the amphora (the camera keeps the amphora's framing), base on the same line.
+DESIGN_LOGO = {'femmes': (2.9, 3.0), 'hommes': (3.6, 3.85), 'unisexe': (3.6, 4.55)}   # print height and centre height, cm
+
+
+def fillet_v(pts, dists, n=9):
+    """Like fillet(), with one tangent distance per inner corner."""
+    pts = [np.array(p, float) for p in pts]
+    out = [pts[0]]
+    for i in range(1, len(pts) - 1):
+        a, b, c = pts[i - 1], pts[i], pts[i + 1]
+        la, lc = np.linalg.norm(a - b), np.linalg.norm(c - b)
+        d = min(dists[i - 1], 0.45 * la, 0.45 * lc)
+        p0, p1 = b + (a - b) / la * d, b + (c - b) / lc * d
+        for t in np.linspace(0, 1, n):
+            out.append((1 - t) ** 2 * p0 + 2 * t * (1 - t) * b + t * t * p1)
+    out.append(pts[-1])
+    return np.array(out)
+
+
+def densify(P, maxlen=0.12):
+    """Split long straight runs, so that the smooth shading of a rounded edge does not leak over a flat face."""
+    P = np.asarray(P, float)
+    out = [P[0]]
+    for a, b in zip(P[:-1], P[1:]):
+        n = max(1, int(math.ceil(np.linalg.norm(b - a) / maxlen)))
+        out.extend(a + (b - a) * k / n for k in range(1, n + 1))
+    return np.array(out)
+
+
+def mat_metal(name, base, rough, aniso=0.0):
+    m, N, L = new_mat(name)
+    out = N.new('ShaderNodeOutputMaterial'); p = N.new('ShaderNodeBsdfPrincipled')
+    p.inputs['Base Color'].default_value = tuple(base) + (1,)
+    p.inputs['Metallic'].default_value = 1.0
+    p.inputs['Roughness'].default_value = rough
+    if aniso:
+        p.inputs['Anisotropic'].default_value = aniso
+    L.new(p.outputs[0], out.inputs['Surface'])
+    return m
+
+
+def r_at_z(prof, z):
+    for (r0, z0), (r1, z1) in zip(prof[:-1], prof[1:]):
+        if z0 != z1 and (z0 - z) * (z1 - z) <= 0:
+            return float(r0 + (r1 - r0) * (z0 - z) / (z0 - z1))
+    raise ValueError('perfume level outside the cavity')
+
+
+def design_logo(design):
+    h, zc_ = DESIGN_LOGO[design]
+    return h * args.logo_height / 4.0, zc_
+
+
+def print_glass(mats, design):
+    if not mats.get('logo'):
+        return mats['glass']
+    h, zc_ = design_logo(design)
+    return mat_glass('glass_print', IOR_G, 0.78, logo=(mats['logo'][0], mats['logo'][1], h, zc_, CM))
+
+
+def lathe_body(design, outer, inner, bottom, mats, fill, neck_ref):
+    """Glass + perfume of a turned flacon: the same three-interface model as the amphora."""
+    cav_floor = float(inner[-1, 1])
+    zL = cav_floor + fill * (neck_ref - cav_floor)
+    zc = zL + MENISCUS_H
+    rc = r_at_z(inner, zc)
+    up = inner[inner[:, 1] > zc + 0.02][::-1]
+    down = inner[inner[:, 1] < zc - 0.02]
+    ri, ro, zt = float(inner[0, 0]), float(outer[0, 0]), float(outer[0, 1])
+    lip = np.array([[ri + 0.06, zt + 0.04], [(ri + ro) / 2, zt + 0.055], [ro - 0.06, zt + 0.04]])
+    g = lathe('glass', np.vstack([[[rc, zc]], up, lip, outer, bottom[1:]])); g.data.materials.append(print_glass(mats, design))
+    s = np.linspace(0, 1, 34)
+    rr = rc * (1 - (1 - s) ** 2.2)
+    top = np.c_[rr, zL + MENISCUS_H * np.exp(-(rc - rr) / MENISCUS_L)]
+    top[-1] = (rc, zc)
+    lprof = np.vstack([top, down]); lprof[0, 0] = 0.0; lprof[-1, 0] = 0.0
+    lq = lathe('liquid', lprof, [0] * (len(top) - 1) + [1] * len(down))
+    lq.data.materials.append(mats['liq_top']); lq.data.materials.append(mats['liq_wall'])
+
+
+def design_femmes(mats, fill):
+    """Slender hourglass: narrow foot, rounded hips, drawn-in waist, fine shoulders, slim neck; thin glass;
+    polished rose-gold sphere on a slim rose-gold collar."""
+    zt = 10.90
+    pts = [(0.70, zt), (0.70, 10.50), (0.71, 10.15), (0.80, 9.85), (1.02, 9.55), (1.36, 9.22), (1.62, 8.80),
+           (1.74, 8.30), (1.72, 7.75), (1.60, 7.15), (1.48, 6.55), (1.44, 6.00), (1.50, 5.45), (1.70, 4.80),
+           (2.02, 4.05), (2.34, 3.30), (2.50, 2.60), (2.46, 1.95), (2.24, 1.35), (1.90, 0.82), (1.58, 0.42),
+           (1.42, 0.16), (1.37, 0.04), (1.28, 0.0)]
+    wall = 0.22
+    outer = resample(catmull(pts, 14), 260)
+    d = np.gradient(outer, axis=0)
+    tang = d / np.linalg.norm(d, axis=1)[:, None]
+    off = outer - wall * np.c_[-tang[:, 1], tang[:, 0]]
+    keep = off[outer[:, 1] >= 2.2][::7]
+    ctrl = np.vstack([[0.70 - wall, zt], keep[1:], [2.04, 1.62], [1.60, 1.12], [0.90, 0.86], [0.0, 0.80]])
+    inner = resample(catmull(ctrl, 12), 220)
+    inner[0] = (0.70 - wall, zt); inner[-1] = (0.0, 0.80); inner[:, 0] = np.maximum(inner[:, 0], 0.0)
+    bottom = resample(catmull([(1.28, 0.0), (1.06, 0.0), (0.86, 0.03), (0.50, 0.075), (0.0, 0.085)], 8), 16)
+    bottom[-1, 0] = 0.0
+    lathe_body('femmes', outer, inner, bottom, mats, fill, zt - 0.9)
+    rose = mat_metal('rose_gold', (0.96, 0.53, 0.42), 0.09)
+    col = lathe('collar', fillet([(0.0, zt + 0.14), (0.97, zt + 0.14), (0.97, zt - 0.62), (0.745, zt - 0.62), (0.745, zt + 0.09), (0.0, zt + 0.09)], 0.05, 5))
+    col.data.materials.append(rose)
+    R_, rs_, zb = 1.02, 0.46, zt + 0.245
+    zc_ = zb + math.sqrt(R_ * R_ - rs_ * rs_)
+    a = np.linspace(0, math.pi - math.asin(rs_ / R_), 44)
+    prof = np.vstack([np.c_[R_ * np.sin(a), zc_ + R_ * np.cos(a)], [[rs_, zt + 0.175], [rs_ - 0.03, zt + 0.145], [0.0, zt + 0.145]]])
+    prof[0, 0] = 0.0
+    stp = lathe('stopper', prof); stp.data.materials.append(rose)
+    return (zc_ + R_) * CM
+
+
+def design_unisexe(mats, fill):
+    """Minimal straight cylinder, crisp flat shoulder, short neck, thick flat base; low wide drum in brushed champagne metal."""
+    outer = densify(fillet_v([(0.90, 10.20), (0.90, 9.40), (2.80, 9.40), (2.80, 0.0), (2.20, 0.0)], [0.10, 0.16, 0.10]))
+    inner = densify(fillet_v([(0.56, 10.20), (0.56, 9.04), (2.44, 9.04), (2.44, 1.50), (0.0, 1.50)], [0.10, 0.22, 0.28]))
+    inner[-1, 0] = 0.0
+    bottom = resample(catmull([(2.20, 0.0), (1.90, 0.0), (1.60, 0.035), (0.80, 0.095), (0.0, 0.105)], 8), 14)
+    bottom[-1, 0] = 0.0
+    lathe_body('unisexe', outer, inner, bottom, mats, fill, 9.04)
+    champ = mat_metal('champagne', (0.93, 0.80, 0.58), 0.22, 0.5)
+    cap = lathe('stopper', densify(fillet_v([(0.0, 11.25), (1.95, 11.25), (1.95, 9.95), (0.94, 9.95), (0.94, 10.29), (0.0, 10.29)],
+                                            [0.07, 0.05, 0.03, 0.03]), 0.15))
+    cap.data.materials.append(champ)
+    return 11.25 * CM
+
+
+def rrect(a, b, c, nc=12, hold=0.03):
+    """Rounded rectangle outline, counter-clockwise: half extents a (x) and b (y), corner radius c.
+    Three points per side, two of them right next to the corners (holding edges: the flat sides stay flat)."""
+    c = max(min(c, a - 1e-4, b - 1e-4), 1e-4)
+    ctr = [(a - c, b - c, 0.0), (-(a - c), b - c, 0.5 * math.pi), (-(a - c), -(b - c), math.pi), (a - c, -(b - c), 1.5 * math.pi)]
+    P = []
+    for i, (cx, cy, a0) in enumerate(ctr):
+        arc = [(cx + c * math.cos(a0 + 0.5 * math.pi * k / nc), cy + c * math.sin(a0 + 0.5 * math.pi * k / nc)) for k in range(nc + 1)]
+        P.extend(arc)
+        nx_, ny_, _ = ctr[(i + 1) % 4]
+        a1 = a0 + 0.5 * math.pi
+        e0, e1 = arc[-1], (nx_ + c * math.cos(a1), ny_ + c * math.sin(a1))
+        L_ = math.hypot(e1[0] - e0[0], e1[1] - e0[1])
+        h = min(hold, 0.25 * L_) / max(L_, 1e-9)
+        for t in (h, 0.5, 1 - h):
+            P.append((e0[0] + (e1[0] - e0[0]) * t, e0[1] + (e1[1] - e0[1]) * t))
+    return np.array(P)
+
+
+def loft(name, rings, fmat_ring=None):
+    """Surface through a list of rings (outline (N, 2) or None for a pole, z), same winding rule as grid_mesh()."""
+    verts, start, pole = [], [], []
+    for xy, z in rings:
+        start.append(len(verts))
+        if xy is None:
+            pole.append(True); verts.append((0.0, 0.0, z * CM))
+        else:
+            pole.append(False); verts.extend((float(x) * CM, float(y) * CM, z * CM) for x, y in xy)
+    ns = next(len(xy) for xy, z in rings if xy is not None)
+    faces, fmat = [], []
+    for i in range(len(rings) - 1):
+        a, b = start[i], start[i + 1]
+        if pole[i] and pole[i + 1]:
+            continue
+        m = int(fmat_ring[i]) if fmat_ring is not None else 0
+        for j in range(ns):
+            j2 = (j + 1) % ns
+            if pole[i]:
+                faces.append((a, b + j, b + j2))
+            elif pole[i + 1]:
+                faces.append((a + j, b, a + j2))
+            else:
+                faces.append((a + j, b + j, b + j2, a + j2))
+            fmat.append(m)
+    return make_object(name, verts, faces, fmat)
+
+
+def design_hommes(mats, fill):
+    """Architectural block: rectangular glass with square shoulders, softly bevelled edges, a heavy base and a flat
+    front face for the print; inner cavity box for the perfume; tall gunmetal cylinder cap with one thin gold ring.
+    A bevelled box mesh built ring by ring, so that the perfume shares the cavity wall exactly."""
+    A, B, C, Zt, eh, el = 3.20, 1.75, 0.50, 8.30, 0.30, 0.22      # outer half width, half depth, edge radii, height
+    a, b, c, zf, zt, e = 2.75, 1.30, 0.26, 1.70, 7.75, 0.24       # cavity: thick walls, 1.7 cm base
+    hold = 0.03
+
+    def face(a_, b_, c_, z, inward):      # flat face between its rim and the centre
+        sc = [1 - hold / b_, 0.85, 0.6, 0.3]
+        rg = [(rrect(a_ * s, b_ * s, c_ * s), z) for s in (sc if inward else sc[::-1])]
+        return rg + [(None, z)] if inward else [(None, z)] + rg
+
+    def arc(a_, b_, c_, zc_, r, p0, p1):  # rounded horizontal edge of radius r
+        out = []
+        for psi in np.linspace(p0, p1, 9):
+            d = r * (1 - math.cos(psi))
+            out.append((rrect(a_ - d, b_ - d, max(c_ - d, 0.04)), zc_ + r * math.sin(psi)))
+        return out
+
+    rings = face(A - eh, B - eh, max(C - eh, 0.04), Zt, False) + arc(A, B, C, Zt - eh, eh, math.pi / 2, 0)
+    rings += [(rrect(A, B, C), Zt - eh - hold), (rrect(A, B, C), el + hold)]
+    rings += arc(A, B, C, el, el, 0, -math.pi / 2) + face(A - el, B - el, max(C - el, 0.04), 0.0, True)
+    g = loft('glass', rings); g.data.materials.append(print_glass(mats, 'hommes'))
+
+    zL = zf + fill * (zt - zf)
+    zc = zL + MENISCUS_H
+    ring_c = (rrect(a, b, c), zc)
+    up = [ring_c, (rrect(a, b, c), zt - e - hold)] + arc(a, b, c, zt - e, e, 0, math.pi / 2) + face(a - e, b - e, max(c - e, 0.04), zt, True)
+    gi = loft('glass.cav', up); gi.data.materials.append(mats['glass'])      # air side of the cavity
+    d0 = 0.9
+    top = [(None, zL)] + [(rrect((a - d0) * s, (b - d0) * s, 0.04 * s), zL) for s in (0.33, 0.66)]
+    for d in (0.9, 0.6, 0.4, 0.28, 0.19, 0.13, 0.085, 0.05, 0.025):
+        top.append((rrect(a - d, b - d, max(c - d, 0.04)), zL + MENISCUS_H * math.exp(-d / MENISCUS_L)))
+    top.append(ring_c)
+    wall = [(rrect(a, b, c), zf + e + hold)] + arc(a, b, c, zf + e, e, 0, -math.pi / 2) + face(a - e, b - e, max(c - e, 0.04), zf, True)
+    lq = loft('liquid', top + wall, [0] * (len(top) - 1) + [1] * len(wall))
+    lq.data.materials.append(mats['liq_top']); lq.data.materials.append(mats['liq_wall'])
+
+    ring = lathe('collar', densify(fillet_v([(0.0, 8.52), (1.35, 8.52), (1.35, 8.32), (0.0, 8.32)], [0.03, 0.03]), 0.2))
+    ring.data.materials.append(mats['gold'])
+    cap = lathe('stopper', densify(fillet_v([(0.0, 11.20), (1.30, 11.20), (1.30, 8.53), (0.0, 8.53)], [0.08, 0.02]), 0.2))
+    cap.data.materials.append(mat_metal('gunmetal', (0.13, 0.14, 0.165), 0.2))
+    return 11.20 * CM
+
+
+DESIGNS = {'femmes': design_femmes, 'hommes': design_hommes, 'unisexe': design_unisexe}
+
+
 # ----------------------------------------------------------------------------- composition over the page background
 def compose(im, src_comp, W, H, hfrac, cxfrac, basefrac, dark, out, webp=True):
     """Place an RGBA frame (framed as COMPS[src_comp]) into a W x H frame over the exact background."""
@@ -556,7 +781,11 @@ if args.comp == 'sizes':
         ztop = max(ztop, build_flacon('_%d' % i, s_, (x_, 0, 0), mats, args.fill))
     group_cx = ((xs[0] - wd[0] / 2) + (xs[2] + wd[2] / 2)) / 2
 else:
-    ztop = build_flacon('', 1.0, (0, 0, 0), mats, args.fill)
+    if args.design == 'arabisant':
+        ztop = build_flacon('', 1.0, (0, 0, 0), mats, args.fill)
+    else:
+        DESIGNS[args.design](mats, args.fill)
+        ztop = stopper_rings()[2] * CM      # keep the amphora's framing: all designs at one scale, on one base line
     group_cx = 0.0
     if args.turn:
         for ob in bpy.data.objects:

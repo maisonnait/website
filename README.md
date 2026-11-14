@@ -71,6 +71,9 @@ project settings on Vercel. `.env.example` lists them all. Never commit real val
 
 ## Deploy on Vercel
 
+`DEPLOY.md` holds the same procedure written as exact commands, with a check after each step: hand that
+file to a coding agent (or follow it yourself) to go from this folder to GitHub and to two working Vercel projects.
+
 Two Vercel projects are created from this one repository, and both are connected to one Postgres
 database. Menu names below were checked against the Vercel and Neon documentation in November 2026.
 
@@ -99,9 +102,10 @@ database. Menu names below were checked against the Vercel and Neon documentatio
    the tables and the catalogue; the owner account is created by the stock manager, which is the
    project that has `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
 
-The first deployment of each project (steps 2 and 3) builds without a database, but its pages
-answer with an error until steps 4 to 7 are done: without `DATABASE_URL` the apps refuse to start on
-Vercel with an explicit message, because the local PGlite database is for a developer's machine only.
+The first deployment of each project (steps 2 and 3) builds without a database. Until steps 4 to 7
+are done, every page of both apps is replaced by a note that says the database still has to be
+connected (`apps/store/src/app/setup`, `apps/admin/src/app/configuration`): the local PGlite database
+is for a developer's machine only, never for Vercel.
 
 ### Domains, and where the stock manager's subdomain is configured
 

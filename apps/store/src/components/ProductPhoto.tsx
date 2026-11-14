@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
-const RENDERED = new Set(['arabisant', 'femmes', 'hommes', 'unisexe']);
+import { FlaconPlate } from './FlaconPlate';
 
 /**
  * A product picture on its plate. The house flacon (a rendering) is always there; the photo is a plain
@@ -46,14 +45,8 @@ export function ProductPhoto({
 
   return (
     <span className={`plate plate--${collection} ${shown ? 'has-photo' : ''} ${className}`}>
-      {/* the house flacon of this collection (a 3D rendering, not a photo of the product) */}
-      <img
-        className="plate__render"
-        src={`/media/flacon/bottle-${RENDERED.has(collection) ? collection : 'arabisant'}.webp`}
-        alt=""
-        loading={eager ? 'eager' : 'lazy'}
-        decoding="async"
-      />
+      {/* the flacon of this collection (a 3D rendering, not a photo of the product) */}
+      <FlaconPlate collection={collection} className="plate__render" eager={eager} />
       {src && state !== 'failed' ? (
         // A plain <img>: the photos live on the catalogue's own CDN and are shown as they are.
         <img

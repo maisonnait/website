@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMode, usePrefersReducedMotion } from '@/lib/theme';
 import { Mark } from '@/brand/Logo';
+import { FlaconPlate } from '@/components/FlaconPlate';
 import { Mist } from './mist';
 
 export interface StageText {
@@ -35,7 +36,7 @@ export function ReadPerfume({
   stages: StageText[];
 }) {
   const mistCanvas = useRef<HTMLCanvasElement>(null);
-  const flacon = useRef<HTMLImageElement>(null);
+  const flacon = useRef<HTMLSpanElement>(null);
   const mist = useRef<Mist | null>(null);
   const timers = useRef<number[]>([]);
   const mode = useMode();
@@ -106,16 +107,9 @@ export function ReadPerfume({
       <div className="atom">
         <div className="atom__stage">
           <canvas className="atom__mist" ref={mistCanvas} aria-hidden="true" />
-          <img
-            className="atom__flacon"
-            ref={flacon}
-            src="/media/flacon/bottle-arabisant.webp"
-            alt=""
-            width={1200}
-            height={1500}
-            loading="lazy"
-            decoding="async"
-          />
+          <span className="atom__flacon" ref={flacon}>
+            <FlaconPlate collection="arabisant" className="atom__img" />
+          </span>
         </div>
         <button className="btn" type="button" onClick={onSpray}>
           {spray}

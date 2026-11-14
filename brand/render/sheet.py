@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-Packs the frames of the turning flacon into the one picture the shop loads (apps/store/src/home/FlaconTurn.tsx).
+Packs the frames of the turning flacon into the one picture per theme the shop loads (apps/store/src/home/HeroFlacon.tsx).
 
   1. render the frames, the flacon turned by one lathe segment (360/128 = 2.8125 degrees) more on each:
        python3 scene.py --liquid arabisant --bg light --comp layer --scale 0.5 --samples 40 --noise 0.03 \
          --turn-seq="0,2.8125,-2.8125,5.625,-5.625,8.4375,-8.4375,11.25,-11.25,14.0625,-14.0625,16.875,-16.875,19.6875,-19.6875" \
          --save-layer "seq/light/f%02d.png"
   2. pack them:
-       python3 sheet.py seq/light ../../apps/store/public/media/flacon/turn-light.webp
+       python3 sheet.py seq/light ../../apps/store/public/media/flacon/turn-light.webp ../../apps/store/public/media/flacon/turn-mask.png
+       python3 sheet.py seq/dark  ../../apps/store/public/media/flacon/turn-dark.webp      (frames rendered with --bg dark)
 
 Only the flacon itself is kept in each frame (its shadow and reflection stay those of the still picture underneath).
 The script also prints where the canvas must sit over each still picture; those numbers are in home.css (.hero__turn).
@@ -45,7 +46,7 @@ def placement():
         print(f'{name:9s} left {left * 100:.4f}%  top {top * 100:.4f}%  width {width * 100:.4f}%  height {height * 100:.4f}%')
 
 
-def main(folder, out):
+def main(folder, out, mask=None):
     cells = []
     for k in range(-7, 8):
         path = os.path.join(folder, 'f%02d.png' % ORDER.index(k))
@@ -65,9 +66,13 @@ def main(folder, out):
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     sheet.save(out, quality=84, method=6, alpha_quality=100)
     print('wrote %s  %dx%d  frame %dx%d  %d kB' % (out, sheet.width, sheet.height, cw, ch, os.path.getsize(out) // 1000))
+    if mask:        # the outline of the flacon facing front: the light that passes over the glass is cut to it
+        alpha = cells[7].getchannel('A')
+        Image.merge('RGBA', (alpha.point(lambda v: 255),) * 3 + (alpha,)).save(mask, optimize=True)
+        print('wrote %s  %d kB' % (mask, os.path.getsize(mask) // 1000))
 
 
 if __name__ == '__main__':
     placement()
-    if len(sys.argv) == 3:
-        main(sys.argv[1], sys.argv[2])
+    if len(sys.argv) >= 3:
+        main(*sys.argv[1:4])

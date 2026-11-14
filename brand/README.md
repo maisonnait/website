@@ -28,36 +28,47 @@ python3 kit.py       # logo-geometry.json -> every file above and the shop's Log
 After `kit.py`, copy the icons you changed into `apps/store/public` (and `favicon.svg` to
 `apps/admin/src/app/icon.svg`).
 
-## The rendered flacon
+## The rendered flacons
 
-`render/scene.py` builds the house flacon in 3D (the sign turned into a bottle: amphora glass, crown
-stopper, the logo printed in gold) and path traces it with Blender's Cycles through the `bpy` Python
-module (`pip install bpy`). The pictures the shop uses are in `apps/store/public/media/flacon`:
-the hero in light and dark, wide and portrait, and one plate per collection.
+`render/scene.py` builds the house flacons in 3D and path traces them with Blender's Cycles through the `bpy`
+Python module (`pip install bpy`). One design per collection, all with the logo printed in gold on the glass:
+
+| `--design` | Collection | Flacon |
+| --- | --- | --- |
+| `arabisant` (default) | Arabisant, and the hero of the home page | the sign turned into a bottle: amphora glass, gold crown stopper |
+| `femmes` | Femmes | slender hourglass, rose-gold sphere stopper |
+| `hommes` | Hommes | square block, heavy base, dark cylinder cap |
+| `unisexe` | Unisexe | plain cylinder, low pale-gold cap |
+
+The pictures the shop uses are in `apps/store/public/media/flacon`: the hero in light and dark, wide, portrait and
+right-to-left (`hero-*`), one plate per collection and per theme (`bottle-<collection>.webp`, `bottle-<collection>-dark.webp`),
+and the frames of the turning flacon (`turn-light.webp`, `turn-dark.webp`, `turn-mask.png`).
 
 ```bash
 cd brand/render
-python3 scene.py --liquid femmes --bg light --comp layer --samples 48 --noise 0.03 --save-layer layers/femmes.png
-python3 scene.py --use-layer layers/femmes.png --bg light --comp packshot --out bottle-femmes.jpg
+# a plate: render the master once, then compose it (seconds)
+python3 scene.py --design femmes --liquid femmes --bg light --comp layer --samples 48 --noise 0.03 --save-layer layers/femmes-light.png
+python3 scene.py --use-layer layers/femmes-light.png --bg light --comp packshot --out bottle-femmes.jpg
+# dark plate: --bg dark for the master, then --bg dark --bgcolor "#10153A" when composing
 ```
 
-### The turning flacon of the home page
+These pictures are brand imagery: they show the house's flacons, not photographs of the products.
 
-The flacon of the hero turns towards the mouse, turns away as the page scrolls, and looks left and
-right once on arrival. It is not a live 3D model: fifteen frames of the same scene, the flacon turned
-2.8125 degrees more on each, are packed in one picture (`apps/store/public/media/flacon/turn-light.webp`)
-and played by `apps/store/src/home/FlaconTurn.tsx` on a canvas laid exactly over the still picture.
+### The staged flacon of the home page
+
+The flacon of the hero arrives like a short film (the camera pulls back, the focus comes in, the flacon swings round,
+mist leaves the stopper, light passes over the glass), then follows the mouse, sprays when it is clicked or tapped,
+and turns away as the page scrolls. It is not a live 3D model: fifteen frames of the same scene, the flacon turned
+2.8125 degrees more on each, are packed in one picture per theme and played by `apps/store/src/home/HeroFlacon.tsx`
+on a canvas laid exactly over the still picture; the mist is drawn live (`apps/store/src/home/plume.ts`).
 
 ```bash
 cd brand/render
 python3 scene.py --liquid arabisant --bg light --comp layer --scale 0.5 --samples 40 --noise 0.03 \
   --turn-seq="0,2.8125,-2.8125,5.625,-5.625,8.4375,-8.4375,11.25,-11.25,14.0625,-14.0625,16.875,-16.875,19.6875,-19.6875" \
-  --save-layer "seq/light/f%02d.png"            # about one minute per frame on two cores
-python3 sheet.py seq/light ../../apps/store/public/media/flacon/turn-light.webp
+  --save-layer "seq/light/f%02d.png"            # about one minute per frame on two cores; --bg dark into seq/dark for the dark theme
+python3 sheet.py seq/light ../../apps/store/public/media/flacon/turn-light.webp ../../apps/store/public/media/flacon/turn-mask.png
+python3 sheet.py seq/dark  ../../apps/store/public/media/flacon/turn-dark.webp
 ```
 
-The dark theme has no frames yet: render the same sequence with `--bg dark` into `seq/dark`, pack it as
-`turn-dark.webp` and add `dark: '/media/flacon/turn-dark.webp'` to `SHEETS` in `FlaconTurn.tsx`.
 A larger `--scale` gives sharper frames (the shop shows the sharp still whenever the flacon is at rest).
-
-These pictures are brand imagery: they show the house flacon, not a photograph of a product.

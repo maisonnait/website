@@ -9,8 +9,8 @@ import { ProductCard } from '@/components/ProductCard';
 import { StyleNote } from '@/components/StyleNote';
 import { Glyph } from '@/components/SvgDefs';
 import { Film } from '@/home/Film';
+import { HeroFlacon } from '@/home/HeroFlacon';
 import { CollectionDoors } from '@/home/CollectionDoors';
-import { FlaconTurn } from '@/home/FlaconTurn';
 import { LoopVideo } from '@/home/HeroVideo';
 import { NotesStack, type NoteText } from '@/home/NotesStack';
 import { ReadPerfume, type StageText } from '@/home/ReadPerfume';
@@ -70,7 +70,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
       <section className="hero" id="top">
         {/* The house flacon, rendered for each theme; the picture's background is the section's own.
             Right-to-left pages get the picture with the flacon on the left (never a mirrored one: the logo is printed on it). */}
-        <div className="hero__art" aria-hidden="true">
+        <HeroFlacon>
           {(['light', 'dark'] as const).map((mode) => (
             <picture key={mode} className={`hero__pic hero__pic--${mode}`}>
               <source media="(max-width: 899px)" type="image/webp" srcSet={`/media/flacon/hero-${mode}-portrait.webp`} />
@@ -86,8 +86,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
               />
             </picture>
           ))}
-          <FlaconTurn />
-        </div>
+        </HeroFlacon>
         <div className="wrap hero__in">
           <h1 className="hero__lead">{t('hero.lead')}</h1>
           <p className="hero__sub">{t('hero.sub')}</p>

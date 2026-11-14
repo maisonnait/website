@@ -30,24 +30,115 @@
   aspect-ratio: 2000 / 1300;
   height: 100%;
 }
-/* the turning flacon: a canvas laid exactly over the flacon of the still picture (see FlaconTurn.tsx).
-   The four numbers place the crop of the frames inside the picture; brand/render/sheet.py prints them. */
-.hero__turn {
+/* the camera: everything of the picture that moves together. Arrival: it pulls back while the focus comes in.
+   Afterwards it drifts very slowly, shifts a little against the mouse (--px, --py) and lags behind the scroll (--sy). */
+.hero__cam {
+  position: absolute;
+  inset: 0;
+  transform-origin: 72.5% 55%;
+  translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px + var(--sy, 0) * 1px);
+  transition: translate 0.7s var(--ease);
+}
+:root[dir='rtl'] .hero__cam {
+  transform-origin: 27.5% 55%;
+}
+@keyframes cam-in {
+  from {
+    opacity: 0;
+    transform: scale(1.16) translateY(1.5%);
+    filter: blur(14px);
+  }
+  55% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+@keyframes cam-drift {
+  to {
+    scale: 1.024;
+  }
+}
+@keyframes art-press {
+  35% {
+    translate: 0 5px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero__cam {
+    animation:
+      cam-in 2.3s cubic-bezier(0.16, 0.7, 0.2, 1) both,
+      cam-drift 13s ease-in-out 2.4s infinite alternate;
+  }
+  .hero__art.is-pressed {
+    animation: art-press 0.5s var(--ease);
+  }
+}
+/* the turning flacon: a canvas laid exactly over the flacon of the still picture (see HeroFlacon.tsx), and the
+   light that passes over the glass, cut to the outline of the flacon. The four numbers place the crop of the
+   frames inside the picture; brand/render/sheet.py prints them. */
+.hero__turn,
+.hero__sheen {
   position: absolute;
   left: 59.0143%;
   top: 15.5%;
   width: 26.9714%;
   height: 73.8808%;
-  opacity: 0;
   pointer-events: none;
+}
+:root[dir='rtl'] .hero__turn,
+:root[dir='rtl'] .hero__sheen {
+  left: 14.0143%;
+}
+.hero__turn {
+  opacity: 0;
   transition: opacity 0.4s linear;
 }
 .hero__turn.is-live {
   opacity: 1;
   transition-duration: 0.14s;
 }
-:root[dir='rtl'] .hero__turn {
-  left: 14.0143%;
+.hero__sheen {
+  opacity: 0;
+  -webkit-mask: url(/media/flacon/turn-mask.png) center / 100% 100% no-repeat;
+  mask: url(/media/flacon/turn-mask.png) center / 100% 100% no-repeat;
+  /* a bright band and a thin one behind it, as on real glass */
+  background: linear-gradient(104deg, transparent 41%, rgba(255, 255, 255, 0.95) 49.5%, rgba(255, 255, 255, 0.95) 50.5%, transparent 55.5%, transparent 58%, rgba(255, 255, 255, 0.5) 60%, transparent 62.5%)
+    140% 0 / 280% 100% no-repeat;
+  mix-blend-mode: overlay;
+}
+:root[data-mode='dark'] .hero__sheen {
+  background-image: linear-gradient(104deg, transparent 41%, rgba(255, 240, 210, 0.7) 49.5%, rgba(255, 240, 210, 0.7) 50.5%, transparent 55.5%, transparent 58%, rgba(255, 240, 210, 0.32) 60%, transparent 62.5%);
+  mix-blend-mode: screen;
+}
+@keyframes sheen {
+  0% {
+    opacity: 0;
+    background-position: 140% 0;
+  }
+  18%,
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background-position: -40% 0;
+  }
+}
+.hero__sheen.is-on {
+  animation: sheen 1.7s cubic-bezier(0.4, 0.1, 0.3, 1) both;
+}
+/* the mist: over the whole hero, behind the words */
+.hero__mist {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 .hero__pic img {
   display: block;
@@ -82,24 +173,20 @@
     aspect-ratio: 1200 / 1600;
   }
   .hero__turn,
-  :root[dir='rtl'] .hero__turn {
+  .hero__sheen,
+  :root[dir='rtl'] .hero__turn,
+  :root[dir='rtl'] .hero__sheen {
     left: 28.0345%;
     top: 6.1563%;
     width: 43.8476%;
     height: 58.6031%;
   }
+  .hero__cam,
+  :root[dir='rtl'] .hero__cam {
+    transform-origin: 50% 35%;
+  }
   .hero .hero__in {
     padding-top: calc(var(--bar-h) + 92vw);
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .hero__pic {
-    animation: flacon-in 1.4s var(--ease) both;
-  }
-}
-@keyframes flacon-in {
-  from {
-    opacity: 0;
   }
 }
 .hero__in {
@@ -541,8 +628,11 @@
 .atom__flacon {
   position: absolute;
   inset: 14% 0 0;
+  background: var(--ground);
+}
+.atom__img {
   width: 100%;
-  height: 86%;
+  height: 100%;
   object-fit: cover;
 }
 .sizes {
