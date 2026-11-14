@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "arabisant",
+    "position": 1,
+    "name": {
+      "fr": "Arabisant",
+      "en": "Arabisant",
+      "ar": "عربي",
+      "ary": "عربي",
+      "zgh": "ⵜⴰⵄⵔⴰⴱⵜ"
+    },
+    "description": {
+      "fr": "Oud, ambre, musc, encens : l’esprit des grandes maisons du Golfe.",
+      "en": "Oud, amber, musk, incense: the spirit of the great Gulf houses.",
+      "ar": "عود وعنبر ومسك وبخور: روح دور العطور الخليجية الكبرى.",
+      "ary": "عود، عنبر، مسك، بخور: الروح ديال ديور العطر الكبار ديال الخليج.",
+      "zgh": "ⵍⵄⵓⴷ, ⵍⵄⵏⴱⵔ, ⵍⵎⵙⴽ, ⵍⴱⵅⵓⵔ: ⵉⵎⴰⵏ ⵏ ⵜⴳⵎⵎⴰ ⵜⵉⵎⵇⵔⴰⵏⵉⵏ ⵏ ⵍⵅⵍⵉⵊ."
+    }
+  },
+  {
+    "slug": "femmes",
+    "position": 2,
+    "name": {
+      "fr": "Femmes",
+      "en": "Women",
+      "ar": "نسائي",
+      "ary": "العيالات",
+      "zgh": "ⵜⵉⵎⵖⴰⵔⵉⵏ"
+    },
+    "description": {
+      "fr": "Onze familles de senteurs pour elle.",
+      "en": "Eleven scent families for her.",
+      "ar": "إحدى عشرة عائلة عطرية لها.",
+      "ary": "حداشر عائلة ديال الريحات ليها.",
+      "zgh": "11 ⵏ ⵜⵡⴰⵛⵓⵍⵉⵏ ⵏ ⵜⵓⵊⵊⵓⵜⵉⵏ ⵉ ⵜⵎⵖⴰⵔⵉⵏ."
+    }
+  },
+  {
+    "slug": "hommes",
+    "position": 3,
+    "name": {
+      "fr": "Hommes",
+      "en": "Men",
+      "ar": "رجالي",
+      "ary": "الرجال",
+      "zgh": "ⵉⵔⴳⴰⵣⵏ"
+    },
+    "description": {
+      "fr": "Neuf familles de senteurs pour lui.",
+      "en": "Nine scent families for him.",
+      "ar": "تسع عائلات عطرية له.",
+      "ary": "تسعة ديال العائلات ديال الريحات ليه.",
+      "zgh": "9 ⵏ ⵜⵡⴰⵛⵓⵍⵉⵏ ⵏ ⵜⵓⵊⵊⵓⵜⵉⵏ ⵉ ⵉⵔⴳⴰⵣⵏ."
+    }
+  },
+  {
+    "slug": "unisexe",
+    "position": 4,
+    "name": {
+      "fr": "Unisexe",
+      "en": "Unisex",
+      "ar": "للجنسين",
+      "ary": "للجوج",
+      "zgh": "ⵉ ⴽⵓ ⵢⴰⵏ"
+    },
+    "description": {
+      "fr": "La collection Unisexe se prépare. Elle arrivera bientôt en boutique.",
+      "en": "The Unisex collection is being prepared. It will be in the shop soon.",
+      "ar": "مجموعة «للجنسين» قيد التحضير، وستتوفر قريباً في المتجر.",
+      "ary": "مجموعة «للجوج» كتوجد، وقريب غادي تكون فالمتجر.",
+      "zgh": "ⵜⴰⴳⵔⵓⵎⵎⴰ «ⵉ ⴽⵓ ⵢⴰⵏ» ⵜⵍⵍⴰ ⴳ ⵓⴱⵔⵉⴷ. ⵔⴰⴷ ⵜⵉⵍⵉ ⴳ ⵜⵃⴰⵏⵓⵜ ⴷⵖⵢⴰ."
+    }
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "maison-nait-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Maison N'Ait - online shop (apps/store) and stock manager (apps/admin) sharing one Postgres database (packages/db).",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "dev:store": "pnpm --filter \"./apps/store\" dev",
+    "dev:admin": "pnpm --filter \"./apps/admin\" dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "db:migrate": "pnpm --filter @nait/db db:migrate",
+    "db:reset": "pnpm --filter @nait/db db:reset"
+  }
+}

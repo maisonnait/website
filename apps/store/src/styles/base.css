@@ -1,0 +1,623 @@
+/* ================= reset and page ================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--paper);
+  scroll-behavior: smooth;
+}
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--t-md);
+  line-height: var(--lh);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+:root[dir='rtl'] body {
+  font-size: calc(var(--t-md) * 1.06);
+}
+main {
+  flex: 1;
+  overflow-x: clip;
+}
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+h1,
+h2,
+h3,
+p,
+figure,
+ul,
+ol,
+dl,
+dd,
+fieldset {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+em {
+  font-style: italic;
+  color: var(--gold-text);
+}
+:root[dir='rtl'] em,
+:root:lang(zgh) em {
+  font-style: normal;
+}
+a {
+  color: inherit;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+::selection {
+  background: var(--gold);
+  color: #0b0b0c;
+}
+[id] {
+  scroll-margin-top: calc(var(--bar-h) + 12px);
+}
+[hidden] {
+  display: none !important;
+}
+
+/* ================= helpers ================= */
+.wrap {
+  width: min(100% - 2 * var(--gutter), 1240px);
+  margin-inline: auto;
+}
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.skip {
+  position: fixed;
+  top: 8px;
+  inset-inline-start: 8px;
+  z-index: 99;
+  background: var(--gold);
+  color: #0b0b0c;
+  padding: 0.7em 1em;
+  font: 600 var(--t-sm) / 1 var(--ui);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip:focus {
+  transform: none;
+}
+.foil {
+  fill: #b59449;
+  fill: url(#foil);
+}
+
+/* chamfered corners, cut like the flacon: buttons, the film frame, the amber block. Nowhere else. */
+.cham {
+  clip-path: polygon(
+    var(--cham) 0,
+    calc(100% - var(--cham)) 0,
+    100% var(--cham),
+    100% calc(100% - var(--cham)),
+    calc(100% - var(--cham)) 100%,
+    var(--cham) 100%,
+    0 calc(100% - var(--cham)),
+    0 var(--cham)
+  );
+}
+.ring {
+  position: relative;
+}
+.ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: var(--ring, var(--line));
+  --b: 1px;
+  --k: 0.42px;
+  clip-path: polygon(
+    evenodd,
+    var(--cham) 0,
+    calc(100% - var(--cham)) 0,
+    100% var(--cham),
+    100% calc(100% - var(--cham)),
+    calc(100% - var(--cham)) 100%,
+    var(--cham) 100%,
+    0 calc(100% - var(--cham)),
+    0 var(--cham),
+    var(--cham) 0,
+    calc(var(--cham) + var(--k)) var(--b),
+    var(--b) calc(var(--cham) + var(--k)),
+    var(--b) calc(100% - var(--cham) - var(--k)),
+    calc(var(--cham) + var(--k)) calc(100% - var(--b)),
+    calc(100% - var(--cham) - var(--k)) calc(100% - var(--b)),
+    calc(100% - var(--b)) calc(100% - var(--cham) - var(--k)),
+    calc(100% - var(--b)) calc(var(--cham) + var(--k)),
+    calc(100% - var(--cham) - var(--k)) var(--b),
+    calc(var(--cham) + var(--k)) var(--b)
+  );
+}
+
+/* ================= type ================= */
+h1 {
+  font: var(--h-w) calc(var(--t-h1) * var(--h-k)) / var(--h-lh) var(--display);
+  letter-spacing: calc(var(--tr) * -0.3);
+  text-wrap: balance;
+}
+h2 {
+  font: var(--h-w) calc(var(--t-h2) * var(--h-k) * 1.08) / 1.2 var(--display);
+  text-wrap: balance;
+}
+h3 {
+  font: 400 var(--t-lg) / 1.3 var(--display);
+}
+.lede {
+  font-size: var(--t-lg);
+  line-height: 1.42;
+  font-weight: 300;
+  color: var(--ink-soft);
+  max-width: 38ch;
+  margin-top: 0.9em;
+}
+:root[dir='rtl'] .lede {
+  line-height: 1.8;
+  font-weight: 400;
+}
+:root:lang(zgh) .lede {
+  font-size: calc(var(--t-lg) * 0.86);
+  line-height: 1.7;
+}
+
+/* "Style": the families are the house's interpretations of famous perfumes */
+.style-tag {
+  font: italic 400 1em / 1.2 'Spectral', Georgia, serif;
+  letter-spacing: 0.01em;
+  color: var(--gold-text);
+}
+.stylenote {
+  max-width: 64ch;
+  margin-top: clamp(28px, 4vw, 48px);
+  padding-inline-start: 16px;
+  border-inline-start: 2px solid var(--gold);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+:root[dir='rtl'] .stylenote {
+  line-height: 1.85;
+}
+.price {
+  font-family: var(--ui);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ================= buttons and links ================= */
+.btn {
+  --cham: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 50px;
+  padding: 0.28em 1.7em 0;
+  border: 0;
+  font: 600 var(--t-sm) / 1.1 var(--ui);
+  letter-spacing: var(--tr);
+  text-decoration: none;
+  text-align: center;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  clip-path: polygon(
+    var(--cham) 0,
+    calc(100% - var(--cham)) 0,
+    100% var(--cham),
+    100% calc(100% - var(--cham)),
+    calc(100% - var(--cham)) 100%,
+    var(--cham) 100%,
+    0 calc(100% - var(--cham)),
+    0 var(--cham)
+  );
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+:root[dir='rtl'] .btn {
+  padding-top: 0.1em;
+  font-weight: 700;
+  font-size: 1rem;
+}
+:root:lang(zgh) .btn {
+  padding-top: 0;
+  font-weight: 400;
+}
+.btn:hover {
+  background: var(--btn-bg-h);
+  color: var(--btn-fg-h);
+}
+.btn:focus-visible {
+  outline: 0;
+  box-shadow: inset 0 0 0 2px var(--gold-hi);
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  background: var(--wash);
+  color: var(--ink-soft);
+  cursor: not-allowed;
+}
+.btn--wide {
+  width: 100%;
+}
+.btn--dark {
+  --btn-bg: #0b0b0c;
+  --btn-fg: #e6d3a3;
+  --btn-bg-h: #1d1d1f;
+  --btn-fg-h: #fff4d6;
+}
+
+/* text link: a gold rule that withdraws on hover */
+.tlink {
+  appearance: none;
+  border: 0;
+  color: inherit;
+  text-decoration: none;
+  font: 400 var(--t-sm) / 1.2 var(--ui);
+  letter-spacing: var(--tr);
+  padding: 0.5em 0 0.35em;
+  background: linear-gradient(var(--gold), var(--gold)) 0 100% / 100% 1px no-repeat;
+  transition:
+    background-size 0.45s var(--ease),
+    color 0.3s;
+}
+.tlink:hover {
+  background-size: 0 1px;
+  background-position: 100% 100%;
+  color: var(--gold-text);
+}
+.textbtn {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0.35em 0;
+  font: 400 var(--t-xs) / 1.2 var(--ui);
+  letter-spacing: var(--tr);
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 0.25em;
+}
+.textbtn:hover {
+  color: var(--ink);
+  text-decoration-color: var(--gold);
+}
+.iconbtn {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.iconbtn:hover {
+  color: var(--gold-text);
+}
+.iconbtn svg {
+  width: 21px;
+  height: 21px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+
+/* ================= small parts shared by the shop ================= */
+/* availability: the house diamond, full when in stock, empty when sold out */
+.stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font: 400 var(--t-xs) / 1.3 var(--ui);
+  letter-spacing: var(--tr);
+  color: var(--ink-soft);
+}
+.stock::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-inline-start: 2px;
+  background: var(--gold);
+  outline: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+.stock--low {
+  color: var(--gold-text);
+}
+.stock--out::before {
+  background: transparent;
+  outline-color: var(--line-strong);
+}
+.tagchip {
+  display: inline-block;
+  padding: 0.28em 0.5em 0.14em;
+  font: 400 0.6875rem/1 var(--ui);
+  letter-spacing: 0.06em;
+  color: #0b0b0c;
+  background: var(--gold-hi);
+}
+:root[dir='rtl'] .tagchip {
+  font-weight: 700;
+  letter-spacing: 0;
+  padding: 0.25em 0.5em 0.15em;
+}
+
+/* quantity: minus, number, plus */
+.qty {
+  display: inline-grid;
+  grid-template-columns: 46px minmax(34px, auto) 46px;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  height: 50px;
+  direction: ltr;
+}
+.qty__btn {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: none;
+  color: var(--ink);
+}
+.qty__btn svg {
+  width: 16px;
+  height: 16px;
+}
+.qty__btn:hover:not(:disabled) {
+  color: var(--gold-text);
+}
+.qty__btn:disabled {
+  color: var(--line-strong);
+  cursor: not-allowed;
+}
+.qty__value {
+  text-align: center;
+  font: 400 1rem/1 var(--latin);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.2em;
+}
+.qty--sm {
+  grid-template-columns: 38px minmax(26px, auto) 38px;
+  height: 40px;
+}
+
+/* forms */
+.field {
+  display: grid;
+  gap: 7px;
+  margin-top: 22px;
+}
+.field label {
+  font: 400 var(--t-sm) / 1.3 var(--ui);
+  letter-spacing: var(--tr);
+}
+.field__optional {
+  color: var(--ink-soft);
+}
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 50px;
+  padding: 0.75em 0.9em 0.65em;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.4 var(--body);
+  appearance: none;
+}
+.field textarea {
+  resize: vertical;
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 0;
+  border-color: var(--ink);
+}
+.field.has-error input,
+.field.has-error textarea {
+  border-color: var(--bad);
+}
+.field__hint {
+  font: 400 var(--t-xs) / 1.4 var(--ui);
+  letter-spacing: var(--tr);
+  color: var(--ink-soft);
+}
+.field__error {
+  font: 400 var(--t-sm) / 1.4 var(--ui);
+  color: var(--bad);
+}
+.formerror {
+  margin-top: 20px;
+  padding: 0.8em 1em 0.7em;
+  border-inline-start: 2px solid var(--bad);
+  background: color-mix(in srgb, var(--bad) 8%, transparent);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+}
+.formerror:focus {
+  outline: 0;
+}
+/* honeypot: off screen for people, present for robots */
+.hp {
+  position: absolute;
+  inset-inline-start: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* a real sequence, so it is numbered: how ordering works, what happens after an order */
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: clamp(36px, 5vw, 64px);
+}
+.steps::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 4px;
+  width: 1px;
+  background: var(--gold);
+}
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding-block: 0 30px;
+  padding-inline: 34px 0;
+}
+.step::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 0;
+  width: 9px;
+  height: 9px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+.step__n {
+  font: 300 2.25rem/1 var(--latin);
+  color: var(--gold-text);
+  font-variant-numeric: tabular-nums;
+}
+.step__t {
+  font: var(--h-w) calc(var(--t-lg) * 1.02) / 1.25 var(--display);
+}
+.step__d {
+  color: var(--ink-soft);
+  max-width: 32ch;
+}
+@media (min-width: 880px) {
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .steps--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .steps::before {
+    inset-block: 4px auto;
+    inset-inline: 0;
+    width: auto;
+    height: 1px;
+  }
+  .step {
+    padding-block: 34px 0;
+    padding-inline: 0 26px;
+  }
+  .step::before {
+    top: 0;
+  }
+}
+
+/* ================= pages other than the home page ================= */
+.page {
+  padding-block: clamp(36px, 6vw, 88px) clamp(72px, 10vw, 140px);
+}
+/* narrow pages stay on the same start edge as every other page */
+.page--narrow > * {
+  max-width: 46rem;
+}
+.page__head {
+  max-width: 46rem;
+  margin-bottom: clamp(28px, 4vw, 56px);
+}
+.empty {
+  display: grid;
+  justify-items: start;
+  gap: 14px;
+  max-width: 34rem;
+  color: var(--ink-soft);
+}
+.empty__title {
+  font: var(--h-w) var(--t-lg) / 1.3 var(--display);
+  color: var(--ink);
+}
+.empty .btn {
+  margin-top: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* the skip link moves focus into the content; the content itself shows no ring */
+main:focus {
+  outline: 0;
+}

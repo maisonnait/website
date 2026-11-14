@@ -1,0 +1,192 @@
+/*
+ * Maison N'Ait - design tokens. White paper, black ink, gold as the colour of action;
+ * the dark theme is midnight blue, ivory and gold. Values come from the house's first
+ * one-page site (src/styles.css), calmed down: one gutter, a shorter type scale.
+ */
+:root {
+  color-scheme: light;
+
+  /* colour */
+  --paper: #ffffff;
+  --paper-2: #faf6ec;
+  --ground: #f5f4f1; /* the plate behind a product photo */
+  --ink: #0b0b0c;
+  --mark: #0b0b0c;
+  --gold: #b59449;
+  --logo-gold: #b59449;
+  --gold-hi: #e6d3a3;
+  --gold-deep: #8a6d2f;
+  --gold-text: #7a5f22;
+  --bad: #a3271b;
+  --ink-soft: rgba(11, 11, 12, 0.7);
+  --line: rgba(11, 11, 12, 0.16);
+  --line-strong: rgba(11, 11, 12, 0.42);
+  --wash: rgba(11, 11, 12, 0.06);
+  --veil-0: rgba(255, 255, 255, 0);
+  --veil-6: rgba(255, 255, 255, 0.62);
+  --veil-8: rgba(255, 255, 255, 0.86);
+  --bar-bg: rgba(255, 255, 255, 0.94);
+  --scrim: rgba(6, 6, 10, 0.5);
+  --btn-bg: #0b0b0c;
+  --btn-fg: #e6d3a3;
+  --btn-bg-h: #b59449;
+  --btn-fg-h: #0b0b0c;
+  --hero-poster: url(/media/hero.jpg);
+
+  /* the five notes: white, ivory and black fields */
+  --note-rose: #ffffff;
+  --note-rose-fg: #0b0b0c;
+  --note-blossom: #faf6ec;
+  --note-blossom-fg: #0b0b0c;
+  --note-cedar: #0b0b0c;
+  --note-cedar-fg: #f7f2e6;
+  --note-amber: #ffffff;
+  --note-amber-fg: #0b0b0c;
+  --note-oud: #0b0b0c;
+  --note-oud-fg: #f7f2e6;
+
+  /* liquids of the drawn flacon: gold, rose gold, noir, champagne */
+  --liq-a0: #f6e7ae;
+  --liq-a1: #d4af37;
+  --liq-a2: #8e6b12;
+  --liq-r0: #f9e4db;
+  --liq-r1: #e3ae9e;
+  --liq-r2: #b67868;
+  --liq-i0: #9a9a9a;
+  --liq-i1: #3c3c3c;
+  --liq-i2: #0b0b0c;
+  --liq-s0: #fbf3dc;
+  --liq-s1: #d9c48a;
+
+  /* type */
+  --latin: 'Josefin Sans', 'Century Gothic', 'Avenir Next', Futura, sans-serif;
+  --display: 'Josefin Sans', 'Reem Kufi', 'Segoe UI', system-ui, sans-serif;
+  --ui: 'Josefin Sans', 'Tajawal', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Spectral', 'Noto Naskh Arabic', Georgia, 'Times New Roman', serif;
+  --t-xs: 0.8125rem;
+  --t-sm: 0.9375rem;
+  --t-md: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --t-lg: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --t-h2: clamp(1.5rem, 1.25rem + 1.1vw, 2.125rem);
+  --t-h1: clamp(2rem, 1.45rem + 2.4vw, 3.25rem);
+  --t-xl: clamp(2rem, 1.35rem + 2.9vw, 3.6rem);
+  --h-w: 300;
+  --h-lh: 1.1;
+  --h-k: 1;
+  --tr: 0.04em;
+  --lh: 1.65;
+
+  /* layout */
+  --gutter: clamp(20px, 5vw, 72px);
+  --bar-h: 60px;
+  --cham: 12px;
+  --ease: cubic-bezier(0.2, 0.7, 0.15, 1);
+  --dir: 1;
+}
+
+/* dark theme: midnight blue, ivory and gold */
+:root[data-mode='dark'] {
+  color-scheme: dark;
+  --paper: #080b1f;
+  --paper-2: #0d1230;
+  --ground: #10153a;
+  --ink: #f6f1e4;
+  --mark: #d9dde8;
+  --gold: #c9aa63;
+  --logo-gold: #cdb277;
+  --gold-hi: #e6d3a3;
+  --gold-deep: #94763a;
+  --gold-text: #e6d3a3;
+  --bad: #ffa698;
+  --ink-soft: rgba(246, 241, 228, 0.76);
+  --line: rgba(217, 221, 232, 0.22);
+  --line-strong: rgba(217, 221, 232, 0.5);
+  --wash: rgba(217, 221, 232, 0.09);
+  --veil-0: rgba(8, 11, 31, 0);
+  --veil-6: rgba(8, 11, 31, 0.62);
+  --veil-8: rgba(8, 11, 31, 0.84);
+  --bar-bg: rgba(8, 11, 31, 0.94);
+  --scrim: rgba(2, 3, 12, 0.66);
+  --btn-bg: #c9aa63;
+  --btn-fg: #0b0b0c;
+  --btn-bg-h: #e6d3a3;
+  --btn-fg-h: #0b0b0c;
+  --hero-poster: url(/media/hero-dark.jpg);
+  --note-rose: #7e2b3f;
+  --note-rose-fg: #f6f1e4;
+  --note-blossom: #e9e6cf;
+  --note-blossom-fg: #161d5c;
+  --note-cedar: #173a30;
+  --note-cedar-fg: #f6f1e4;
+  --note-amber: #5a2e0a;
+  --note-amber-fg: #f6f1e4;
+  --note-oud: #1a1210;
+  --note-oud-fg: #f6f1e4;
+  --liq-a0: #f1dc9b;
+  --liq-a1: #d4af37;
+  --liq-a2: #8e6b12;
+  --liq-r0: #fad0d3;
+  --liq-r1: #e58a96;
+  --liq-r2: #a8475a;
+  --liq-i0: #c3cef7;
+  --liq-i1: #7286e4;
+  --liq-i2: #2a36a8;
+  --liq-s0: #f4eedf;
+  --liq-s1: #9aa3b8;
+}
+
+/* Arabic and Darija: right to left, Arabic faces first, taller lines */
+:root[dir='rtl'] {
+  --dir: -1;
+  --display: 'Reem Kufi', 'Josefin Sans', 'Segoe UI', system-ui, sans-serif;
+  --ui: 'Tajawal', 'Josefin Sans', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Noto Naskh Arabic', 'Spectral', Georgia, serif;
+  --h-w: 400;
+  --h-lh: 1.45;
+  --h-k: 0.82;
+  --tr: 0em;
+  --lh: 1.95;
+  --t-xs: 0.9375rem;
+  --t-sm: 1.03rem;
+}
+
+/* Tamazight in Tifinagh: wide letters, one weight */
+:root:lang(zgh) {
+  --display: 'Noto Sans Tifinagh', 'Josefin Sans', sans-serif;
+  --ui: 'Noto Sans Tifinagh', 'Josefin Sans', sans-serif;
+  --body: 'Noto Sans Tifinagh', 'Spectral', serif;
+  --h-w: 400;
+  --h-lh: 1.3;
+  --h-k: 0.74;
+  --tr: 0em;
+  --lh: 1.85;
+}
+
+/* black blocks (film, footer) punctuate the white page; in the dark theme they sink one step deeper */
+.onyx {
+  --logo-gold: #cdb277;
+  --paper: #0b0b0c;
+  --paper-2: #161616;
+  --ink: #f7f2e6;
+  --mark: #f7f2e6;
+  --gold-text: #e0cb96;
+  --ink-soft: rgba(247, 242, 230, 0.74);
+  --line: rgba(247, 242, 230, 0.2);
+  --wash: rgba(247, 242, 230, 0.1);
+  --btn-bg: #b59449;
+  --btn-fg: #0b0b0c;
+  --btn-bg-h: #e6d3a3;
+  --btn-fg-h: #0b0b0c;
+  background: var(--paper);
+  color: var(--ink);
+}
+:root[data-mode='dark'] .onyx {
+  --paper: #05071a;
+  --paper-2: #0a0e28;
+  --ink: #f6f1e4;
+  --mark: #d9dde8;
+  --gold-text: #e6d3a3;
+  --ink-soft: rgba(246, 241, 228, 0.76);
+  --line: rgba(217, 221, 232, 0.22);
+  --wash: rgba(217, 221, 232, 0.09);
+}

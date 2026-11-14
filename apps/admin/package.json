@@ -1,0 +1,29 @@
+{
+  "name": "admin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Maison N'Ait - gestionnaire de stock (back office, Next.js App Router).",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/josefin-sans": "^5.3.0",
+    "@fontsource/spectral": "^5.3.0",
+    "@fontsource/tajawal": "^5.3.0",
+    "@nait/db": "workspace:*",
+    "@vercel/blob": "^2.9.0",
+    "jose": "^6.2.17",
+    "next": "16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^6.0.3"
+  }
+}

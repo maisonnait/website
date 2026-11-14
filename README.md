@@ -1,53 +1,121 @@
-# Maison N'Ait — website
+# Maison N'Ait platform
 
-One-page brand site for Maison N'Ait (Moroccan perfume house): the story of the name, five notes of Morocco, a 26-second film with a voice-over, the catalogue and how to order.
+One repository (pnpm workspaces), two Next.js apps, one shared database.
 
-- Five languages: Darija, Arabic, Tamazight (Tifinagh letters), French, English. Right-to-left is handled.
-- Two themes: light (white, gold and black) by default, and a dark one. The visitor switches with the moon / sun button; the choice is remembered on their device.
+| Path | What it is | Local address |
+| --- | --- | --- |
+| `apps/store` | The public shop: catalogue in five languages (fr, en, ar, ary, zgh), cart, cash-on-delivery orders, order tracking. | http://localhost:3000 |
+| `apps/admin` | The stock manager (French): orders, stock and movements, products, users, settings. | http://localhost:3001 |
+| `packages/db` | `@nait/db`: database schema (Drizzle ORM), SQL migrations, seed, and every query the two apps use. | |
 
-## What is here
+Both apps read and write the same Postgres database through `@nait/db`. An order placed in the shop
+reduces the stock that the stock manager shows; a stock change in the manager is what the shop sells.
 
-- `index.html` — the whole site in one file (styles, scripts and text inlined).
-- `media/` — the videos and their poster images: the two hero loops (light and dark theme), the film in three cuts (`film-fr`, `film-en`, `film-ar`, one per voice-over) and the gold loop of the last block. Keep this folder next to `index.html`.
-- `source/` — the editable parts and the build script.
+## Run locally
 
-## Run it
+Requirements: Node.js 22 or later, pnpm 10.
 
-It is a static site: open `index.html`, or serve the folder with any static host.
-On GitHub Pages: Settings → Pages → Deploy from a branch → `main`, folder `/ (root)`.
+```bash
+pnpm install
+cp .env.example apps/store/.env.local
+cp .env.example apps/admin/.env.local    # then set AUTH_SECRET in it (32 characters or more)
+pnpm dev                                 # shop on :3000, stock manager on :3001
+```
 
-A link can open in a given language: add `#fr`, `#en`, `#ar`, `#darija` or `#tamazight` to the address.
+No database server is needed. While `DATABASE_URL` is empty the data lives in `.data/pglite`
+(PGlite, Postgres running inside Node.js). The folder is created on the first request, with the
+tables and the seed: 4 collections, 25 products, 383 variants at 199 MAD with 20 units each.
 
-## The film's sound
+- Sign in to the stock manager locally with `admin@maisonnait.ma` / `nait-local-2026`. This account
+  exists only in the local database, and only if `ADMIN_EMAIL` / `ADMIN_PASSWORD` are empty.
+- The two apps and a build can use the local database at the same time: it is handed from one
+  process to the other on demand.
+- `pnpm db:reset` deletes the local database; the next start seeds it again.
 
-The film starts silent and has a sound button. The voice-over exists in French, English and Arabic; the Darija and Tamazight pages play the Arabic one. The voice is synthetic and the page says so under the film. Texts, timings, how the tracks were made and how to replace them with a recorded voice: `source/voiceover/README.md`.
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Both apps in development mode (`pnpm dev:store`, `pnpm dev:admin` for one). |
+| `pnpm build` | Production build of both apps. |
+| `pnpm test` | Tests. `pnpm --filter @nait/db test` runs the database tests on a temporary database. |
+| `pnpm typecheck` | Type check of every package. |
+| `pnpm db:migrate` | Creates or updates the tables and seeds an empty database now, instead of on the first request. Uses `DATABASE_URL` if it is set in the shell, the local database otherwise. |
+| `pnpm db:reset` | Deletes the local PGlite database. Never touches a Postgres server. |
 
-## Product photos
+## Environment variables
 
-Each card first shows a drawn flacon, then replaces it with the product's photo as soon as that photo has loaded.
+Next.js reads them from `apps/store/.env.local` and `apps/admin/.env.local` locally, and from the
+project settings on Vercel. `.env.example` lists them all. Never commit real values.
 
-- By default the photo is loaded straight from the shop (`cdn.youcan.shop`, the address is in `source/catalog.json`, field `img`). If the shop changes a photo, update that address.
-- To ship the photos with the site instead, save them as `media/products/<slug>.jpg` (or `.png`, `.webp`), where `<slug>` is the product's `slug` in `catalog.json` (for example `media/products/al-qurashi.jpg`), then rebuild. A local file takes priority over the shop's address.
-- If a photo cannot load, the drawn flacon simply stays.
+| Variable | Needed by | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | both | Postgres connection string. Empty = local PGlite. Must be the same in both apps. |
+| `AUTH_SECRET` | admin | Signs the sessions of the stock manager. At least 32 characters (`openssl rand -base64 32`). |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | admin | Owner account created when the database has no user yet. Password of 8 characters or more. With a Postgres server there is no default: without these two variables no account is created. |
+| `NEXT_PUBLIC_SITE_URL` | both | Public address of the shop, no trailing slash. |
+| `NEXT_PUBLIC_ADMIN_URL` | both | Public address of the stock manager, no trailing slash. |
+| `BLOB_READ_WRITE_TOKEN` | admin, optional | Vercel Blob token for product photo uploads. |
+| `FAL_KEY` | optional | Not used yet. |
 
-The shop has no pictures for its four collections, so the collection tabs are text.
+## Database
 
-## Change it
+- Tables: `collections`, `products`, `scents`, `variants`, `orders`, `order_items`,
+  `stock_movements`, `users`, `settings`. The schema is `packages/db/src/schema.ts`.
+- The first query of each app applies the pending migrations and seeds what is missing. There is no
+  separate migration step, locally or in production.
+- To change the schema: edit `schema.ts`, run `pnpm --filter @nait/db db:generate`, commit the new
+  file in `packages/db/drizzle/` together with `src/migrations.generated.ts`.
+- Stock rules, enforced in `@nait/db` and covered by its tests: an order is one transaction and
+  can never sell more than the stock; cancelling or returning an order puts its units back once;
+  every stock change is written to `stock_movements`; order numbers run `NA-000001`, `NA-000002`, ...
 
-Edit the files in `source/`, then rebuild:
+## Deploy on Vercel
 
-    python3 source/build.py
+Two Vercel projects are created from this one repository, and both are connected to one Postgres
+database. Menu names below were checked against the Vercel and Neon documentation in November 2026.
 
-- `i18n.json` — every text, per language (`fr`, `en`, `ar`, `ary` = Darija, `zgh` = Tamazight). The build stops if a key is missing in one language.
-- `catalog.json` — collections, scent families and scents, copied from maisonait.youcan.store on 13 Nov 2026. Each "Order" button opens the matching product page of the shop.
-- `page.html`, `styles.css`, `app.js` — structure, look and behaviour. The colours of both themes are the variables at the top of `styles.css`.
-- `sketches.js` — the five canvas drawings of the notes.
-- `glyphs.json` — outlines of the wordmark and of the Tifinagh letters.
+1. **Push the repository** to GitHub, GitLab or Bitbucket.
+2. **Create the shop project.** In the Vercel dashboard: **Create New** > **Project**, **Import** the
+   repository, click **Edit** next to **Root Directory**, choose `apps/store`, then **Deploy**.
+3. **Create the stock manager project.** Same steps with the same repository and Root Directory
+   `apps/admin`.
 
-## To validate before going live
+   Leave **Include files outside the root directory in the Build Step** on (the default): both apps
+   need `packages/db`. pnpm is detected from `pnpm-lock.yaml`; no install or build command has to
+   be set. Set **Node.js Version** to 22.x or later (**Settings** > **Build and Deployment**).
+4. **Add the database.** Any Postgres works: put its connection string in `DATABASE_URL` in both
+   projects. The usual choice is Neon from the Vercel Marketplace: install the Neon integration,
+   create the database in a region close to your customers, and it appears under the **Storage**
+   tab. Open **Storage** > the database > **Connect Project** and connect it to the shop project,
+   then again to the stock manager project. Each connection adds `DATABASE_URL` (the pooled
+   connection string) to that project.
+5. **Run the functions next to the database.** New projects run in Washington, D.C. (`iad1`). In
+   each project, **Settings** > **Functions** > **Function Regions**, pick the region nearest to the
+   database, for example Paris (`cdg1`) or Frankfurt (`fra1`).
+6. **Set the other variables** in each project's settings (see the table above): `AUTH_SECRET`,
+   `ADMIN_EMAIL` and `ADMIN_PASSWORD` in the stock manager; `NEXT_PUBLIC_SITE_URL` and
+   `NEXT_PUBLIC_ADMIN_URL` in both.
+7. **Redeploy both projects.** Variables only apply to new deployments. The first request creates
+   the tables and the catalogue; the owner account is created by the stock manager, which is the
+   project that has `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
 
-- Listen to the three voice-overs: they were checked by automatic transcription and measurement, not by ear.
-- The Tamazight text is a first draft and needs a read-through by a native speaker.
-- The brand story and the Arabic name «دار نايت» are a proposal.
-- Fonts load from Google Fonts (Josefin Sans, Spectral, Reem Kufi, Tajawal, Noto Naskh Arabic, Noto Sans Tifinagh).
-- The videos and the film's music are generated by code, not filmed or recorded. The shop's logo is not used.
+Without `DATABASE_URL` a deployment on Vercel stops with an explicit error: the local PGlite
+database is for a developer's machine only.
+
+### Domains, and where the stock manager's subdomain is configured
+
+Each project has its own domains: **Settings** > **Domains** > **Add Existing**.
+
+- Shop project: the main domain, for example `www.example.ma` (and the apex `example.ma`).
+- Stock manager project: a subdomain of the same domain, for example `stock.example.ma`. This is
+  the only place where that subdomain is chosen. Vercel then shows the CNAME record to create at
+  the DNS provider of the domain; use the value shown for that project.
+
+Afterwards set `NEXT_PUBLIC_ADMIN_URL=https://stock.example.ma` and
+`NEXT_PUBLIC_SITE_URL=https://www.example.ma` in both projects and redeploy them: `NEXT_PUBLIC_`
+values are fixed at build time.
+
+### Product photos
+
+The seeded products keep the photo addresses listed in `packages/db/seed/catalog.json`, which are
+served by the YouCan CDN (`cdn.youcan.shop`). They stop working if that store is closed: upload each
+photo again from the stock manager (this needs `BLOB_READ_WRITE_TOKEN`) before that happens.
