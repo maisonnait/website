@@ -17,6 +17,14 @@
   font-family: var(--font-ui);
 }
 
+.login__sign {
+  height: clamp(72px, 18vw, 120px);
+  width: auto;
+  justify-self: start;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
 .login__mark {
   font-size: clamp(3rem, 15vw, 6.5rem);
   line-height: 0.9;

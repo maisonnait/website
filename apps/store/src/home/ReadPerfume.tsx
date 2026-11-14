@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useMode, usePrefersReducedMotion } from '@/lib/theme';
+import { Mark } from '@/brand/Logo';
 import { Mist } from './mist';
 
 export interface StageText {
@@ -11,11 +12,11 @@ export interface StageText {
   text: string;
 }
 
-const WAVE = 'M-160 0q20-6 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0V240H-160Z';
-const FULL = 122;
+/** Where the top of the stopper is in the picture of the flacon, from the top of its box. */
+const STOPPER_TOP = 0.145;
 
 /**
- * "A perfume is read in three stages". The button sprays the drawn flacon; the three stages
+ * "A perfume is read in three stages". The button sprays the house flacon; the three stages
  * then light up one after the other, each for as long as it lasts on skin (in proportion).
  */
 export function ReadPerfume({
@@ -34,13 +35,12 @@ export function ReadPerfume({
   stages: StageText[];
 }) {
   const mistCanvas = useRef<HTMLCanvasElement>(null);
-  const flacon = useRef<SVGSVGElement>(null);
+  const flacon = useRef<HTMLImageElement>(null);
   const mist = useRef<Mist | null>(null);
   const timers = useRef<number[]>([]);
   const mode = useMode();
   const reduced = usePrefersReducedMotion();
 
-  const [level, setLevel] = useState(FULL);
   const [running, setRunning] = useState(false);
   const [run, setRun] = useState(0);
   const [active, setActive] = useState<Record<string, number>>({});
@@ -64,7 +64,6 @@ export function ReadPerfume({
   }, [mode]);
 
   const onSpray = () => {
-    setLevel((value) => (value > 236 ? FULL : value + 9)); // the flacon empties a little, then refills
     if (reduced) return;
 
     const bottle = flacon.current?.getBoundingClientRect();
@@ -72,7 +71,7 @@ export function ReadPerfume({
     if (bottle && canvas && mist.current) {
       mist.current.resize();
       const x = bottle.left + bottle.width / 2 - canvas.left;
-      const y = bottle.top + bottle.height * (2 / 320) - canvas.top;
+      const y = bottle.top + bottle.height * STOPPER_TOP - canvas.top;
       mist.current.burst(x, y, { n: 150, spread: 0.75, power: 1.05 });
       const instance = mist.current;
       window.setTimeout(() => instance.burst(x, y, { n: 70, spread: 0.5, power: 0.8 }), 140);
@@ -107,36 +106,24 @@ export function ReadPerfume({
       <div className="atom">
         <div className="atom__stage">
           <canvas className="atom__mist" ref={mistCanvas} aria-hidden="true" />
-          <svg className="atom__flacon" ref={flacon} viewBox="0 0 200 320" aria-hidden="true">
-            <ellipse cx="100" cy="313" rx="76" ry="6" fill="currentColor" opacity=".12" />
-            <g clipPath="url(#clip-body)">
-              <g className="flacon__liq" style={{ transform: `translate(0px, ${level}px)` }}>
-                <path className="flacon__wave" d={WAVE} fill="url(#liq-amber)" />
-              </g>
-            </g>
-            <g fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round">
-              <polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" fill="currentColor" fillOpacity=".03" />
-              <rect x="88" y="52" width="24" height="18" />
-              <rect x="70" y="14" width="60" height="38" fill="currentColor" fillOpacity=".07" />
-              <rect x="82" y="2" width="36" height="12" fill="currentColor" fillOpacity=".07" />
-              <path d="M100 140 134 190 100 240 66 190Z" strokeOpacity=".7" />
-              <circle cx="100" cy="190" r="8" strokeOpacity=".7" />
-            </g>
-          </svg>
+          <img
+            className="atom__flacon"
+            ref={flacon}
+            src="/media/flacon/bottle-arabisant.webp"
+            alt=""
+            width={1200}
+            height={1500}
+            loading="lazy"
+            decoding="async"
+          />
         </div>
         <button className="btn" type="button" onClick={onSpray}>
           {spray}
         </button>
         <ul className="sizes" aria-hidden="true">
-          {[
-            [50, 9],
-            [75, 7.5],
-            [100, 6],
-          ].map(([ml, stroke]) => (
+          {[50, 75, 100].map((ml) => (
             <li key={ml}>
-              <svg viewBox="0 0 200 320" strokeWidth={stroke}>
-                <use href="#flacon" />
-              </svg>
+              <Mark className="sizes__sign" title="" />
               {ml} ml
             </li>
           ))}

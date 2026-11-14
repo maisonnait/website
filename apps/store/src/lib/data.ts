@@ -1,5 +1,5 @@
 /**
- * The shop's only door to the database. Everything comes from @nait/db (see CONTRACT.md);
+ * The shop's only door to the database. Everything comes from @nait/db (see packages/db/src/index.ts);
  * this file adapts its rows to what the pages show and keeps private columns on the server.
  */
 import 'server-only';

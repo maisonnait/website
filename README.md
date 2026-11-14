@@ -7,6 +7,7 @@ One repository (pnpm workspaces), two Next.js apps, one shared database.
 | `apps/store` | The public shop: catalogue in five languages (fr, en, ar, ary, zgh), cart, cash-on-delivery orders, order tracking. | http://localhost:3000 |
 | `apps/admin` | The stock manager (French): orders, stock and movements, products, users, settings. | http://localhost:3001 |
 | `packages/db` | `@nait/db`: database schema (Drizzle ORM), SQL migrations, seed, and every query the two apps use. | |
+| `brand` | The brand kit built on the house logo (SVG logos, favicon, app icons, share image), its sources and the 3D scene of the house flacon. See `brand/README.md`. | |
 
 Both apps read and write the same Postgres database through `@nait/db`. An order placed in the shop
 reduces the stock that the stock manager shows; a stock change in the manager is what the shop sells.
@@ -98,8 +99,9 @@ database. Menu names below were checked against the Vercel and Neon documentatio
    the tables and the catalogue; the owner account is created by the stock manager, which is the
    project that has `ADMIN_EMAIL` and `ADMIN_PASSWORD`.
 
-Without `DATABASE_URL` a deployment on Vercel stops with an explicit error: the local PGlite
-database is for a developer's machine only.
+The first deployment of each project (steps 2 and 3) builds without a database, but its pages
+answer with an error until steps 4 to 7 are done: without `DATABASE_URL` the apps refuse to start on
+Vercel with an explicit message, because the local PGlite database is for a developer's machine only.
 
 ### Domains, and where the stock manager's subdomain is configured
 
@@ -119,3 +121,8 @@ values are fixed at build time.
 The seeded products keep the photo addresses listed in `packages/db/seed/catalog.json`, which are
 served by the YouCan CDN (`cdn.youcan.shop`). They stop working if that store is closed: upload each
 photo again from the stock manager (this needs `BLOB_READ_WRITE_TOKEN`) before that happens.
+
+Behind every product photo the shop shows the rendered house flacon of the product's collection
+(`apps/store/public/media/flacon/bottle-<collection>.webp`). It is what a visitor sees while a photo
+loads, and all they see when a photo is missing. These renderings show the house flacon with its
+logo; they are not photographs of the products.

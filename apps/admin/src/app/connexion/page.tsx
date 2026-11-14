@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { getSessionUser } from '@/lib/auth'
 import { firstParam, safeNextPath } from '@/lib/paths'
 import { hasAuthSecret } from '@/lib/session-token'
+import { Sign } from '@/components/sign'
 import { Wordmark } from '@/components/wordmark'
 import { LoginForm } from './login-form'
 
@@ -19,6 +20,7 @@ export default async function LoginPage(props: PageProps<'/connexion'>) {
   return (
     <main className="login">
       <div className="login__brand">
+        <Sign className="login__sign" />
         <p aria-label="N’Ait">
           <Wordmark className="login__mark" />
         </p>

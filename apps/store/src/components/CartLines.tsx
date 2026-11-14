@@ -38,7 +38,7 @@ export function CartLines({ onNavigate }: { onNavigate?: () => void }) {
         return (
           <li className={`line ${gone || over ? 'has-issue' : ''}`} key={line.variantId}>
             <Link className="line__photo" href={href(`/produits/${line.slug}`)} onClick={onNavigate} tabIndex={-1} aria-hidden="true">
-              <ProductPhoto src={line.imageUrl} alt="" slug={line.slug} collection={line.collectionSlug} />
+              <ProductPhoto src={line.imageUrl} alt="" collection={line.collectionSlug} />
             </Link>
             <div className="line__main">
               <Link className="line__name" href={href(`/produits/${line.slug}`)} onClick={onNavigate}>

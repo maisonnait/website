@@ -4,12 +4,14 @@ import { notFound } from 'next/navigation';
 
 import { Announcement } from '@/components/Announcement';
 import { CollectionNav } from '@/components/CollectionNav';
-import { Flacon } from '@/components/Flacon';
 import { ProductCard } from '@/components/ProductCard';
 import { StyleNote } from '@/components/StyleNote';
 import { collectionDescription, collectionName, getSettings, listCollections, listProducts } from '@/lib/data';
 import { pageContext } from '@/lib/page';
 import { localePath, pageMetadata } from '@/lib/site';
+
+/** Collections that have their own rendered flacon in /media/flacon. */
+const FLACONS = new Set(['arabisant', 'femmes', 'hommes', 'unisexe']);
 
 // Stock and prices are live: rendered on request.
 export const dynamic = 'force-dynamic';
@@ -58,7 +60,14 @@ export default async function CollectionPage({ params }: PageProps<'/[lang]/coll
           </>
         ) : (
           <div className="soon">
-            <Flacon slug={collection.slug} collection={collection.slug} className="soon__flacon" />
+            <img
+              className="soon__flacon"
+              src={`/media/flacon/bottle-${FLACONS.has(collection.slug) ? collection.slug : 'arabisant'}.webp`}
+              alt=""
+              width={1200}
+              height={1500}
+              decoding="async"
+            />
             <Link className="btn" href={localePath(lang, '/collections')}>
               {t('nav.allCollections')}
             </Link>

@@ -25,7 +25,7 @@ export function ProductCard({
     <article className={`card ${product.inStock ? '' : 'is-out'}`}>
       <Link className="card__link" href={localePath(lang, `/produits/${product.slug}`)}>
         {/* Decorative here: the name is written right below, inside the same link. */}
-        <ProductPhoto src={product.imageUrl} alt="" slug={product.slug} collection={product.collectionSlug} eager={eager} />
+        <ProductPhoto src={product.imageUrl} alt="" collection={product.collectionSlug} eager={eager} />
         <span className="card__body">
           <span className="card__title">
             <span className="style-tag">{t('pdp.style')}</span>

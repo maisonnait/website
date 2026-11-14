@@ -62,7 +62,6 @@ export default async function ProductPage({ params }: PageProps<'/[lang]/produit
             <ProductPhoto
               src={product.imageUrl}
               alt={`${t('pdp.style')} ${product.name}`}
-              slug={product.slug}
               collection={product.collectionSlug}
               eager
               className="plate--large"

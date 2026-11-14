@@ -1,24 +1,23 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Flacon } from './Flacon';
+
+const RENDERED = new Set(['arabisant', 'femmes', 'hommes', 'unisexe']);
 
 /**
- * A product picture on its plate. The drawn flacon is always there; the photo is a plain
+ * A product picture on its plate. The house flacon (a rendering) is always there; the photo is a plain
  * <img> laid over it that only shows once it has really loaded. A missing or broken photo
- * therefore leaves the drawing, never a broken-image icon.
+ * therefore leaves the flacon, never a broken-image icon.
  */
 export function ProductPhoto({
   src,
   alt,
-  slug,
   collection,
   eager = false,
   className = '',
 }: {
   src: string | null;
   alt: string;
-  slug: string;
   collection: string;
   /** true for the main picture of a product page. */
   eager?: boolean;
@@ -47,7 +46,14 @@ export function ProductPhoto({
 
   return (
     <span className={`plate plate--${collection} ${shown ? 'has-photo' : ''} ${className}`}>
-      <Flacon slug={slug} collection={collection} className="plate__flacon" />
+      {/* the house flacon of this collection (a 3D rendering, not a photo of the product) */}
+      <img
+        className="plate__render"
+        src={`/media/flacon/bottle-${RENDERED.has(collection) ? collection : 'arabisant'}.webp`}
+        alt=""
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
       {src && state !== 'failed' ? (
         // A plain <img>: the photos live on the catalogue's own CDN and are shown as they are.
         <img

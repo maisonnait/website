@@ -4,6 +4,7 @@ import { countOrders } from '@nait/db'
 import { logout } from '@/app/connexion/actions'
 import { AccountMenu } from '@/components/account-menu'
 import { Nav } from '@/components/nav'
+import { Sign } from '@/components/sign'
 import { Wordmark } from '@/components/wordmark'
 import { isOwner, requireUser } from '@/lib/auth'
 import { initials } from '@/lib/format'
@@ -25,6 +26,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
       <header className="topbar no-print">
         <Link href="/" className="brand" aria-label="N’Ait, tableau de bord">
+          <Sign className="brand__sign" />
           <Wordmark className="brand__mark" />
           <span className="brand__sub">Gestion</span>
         </Link>
@@ -34,6 +36,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       <aside className="rail no-print">
         <div className="rail__in">
           <Link href="/" className="brand" aria-label="N’Ait, tableau de bord">
+            <Sign className="brand__sign" />
             <Wordmark className="brand__mark" />
             <span className="brand__sub">Gestionnaire de stock</span>
           </Link>

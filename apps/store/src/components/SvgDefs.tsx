@@ -1,6 +1,6 @@
 /**
  * Shared SVG definitions, rendered once per page: the four Tifinagh letters of the name
- * (ⵏ ⴰ ⵢ ⵜ), the gold foil, the liquids of the drawn flacon and its clipping shape.
+ * (ⵏ ⴰ ⵢ ⵜ), and the gold foil.
  */
 const N = 'M0 725V11H89V725Z';
 const A =
@@ -50,14 +50,6 @@ export function SvgDefs() {
           <path transform="translate(853 0)" d={Y} />
           <path transform="translate(1384 0)" d={T} />
         </symbol>
-        <symbol id="flacon" viewBox="0 0 200 320">
-          <g fill="none" stroke="currentColor" strokeLinejoin="round">
-            <polygon points="56,70 144,70 170,96 170,284 144,310 56,310 30,284 30,96" />
-            <rect x="88" y="52" width="24" height="18" />
-            <rect x="70" y="14" width="60" height="38" />
-            <rect x="82" y="2" width="36" height="12" />
-          </g>
-        </symbol>
         <linearGradient id="foil" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#8a6d2f" />
           <stop offset=".28" stopColor="#b59449" />
@@ -65,28 +57,6 @@ export function SvgDefs() {
           <stop offset=".72" stopColor="#b59449" />
           <stop offset="1" stopColor="#8a6d2f" />
         </linearGradient>
-        <linearGradient id="liq-amber" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" style={{ stopColor: 'var(--liq-a0)' }} />
-          <stop offset=".4" style={{ stopColor: 'var(--liq-a1)' }} />
-          <stop offset="1" style={{ stopColor: 'var(--liq-a2)' }} />
-        </linearGradient>
-        <linearGradient id="liq-rose" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" style={{ stopColor: 'var(--liq-r0)' }} />
-          <stop offset=".45" style={{ stopColor: 'var(--liq-r1)' }} />
-          <stop offset="1" style={{ stopColor: 'var(--liq-r2)' }} />
-        </linearGradient>
-        <linearGradient id="liq-indigo" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" style={{ stopColor: 'var(--liq-i0)' }} />
-          <stop offset=".45" style={{ stopColor: 'var(--liq-i1)' }} />
-          <stop offset="1" style={{ stopColor: 'var(--liq-i2)' }} />
-        </linearGradient>
-        <linearGradient id="liq-silver" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" style={{ stopColor: 'var(--liq-s0)' }} />
-          <stop offset="1" style={{ stopColor: 'var(--liq-s1)' }} />
-        </linearGradient>
-        <clipPath id="clip-body">
-          <polygon points="58,76 142,76 164,98.5 164,281.5 142,304 58,304 36,281.5 36,98.5" />
-        </clipPath>
       </defs>
     </svg>
   );

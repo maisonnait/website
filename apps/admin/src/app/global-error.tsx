@@ -12,7 +12,7 @@ export default function GlobalError({ retry }: { error: unknown; retry: () => vo
           <button
             type="button"
             onClick={() => retry()}
-            style={{ padding: '10px 18px', background: '#0b0b0c', color: '#f1dc9b', border: 0, fontSize: 16, cursor: 'pointer' }}
+            style={{ padding: '10px 18px', background: '#0b0b0c', color: '#e6d3a3', border: 0, fontSize: 16, cursor: 'pointer' }}
           >
             Réessayer
           </button>

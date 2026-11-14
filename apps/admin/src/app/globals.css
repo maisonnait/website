@@ -19,10 +19,10 @@
   --line-2: rgba(11, 11, 12, 0.09);
   --wash: rgba(11, 11, 12, 0.05);
 
-  --gold: #c9a227;
-  --gold-hi: #f1dc9b;
-  --gold-deep: #8e6b12;
-  --gold-text: #86650f;
+  --gold: #b59449;
+  --gold-hi: #e6d3a3;
+  --gold-deep: #8a6d2f;
+  --gold-text: #7a5f22;
   --ivory: #f7f2e6;
 
   /* states: used with a word next to them, never alone */
@@ -237,6 +237,14 @@ textarea {
   font-size: 1.375rem;
   color: var(--gold);
   padding-top: var(--ui-nudge);
+}
+
+.brand__sign {
+  flex: none;
+  align-self: center;
+  height: 34px;
+  width: auto;
+  color: var(--gold);
 }
 
 .brand__sub {
@@ -463,6 +471,12 @@ textarea {
 
   .rail .brand__mark {
     font-size: 1.75rem;
+  }
+
+  .rail .brand__sign {
+    align-self: flex-start;
+    height: 64px;
+    margin-bottom: 6px;
   }
 
   .rail__nav {

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { preload } from 'react-dom';
 import type { ProductCard as ProductCardData } from '@nait/db';
 
 import '@/styles/home.css';
@@ -10,10 +9,12 @@ import { ProductCard } from '@/components/ProductCard';
 import { StyleNote } from '@/components/StyleNote';
 import { Glyph } from '@/components/SvgDefs';
 import { Film } from '@/home/Film';
-import { HeroVideo, LoopVideo } from '@/home/HeroVideo';
+import { CollectionDoors } from '@/home/CollectionDoors';
+import { FlaconTurn } from '@/home/FlaconTurn';
+import { LoopVideo } from '@/home/HeroVideo';
 import { NotesStack, type NoteText } from '@/home/NotesStack';
 import { ReadPerfume, type StageText } from '@/home/ReadPerfume';
-import { LOCALE_INFO } from '@/i18n/config';
+import { LOCALE_INFO, dirOf } from '@/i18n/config';
 import { collectionName, getSettings, listCollections, listProducts } from '@/lib/data';
 import { pageContext } from '@/lib/page';
 import { localePath, pageMetadata } from '@/lib/site';
@@ -49,8 +50,7 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
   );
   const collectionNames = new Map(collections.map((collection) => [collection.slug, collectionName(collection, lang, t)]));
   const to = (path = '') => localePath(lang, path);
-
-  preload('/media/hero.jpg', { as: 'image', fetchPriority: 'high' });
+  const side = dirOf(lang) === 'rtl' ? '-rtl' : '';
 
   const notes: NoteText[] = (['rose', 'blossom', 'cedar', 'amber', 'oud'] as const).map((key) => ({
     key,
@@ -68,8 +68,26 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
   return (
     <>
       <section className="hero" id="top">
-        <HeroVideo />
-        <div className="hero__shade" />
+        {/* The house flacon, rendered for each theme; the picture's background is the section's own.
+            Right-to-left pages get the picture with the flacon on the left (never a mirrored one: the logo is printed on it). */}
+        <div className="hero__art" aria-hidden="true">
+          {(['light', 'dark'] as const).map((mode) => (
+            <picture key={mode} className={`hero__pic hero__pic--${mode}`}>
+              <source media="(max-width: 899px)" type="image/webp" srcSet={`/media/flacon/hero-${mode}-portrait.webp`} />
+              <source type="image/webp" srcSet={`/media/flacon/hero-${mode}${side}.webp`} />
+              <img
+                src={`/media/flacon/hero-${mode}${side}.jpg`}
+                alt=""
+                width={2000}
+                height={1300}
+                loading={mode === 'light' ? 'eager' : 'lazy'}
+                fetchPriority={mode === 'light' ? 'high' : 'auto'}
+                decoding="async"
+              />
+            </picture>
+          ))}
+          <FlaconTurn />
+        </div>
         <div className="wrap hero__in">
           <h1 className="hero__lead">{t('hero.lead')}</h1>
           <p className="hero__sub">{t('hero.sub')}</p>
@@ -175,18 +193,14 @@ export default async function HomePage({ params }: PageProps<'/[lang]'>) {
             <h2>{t('ch4.title')}</h2>
             <p className="lede">{t('ch4.intro')}</p>
           </div>
-          <ul className="doors">
-            {collections.map((collection) => (
-              <li key={collection.slug}>
-                <Link className="door" href={to(`/collections/${collection.slug}`)}>
-                  <span className="door__name">{collectionName(collection, lang, t)}</span>
-                  <span className="door__count">
-                    {collection.productCount > 0 ? t('fmt.families', { n: collection.productCount }) : t('card.soon')}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <CollectionDoors
+            doors={collections.map((collection) => ({
+              slug: collection.slug,
+              name: collectionName(collection, lang, t),
+              count: collection.productCount > 0 ? t('fmt.families', { n: collection.productCount }) : t('card.soon'),
+              href: to(`/collections/${collection.slug}`),
+            }))}
+          />
           {featured.length > 0 ? (
             <>
               <div className="grid">
